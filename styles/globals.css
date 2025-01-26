@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+body {
+  color: #171717;
+  background: #ffffff;
+}
+
+html {
+  font-family: var(--font-inter);
+}
+
+* {
+  font-family: inherit;
+}
