@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Moodbod  
 
-## Getting Started
+**Version:** 0.1.0  
 
-First, run the development server:
+This is the code for the Moodbod website. It shows what we can do as a development agency and helps people understand our work.  
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠 Tech We Use  
+- **Next.js:** Makes fast websites.  
+- **React:** Helps build great designs.  
+- **Tailwind CSS:** Easy styling for websites.  
+- **Framer Motion:** Smooth animations.  
+- **Redux Toolkit:** Keeps data organized.  
+- **TypeScript:** Makes the code safe and clean.  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 How to Start  
+1. Clone this project:  
+   ```bash
+   git clone https://github.com/your-repo/moodbod.git
+   cd moodbod
+   ```  
+2. Install everything you need:  
+   ```bash
+   npm install
+   ```  
+3. Run it:  
+   ```bash
+   npm run dev
+   ```  
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🔧 What You Can Do  
+- Edit and add new pages.  
+- Change styles`.  
+- Add new features using React components.  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+If you like what you see, we’d love to work with you!  
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+--- 
