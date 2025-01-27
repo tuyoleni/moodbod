@@ -1,6 +1,8 @@
 'use client';
 
+import AboutSection from "./sections/AboutSection";
 import Header from "./sections/Header";
+import QuoteSection from "./sections/QuoteSection";
 import ScrollingText from "./sections/ScrollingText";
 
 export default function HomePage() {
@@ -10,9 +12,15 @@ export default function HomePage() {
         <Header />
       </div>
 
-      <div className="h-[300vh] sm:h-[350vh] md:h-[400vh]">
+      <div className="h-[300vh] sm:h-[350vh] md:h-[400vh] bg-black">
         <ScrollingText />
       </div>
+
+      <div className="h-[300vh] sm:h-[350vh] md:h-[350vh]">
+        <AboutSection />
+      </div>
+
+      <QuoteSection />
 
       <div className="h-[150vh] sm:h-[175vh] md:h-[200vh]">
         <div className="sticky top-0 w-full h-screen bg-blue-200 flex justify-center items-center">
