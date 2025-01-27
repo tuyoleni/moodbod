@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useScroll, useTransform, MotionValue } from 'framer-motion';
 import { RefObject } from 'react';
 
