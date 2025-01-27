@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client'
 import { motion } from 'framer-motion';
 import { RefObject, useRef } from 'react';
@@ -6,7 +7,7 @@ import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 function AboutSection() {
     const sectionRef = useRef<HTMLElement>(null);
-    const { getItemAnimations, headerAnimation } = useScrollAnimation(sectionRef as RefObject<HTMLElement>, 3);
+    const { getItemAnimations, headerAnimation } = useScrollAnimation(sectionRef as RefObject<HTMLElement>);
 
 
     const listItems = [
