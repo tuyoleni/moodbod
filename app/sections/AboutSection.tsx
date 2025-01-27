@@ -36,7 +36,8 @@ function AboutSection() {
                             return (
                                 <motion.li
                                     key={index}
-                                    style={{ opacity, x }}
+                                    style={{ opacity }} // Only apply opacity to style
+                                    animate={{ x: x.get() }} // Convert MotionValue to number
                                     className="leading-none py-2"
                                 >
                                     {text}
