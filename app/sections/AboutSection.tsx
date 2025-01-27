@@ -23,6 +23,7 @@ function AboutSection() {
         >
             <div className="sticky top-0 h-screen">
                 <div className="w-full h-full flex flex-col justify-around">
+                    {/* Header */}
                     <motion.h1
                         style={headerAnimation}
                         className="text-[clamp(80px,12vw,80pt)] font-black leading-[0.85] uppercase"
@@ -30,14 +31,15 @@ function AboutSection() {
                         At Moodbod, we help you win online.
                     </motion.h1>
 
+                    {/* List Items */}
                     <ul className="text-[clamp(20px,12vw,35px)] font-black space-y-2 sm:max-w-[90%]">
                         {listItems.map((text, index) => {
-                            const { opacity, x } = getItemAnimations(index);
+                            const animations = getItemAnimations(index);
                             return (
                                 <motion.li
                                     key={index}
-                                    style={{ opacity }} // Only apply opacity to style
-                                    animate={{ x: x.get() }} // Convert MotionValue to number
+                                    style={{ opacity: animations.opacity }}
+                                    animate={{ x: animations.x.get() }}
                                     className="leading-none py-2"
                                 >
                                     {text}
