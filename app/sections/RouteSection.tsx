@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface RoutePoint {
@@ -30,6 +30,19 @@ export function RouteSection() {
         ],
         []
     );
+
+    const updatePoints = useCallback(() => {
+        if (routeContainerRef.current) {
+            const { width, height } = routeContainerRef.current.getBoundingClientRect();
+            setRoutePoints(
+                relativeRoutePoints.map(point => ({
+                    x: point.x * width,
+                    y: point.y * height,
+                    label: point.label
+                }))
+            );
+        }
+    }, [relativeRoutePoints]);
 
     // Adjust the points based on the container's size
     useEffect(() => {
