@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { Link, animateScroll as scroll } from 'react-scroll';
 import AboutSection from './sections/AboutSection';
 import Header from './sections/Header';
 import QuoteSection from './sections/QuoteSection';
@@ -17,10 +16,10 @@ export default function HomePage() {
     const nextSection = currentSection + 1;
     if (nextSection < sectionIds.length) {
       setCurrentSection(nextSection);
-      scroll.scrollTo(document.getElementById(sectionIds[nextSection])?.offsetTop || 0, {
-        smooth: true,
-        offset: -100, // Optional: Adjust to offset the section if needed
-        duration: 1000, // Duration of scroll
+      const nextElement = document.getElementById(sectionIds[nextSection]);
+      nextElement?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
       });
     }
   };
@@ -30,7 +29,7 @@ export default function HomePage() {
       scrollToNextSection();
     }, 5000); // Scroll every 5 seconds
 
-    return () => clearInterval(interval); // Cleanup interval
+    return () => clearInterval(interval);
   }, [currentSection]);
 
   return (
