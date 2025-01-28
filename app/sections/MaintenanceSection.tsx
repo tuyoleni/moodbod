@@ -75,7 +75,7 @@ const MaintenanceSection = () => {
                         Under Update
                     </h2>
                     <p className="text-base sm:text-lg mb-8 max-w-md mx-auto text-zinc-400">
-                        We're making things better. Our site will be back online in
+                        We&apos;re making things better. Our site will be back online in
                     </p>
 
                     {/* Timer */}
@@ -115,7 +115,7 @@ const MaintenanceSection = () => {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 1, delay: 0.5 }}
                     >
-                        Thank you for your patience. We're working hard to bring you an improved experience.
+                        Thank you for your patience. We&apos;re working hard to bring you an improved experience.
                     </motion.p>
                 </motion.div>
             </div>

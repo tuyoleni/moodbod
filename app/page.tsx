@@ -1,5 +1,7 @@
 'use client';
 
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import AboutSection from "./sections/AboutSection";
 import Header from "./sections/Header";
 import MaintenanceSection from "./sections/MaintenanceSection";
