@@ -5,7 +5,7 @@ import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 function AboutSection() {
     const sectionRef = useRef<HTMLElement>(null) as React.RefObject<HTMLElement>;
-    const { getItemAnimations, headerAnimation } = useScrollAnimation(sectionRef);
+    const { getItemAnimations } = useScrollAnimation(sectionRef as React.RefObject<HTMLElement>);
 
     const listItems = [
         'Build cool websites',

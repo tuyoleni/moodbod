@@ -33,25 +33,23 @@ export function RouteSection() {
 
     // Adjust the points based on the container's size
     useEffect(() => {
-        const updateRoutePoints = () => {
-            if (routeContainerRef.current) {
-                const { width, height } = routeContainerRef.current.getBoundingClientRect();
-                const updatedRoutePoints = relativeRoutePoints.map((point) => ({
-                    x: point.x * width,
-                    y: point.y * height,
-                    label: point.label,
-                }));
-                setRoutePoints(updatedRoutePoints);
+        const currentRef = routeContainerRef.current;
+        const observer = new ResizeObserver(() => {
+            if (currentRef) {
+                updatePoints();
             }
-        };
+        });
 
-        updateRoutePoints();
-        window.addEventListener("resize", updateRoutePoints);
+        if (currentRef) {
+            observer.observe(currentRef);
+        }
 
         return () => {
-            window.removeEventListener("resize", updateRoutePoints);
+            if (currentRef) {
+                observer.unobserve(currentRef);
+            }
         };
-    }, [relativeRoutePoints]);
+    }, [updatePoints]);
 
     // Observe when the section is visible on the screen
     useEffect(() => {
@@ -91,8 +89,8 @@ export function RouteSection() {
         }, "");
     };
 
-    const moodbodPath = useMemo(() => generateSmoothPath([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]), [routePoints]);
-    const othersPath = useMemo(() => generateSmoothPath([1, 4, 6, 10]), [routePoints]);
+    const moodbodPath = useMemo(() => generateSmoothPath(routePoints.map(p => routePoints.indexOf(p) + 1)), [routePoints, generateSmoothPath]);
+    const othersPath = useMemo(() => generateSmoothPath(routePoints.map(p => routePoints.indexOf(p) + 1).map(i => ({ ...routePoints[i - 1], y: routePoints[i - 1].y + 50 })).map(p => routePoints.indexOf(p) + 1)), [routePoints, generateSmoothPath]);
 
     return (
         <motion.div

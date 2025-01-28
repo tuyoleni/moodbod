@@ -25,12 +25,9 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      scrollToNextSection();
-    }, 5000); // Scroll every 5 seconds
-
+    const interval = setInterval(scrollToNextSection, 5000);
     return () => clearInterval(interval);
-  }, [currentSection]);
+  }, [scrollToNextSection]);
 
   return (
     <main className="w-full relative scroll-smooth">
