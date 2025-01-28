@@ -13,7 +13,7 @@ interface HorizontalScrollProps {
 export default function HorizontalScroll({
     children,
     maxScrollWidth = 2,
-    className = "",
+    className = '',
     direction = 'ltr',
     speed = 0.5,
 }: HorizontalScrollProps) {
@@ -26,15 +26,25 @@ export default function HorizontalScroll({
         // Get the section's starting position
         const sectionStart = container.offsetTop;
 
-        const handleScroll = () => {
-            const scrollPosition = window.scrollY - sectionStart;
-            const translateX = (scrollPosition * speed) % (window.innerWidth * maxScrollWidth);
+        let isScrolling = false;
 
-            const finalTranslate = direction === 'ltr' ? -translateX : translateX;
-            container.style.transform = `translateX(${finalTranslate}px)`;
+        const handleScroll = () => {
+            if (isScrolling) return;
+
+            isScrolling = true;
+
+            requestAnimationFrame(() => {
+                const scrollPosition = window.scrollY - sectionStart;
+                const translateX = (scrollPosition * speed) % (window.innerWidth * maxScrollWidth);
+
+                const finalTranslate = direction === 'ltr' ? -translateX : translateX;
+                container.style.transform = `translateX(${finalTranslate}px)`;
+
+                isScrolling = false;
+            });
         };
 
-        // Initial position
+        // Initial scroll position calculation
         handleScroll();
 
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -49,4 +59,4 @@ export default function HorizontalScroll({
             {children}
         </div>
     );
-} 
+}
