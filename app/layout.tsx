@@ -15,6 +15,17 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Moodbod",
   description: "We make websites, apps, and tools that help you start, grow, and scale your business. Just what you need to succeed online.",
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/icons/favicon.ico',
+    apple: '/icons/apple-touch-icon.png',
+    shortcut: [
+      { url: '/icons/favicon-16x16.png', sizes: '16x16' },
+      { url: '/icons/favicon-32x32.png', sizes: '32x32' },
+      { url: '/icons/android-chrome-192x192.png', sizes: '192x192' },
+      { url: '/icons/android-chrome-512x512.png', sizes: '512x512' }
+    ]
+  },
   keywords: [
     // Website Searches
     "how to get a website",

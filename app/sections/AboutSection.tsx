@@ -25,13 +25,13 @@ function AboutSection() {
                             hidden: { opacity: 0 },
                             visible: { opacity: 1, transition: { duration: 1 } },
                         }}
-                        className="text-[clamp(80px,12vw,80pt)] font-black leading-[0.85] uppercase"
+                        className="text-[clamp(60px,10vw,80pt)] text-wrap font-black leading-[0.85] uppercase pr-4"
                     >
                         At Moodbod, we help you win online.
                     </motion.h1>
 
                     {/* List Items */}
-                    <ul className="text-[clamp(20px,12vw,35px)] font-black space-y-2 sm:max-w-[90%]">
+                    <ul className="text-[clamp(18px,12vw,35px)] font-black space-y-2 sm:max-w-[90%] text-black/70">
                         {listItems.map((text, index) => (
                             <motion.li
                                 key={text} // Use the text as the key to avoid potential issues with dynamic lists
