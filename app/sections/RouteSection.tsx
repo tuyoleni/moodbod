@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface RoutePoint {
@@ -31,38 +31,27 @@ export function RouteSection() {
         []
     );
 
-    const updatePoints = useCallback(() => {
-        if (routeContainerRef.current) {
-            const { width, height } = routeContainerRef.current.getBoundingClientRect();
-            setRoutePoints(
-                relativeRoutePoints.map(point => ({
-                    x: point.x * width,
-                    y: point.y * height,
-                    label: point.label
-                }))
-            );
-        }
-    }, [relativeRoutePoints]);
-
     // Adjust the points based on the container's size
     useEffect(() => {
-        const currentRef = routeContainerRef.current;
-        const observer = new ResizeObserver(() => {
-            if (currentRef) {
-                updatePoints();
-            }
-        });
-
-        if (currentRef) {
-            observer.observe(currentRef);
-        }
-
-        return () => {
-            if (currentRef) {
-                observer.unobserve(currentRef);
+        const updateRoutePoints = () => {
+            if (routeContainerRef.current) {
+                const { width, height } = routeContainerRef.current.getBoundingClientRect();
+                const updatedRoutePoints = relativeRoutePoints.map((point) => ({
+                    x: point.x * width,
+                    y: point.y * height,
+                    label: point.label,
+                }));
+                setRoutePoints(updatedRoutePoints);
             }
         };
-    }, [updatePoints]);
+
+        updateRoutePoints();
+        window.addEventListener("resize", updateRoutePoints);
+
+        return () => {
+            window.removeEventListener("resize", updateRoutePoints);
+        };
+    }, [relativeRoutePoints]);
 
     // Observe when the section is visible on the screen
     useEffect(() => {
@@ -102,8 +91,8 @@ export function RouteSection() {
         }, "");
     };
 
-    const moodbodPath = useMemo(() => generateSmoothPath(routePoints.map(p => routePoints.indexOf(p) + 1)), [routePoints, generateSmoothPath]);
-    const othersPath = useMemo(() => generateSmoothPath(routePoints.map(p => routePoints.indexOf(p) + 1).map(i => ({ ...routePoints[i - 1], y: routePoints[i - 1].y + 50 })).map(p => routePoints.indexOf(p) + 1)), [routePoints, generateSmoothPath]);
+    const moodbodPath = useMemo(() => generateSmoothPath([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]), [routePoints]);
+    const othersPath = useMemo(() => generateSmoothPath([1, 4, 6, 10]), [routePoints]);
 
     return (
         <motion.div
@@ -117,23 +106,24 @@ export function RouteSection() {
                 {routePoints.length > 0 && (
                     <svg className="w-full h-screen absolute top-0 left-0">
                         <motion.path
+                            className="moodbod-path"
                             d={moodbodPath}
                             fill="none"
                             stroke="black"
                             strokeWidth="2"
                             initial={{ pathLength: 0 }}
-                            animate={isVisible ? { pathLength: 1 } : { pathLength: 0 }}
-                            transition={{ duration: 2, ease: "easeInOut" }}
+                            animate={{ pathLength: 1 }}
+                            transition={{ duration: 1.5 }}
                         />
-                        {/* Others Path Animation */}
                         <motion.path
+                            className="others-path"
                             d={othersPath}
                             fill="none"
                             strokeWidth="2"
                             stroke="rgb(169, 169, 169)"
                             initial={{ pathLength: 0 }}
-                            animate={isVisible ? { pathLength: 1 } : { pathLength: 0 }}
-                            transition={{ duration: 2, ease: "easeInOut", delay: 0.5 }}
+                            animate={{ pathLength: 1 }}
+                            transition={{ duration: 1.5, delay: 0.5 }}
                         />
                     </svg>
                 )}
