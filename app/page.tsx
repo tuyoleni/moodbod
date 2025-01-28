@@ -1,13 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import AboutSection from "./sections/AboutSection";
-import Header from "./sections/Header";
-import MaintenanceSection from "./sections/MaintenanceSection";
-import QuoteSection from "./sections/QuoteSection";
-import { RouteSection } from "./sections/RouteSection";
-import ScrollingText from "./sections/ScrollingText";
+import AboutSection from './sections/AboutSection';
+import Header from './sections/Header';
+import MaintenanceSection from './sections/MaintenanceSection';
+import ScrollingText from './sections/ScrollingText';
 
 export default function HomePage() {
   return (
@@ -25,15 +21,6 @@ export default function HomePage() {
       </div>
 
       <MaintenanceSection />
-
-      {/* <QuoteSection />
-      <RouteSection /> */}
-
-      {/* <div className="h-[150vh] sm:h-[175vh] md:h-[200vh]">
-        <div className="sticky top-0 w-full h-screen bg-blue-200 flex justify-center items-center">
-          <h2 className="text-4xl font-bold">Sticky Section</h2>
-        </div>
-      </div> */}
     </main>
   );
 }
