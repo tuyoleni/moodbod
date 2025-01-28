@@ -2,6 +2,7 @@
 
 import AboutSection from "./sections/AboutSection";
 import Header from "./sections/Header";
+import MaintenanceSection from "./sections/MaintenanceSection";
 import QuoteSection from "./sections/QuoteSection";
 import { RouteSection } from "./sections/RouteSection";
 import ScrollingText from "./sections/ScrollingText";
@@ -21,8 +22,10 @@ export default function HomePage() {
         <AboutSection />
       </div>
 
-      <QuoteSection />
-      <RouteSection />
+      <MaintenanceSection />
+
+      {/* <QuoteSection />
+      <RouteSection /> */}
 
       {/* <div className="h-[150vh] sm:h-[175vh] md:h-[200vh]">
         <div className="sticky top-0 w-full h-screen bg-blue-200 flex justify-center items-center">
