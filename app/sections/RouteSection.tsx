@@ -106,24 +106,23 @@ export function RouteSection() {
                 {routePoints.length > 0 && (
                     <svg className="w-full h-screen absolute top-0 left-0">
                         <motion.path
-                            className="moodbod-path"
                             d={moodbodPath}
                             fill="none"
                             stroke="black"
                             strokeWidth="2"
                             initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
-                            transition={{ duration: 1.5 }}
+                            animate={isVisible ? { pathLength: 1 } : { pathLength: 0 }}
+                            transition={{ duration: 2, ease: "easeInOut" }}
                         />
+                        {/* Others Path Animation */}
                         <motion.path
-                            className="others-path"
                             d={othersPath}
                             fill="none"
                             strokeWidth="2"
                             stroke="rgb(169, 169, 169)"
                             initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
-                            transition={{ duration: 1.5, delay: 0.5 }}
+                            animate={isVisible ? { pathLength: 1 } : { pathLength: 0 }}
+                            transition={{ duration: 2, ease: "easeInOut", delay: 0.5 }}
                         />
                     </svg>
                 )}
