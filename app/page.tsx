@@ -4,6 +4,7 @@ import AboutSection from './sections/AboutSection';
 import Header from './sections/Header';
 import MaintenanceSection from './sections/MaintenanceSection';
 import ScrollingText from './sections/ScrollingText';
+import ServicesSection from './sections/ServicesSection';
 
 export default function HomePage() {
   return (
@@ -19,7 +20,9 @@ export default function HomePage() {
       <div className="h-[300vh] sm:h-[350vh] md:h-[350vh]">
         <AboutSection />
       </div>
-
+      <div className="h-[300vh]">
+        <ServicesSection />
+      </div>
       <MaintenanceSection />
     </main>
   );

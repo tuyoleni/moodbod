@@ -1,8 +1,11 @@
+'use client';
+import { useEffect, useRef } from 'react';
+
 const paperInfo = [
     {
         title: "Digital Strategy",
         description: "Data-driven approaches to transform your digital presence and market position",
-        image: "https://unsplash.com/photos/two-people-drawing-on-whiteboard-26MJGnCM0Wc",
+        image: "/api/placeholder/400/320",
         tag: "Strategy",
         width: 280,
         height: 340,
@@ -13,7 +16,7 @@ const paperInfo = [
     {
         title: "Brand Design",
         description: "Crafting memorable identities that resonate with your target audience",
-        image: "https://source.unsplash.com/400x300/?branding,design",
+        image: "/api/placeholder/400/320",
         tag: "Branding",
         width: 240,
         height: 320,
@@ -24,7 +27,7 @@ const paperInfo = [
     {
         title: "Development",
         description: "Building scalable, robust solutions with cutting-edge technology",
-        image: "https://source.unsplash.com/400x300/?coding,technology",
+        image: "/api/placeholder/400/320",
         tag: "Tech",
         width: 260,
         height: 330,
@@ -35,7 +38,7 @@ const paperInfo = [
     {
         title: "User Experience",
         description: "Creating intuitive interfaces that delight and engage users",
-        image: "https://source.unsplash.com/400x300/?ux,interface",
+        image: "/api/placeholder/400/320",
         tag: "UX/UI",
         width: 270,
         height: 350,
@@ -46,7 +49,7 @@ const paperInfo = [
     {
         title: "Marketing",
         description: "Strategic campaigns that drive growth and engagement",
-        image: "https://source.unsplash.com/400x300/?marketing,digital",
+        image: "/api/placeholder/400/320",
         tag: "Growth",
         width: 250,
         height: 325,
@@ -57,7 +60,7 @@ const paperInfo = [
     {
         title: "Analytics",
         description: "Deep insights and metrics to optimize performance",
-        image: "https://source.unsplash.com/400x300/?analytics,data",
+        image: "/api/placeholder/400/320",
         tag: "Data",
         width: 290,
         height: 360,
@@ -68,7 +71,7 @@ const paperInfo = [
     {
         title: "Content",
         description: "Engaging storytelling that builds lasting connections",
-        image: "https://source.unsplash.com/400x300/?content,creative",
+        image: "/api/placeholder/400/320",
         tag: "Creative",
         width: 265,
         height: 335,
@@ -79,7 +82,7 @@ const paperInfo = [
     {
         title: "Innovation",
         description: "Pushing boundaries with emerging technologies and trends",
-        image: "https://source.unsplash.com/400x300/?innovation,future",
+        image: "/api/placeholder/400/320",
         tag: "Future",
         width: 255,
         height: 330,
@@ -90,6 +93,8 @@ const paperInfo = [
 ];
 
 const ServicesSection = () => {
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     let papers: Array<{
         element: HTMLDivElement;
         startX: number;
@@ -102,6 +107,7 @@ const ServicesSection = () => {
         active: boolean;
     }> = [];
     let lastScrollProgress = 0;
+    let animationFrameId: number;
 
     const getEdgePosition = (info: any) => {
         const w = window.innerWidth;
@@ -130,9 +136,8 @@ const ServicesSection = () => {
         const centerX = w / 2;
         const centerY = h / 2;
 
-        // Define zones that are closer to center but maintain original direction
         let x, y;
-        const centerPull = 0.6; // How much to pull towards center (0 = edge, 1 = center)
+        const centerPull = 0.6;
 
         switch (startEdge) {
             case "left":
@@ -159,50 +164,8 @@ const ServicesSection = () => {
         return { x, y };
     };
 
-    const updatePapers = () => {
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        const scrollProgress = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
-        const scrollingUp = scrollProgress < lastScrollProgress;
-        lastScrollProgress = scrollProgress;
-
-        papers.forEach((paper, index) => {
-            const paperTrigger = index * 0.1;
-            const progress = Math.max(0, Math.min(1, (scrollProgress - paperTrigger) * 5));
-
-            // Ease out the progress for smoother ending
-            const easedProgress = 1 - Math.pow(1 - progress, 3);
-
-            const currentX = paper.startX + (paper.finalX - paper.startX) * easedProgress;
-            const currentY = paper.startY + (paper.finalY - paper.startY) * easedProgress;
-
-            // Calculate rotation with easing
-            const baseRotation = paper.startRotation;
-            const rotationProgress = Math.max(0, 1 - easedProgress); // Inverse of progress for rotation slowdown
-            const scrollRotation = scrollProgress * paper.rotationSpeed * paper.rotationDirection * rotationProgress;
-            const currentRotation = baseRotation + scrollRotation;
-
-            const offsetX = currentX - centerX;
-            const offsetY = currentY - centerY;
-
-            if (paper.element) {
-                if (scrollingUp && progress === 0) {
-                    paper.element.style.transform = `translate3d(${paper.startX - centerX}px, ${paper.startY - centerY}px, 0) rotate(${baseRotation}deg)`;
-                } else {
-                    paper.element.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) rotate(${currentRotation}deg)`;
-                }
-            }
-        });
-
-        const revealText = document.querySelector('.reveal-text') as HTMLElement;
-        if (revealText) {
-            revealText.style.opacity = scrollProgress > 0.8 ? '1' : '0';
-        }
-
-        requestAnimationFrame(updatePapers);
-    };
-
-    setTimeout(() => {
+    useEffect(() => {
+        // Initialize papers
         const paperElements = document.querySelectorAll('.paper');
         papers = Array.from(paperElements).map((element, i) => {
             const info = paperInfo[i];
@@ -214,68 +177,146 @@ const ServicesSection = () => {
                 startY: startPosition?.y || 0,
                 finalX: finalPosition.x,
                 finalY: finalPosition.y,
-                startRotation: Math.random() * 30 - 15,
-                rotationSpeed: Math.random() * 180 - 90, // Reduced rotation speed range
+                startRotation: info.startRotation || Math.random() * 30 - 15,
+                rotationSpeed: Math.random() * 180 - 90,
                 rotationDirection: Math.random() > 0.5 ? 1 : -1,
                 active: false
             };
         });
 
-        papers.forEach((paper) => {
-            const offsetX = paper.startX - window.innerWidth / 2;
-            const offsetY = paper.startY - window.innerHeight / 2;
-            paper.element.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) rotate(${paper.startRotation}deg)`;
-        });
+        function updatePapers() {
+            if (!containerRef.current || !sectionRef.current) return;
 
+            const container = containerRef.current;
+            const section = sectionRef.current;
+            const rect = section.getBoundingClientRect();
+
+            // Calculate progress based on container position
+            const progress = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));
+            const scrollingUp = progress < lastScrollProgress;
+            lastScrollProgress = progress;
+
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            papers.forEach((paper, index) => {
+                const paperTrigger = index * 0.1;
+                const paperProgress = Math.max(0, Math.min(1, (progress - paperTrigger) * 5));
+                const easedProgress = 1 - Math.pow(1 - paperProgress, 3);
+
+                const currentX = paper.startX + (paper.finalX - paper.startX) * easedProgress;
+                const currentY = paper.startY + (paper.finalY - paper.startY) * easedProgress;
+
+                const baseRotation = paper.startRotation;
+                const rotationProgress = Math.max(0, 1 - easedProgress);
+                const scrollRotation = progress * paper.rotationSpeed * paper.rotationDirection * rotationProgress;
+                const currentRotation = baseRotation + scrollRotation;
+
+                const offsetX = currentX - centerX;
+                const offsetY = currentY - centerY;
+
+                if (paper.element) {
+                    if (scrollingUp && paperProgress === 0) {
+                        paper.element.style.transform = `translate3d(${paper.startX - centerX}px, ${paper.startY - centerY}px, 0) rotate(${baseRotation}deg)`;
+                    } else {
+                        paper.element.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) rotate(${currentRotation}deg)`;
+                    }
+                }
+            });
+
+            animationFrameId = requestAnimationFrame(updatePapers);
+        }
+
+        // Start animation
         updatePapers();
 
-        window.addEventListener('resize', () => {
-            papers.forEach((paper) => {
-                const startPosition = getEdgePosition(paperInfo[Math.floor(Math.random() * paperInfo.length)]);
-                const finalPosition = getFinalPosition(paperInfo[Math.floor(Math.random() * paperInfo.length)].edge);
+        // Handle resize
+        const handleResize = () => {
+            papers.forEach((paper, i) => {
+                const startPosition = getEdgePosition(paperInfo[i]);
+                const finalPosition = getFinalPosition(paperInfo[i].edge);
                 paper.startX = startPosition?.x || 0;
                 paper.startY = startPosition?.y || 0;
                 paper.finalX = finalPosition.x;
                 paper.finalY = finalPosition.y;
             });
-        });
-    }, 0);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+        };
+    }, []);
 
     return (
-        <div className="h-[500vh] bg-[#111111] text-white">
-            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen flex justify-center items-center overflow-hidden">
-                {paperInfo.map((info, i) => (
-                    <div
-                        key={i}
-                        className="paper absolute bg-[#1a1a1a] shadow-lg transform-gpu flex flex-col justify-start items-start p-5 rounded overflow-hidden border border-white/10"
-                        style={{
-                            width: '290px',  // Fixed width for all cards
-                            height: '360px', // Fixed height for all cards
-                            willChange: 'transform',
-                            opacity: 0.99
-                        }}
-                    >
-                        <img
-                            src={info.image}
-                            alt={info.title}
-                            className="w-[calc(100%+40px)] h-[180px] object-cover -mx-5 -mt-5 mb-4 filter grayscale-[20%] contrast-120"
-                        />
-                        <div className="font-semibold text-lg text-white mb-2.5 tracking-wider uppercase">
-                            {info.title}
-                        </div>
-                        <div className="text-sm text-white/70 leading-relaxed font-light mb-4">
-                            {info.description}
-                        </div>
-                        <div className="bg-white/10 px-3 py-1.5 rounded-full text-xs text-white/90 tracking-wider uppercase font-semibold">
-                            {info.tag}
-                        </div>
+        <div ref={sectionRef} className="w-full h-full relative">
+            <div
+                ref={containerRef}
+                className="w-full h-screen sticky top-0 overflow-hidden"
+            >
+                <div className="w-full h-full flex flex-col justify-center items-center text-white bg-[#111111]">
+                    <div className="flex justify-center items-center overflow-hidden">
+                        {paperInfo.map((info, i) => (
+                            <div
+                                key={i}
+                                className="paper absolute bg-[#1a1a1a] shadow-lg transform-gpu flex flex-col justify-start items-start p-5 rounded overflow-hidden border border-white/10 w-[290px] h-[380px] opacity-[0.99] will-change-transform"
+                                data-edge={info.edge}
+                            >
+                                <img
+                                    src="/api/placeholder/400/320"
+                                    alt={info.title}
+                                    className="w-full bg-slate-400 h-[180px] object-cover mb-4 filter grayscale-[20%] contrast-120"
+                                />
+                                <div className="font-semibold text-lg text-white mb-2.5 tracking-wider uppercase">
+                                    {info.title}
+                                </div>
+                                <div className="text-sm text-white/70 leading-relaxed font-light mb-4">
+                                    {info.description}
+                                </div>
+                                <div className="bg-white/10 px-3 py-1.5 rounded-full text-xs text-white/90 tracking-wider uppercase font-semibold">
+                                    {info.tag}
+                                </div>
+                            </div>
+                        ))}
+                        <p className="text-2xl h-full max-w-[500px] sm:max-w-[500px] md:max-w-[650px] xl:max-w-[800px] text-center">
+                            <span className="text-4xl font-black tracking-tight relative group animate-pulse">
+                                Moodbod
+                                <img src="/logo-icon.svg" className="absolute -top-6 -right-6 w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity" alt="Moodbod icon" />
+                                <span className="absolute -left-4 -top-4 text-sm opacity-0 group-hover:opacity-100 transition-all duration-500">⚡</span>
+                            </span> will help your <span className="text-3xl font-bold relative inline-block group">
+                                business grow
+                                <span className="absolute -top-3 -right-3 text-lg opacity-0 group-hover:opacity-100 transition-all duration-500">🚀</span>
+                                <span className="absolute -left-2 top-1/2 text-white/30 transform -translate-y-1/2">&lt;</span>
+                            </span> online with clear and effective solutions. From creating <span className="text-2xl font-extrabold tracking-wide relative group">
+                                strong brand identities
+                                <span className="absolute -right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500">✨</span>
+                                <span className="absolute -right-3 -bottom-2 text-white/30">&gt;</span>
+                            </span> to building <span className="relative group">amazing
+                                <span className="absolute -top-4 -right-4 text-sm opacity-0 group-hover:opacity-100 transition-all duration-500">⚡</span>
+                                <span className="absolute -left-2 bottom-0 text-white/30">/&gt;</span>
+                            </span> digital experiences, everything is designed to <span className="text-3xl font-black relative inline-block group">
+                                attract more customers
+                                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-white/50 scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></span>
+                                <span className="absolute -right-3 top-0 text-white/30">&gt;</span>
+                            </span>. With smart use of <span className="text-2xl font-bold tracking-widest group relative inline-block animate-pulse">
+                                TECH
+                                <span className="absolute -top-2 -right-2 text-xs opacity-0 group-hover:opacity-100 transition-all duration-500">&lt;/&gt;</span>
+                            </span>, <span className="text-4xl font-black tracking-tight group">
+                                Moodbod
+                                <span className="absolute -top-3 -right-3 text-lg opacity-0 group-hover:opacity-100 transition-all duration-500">💫</span>
+                                <span className="absolute -left-3 bottom-0 text-white/30">&lt;</span>
+                            </span> makes <span className="text-3xl font-extrabold relative group">
+                                digital growth
+                                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-white/30 to-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></span>
+                                <span className="absolute -right-3 -top-2 text-white/30">/&gt;</span>
+                            </span> easy.
+                        </p>
                     </div>
-                ))}
-                <p className="reveal-text w-1/2 z-2 text-white fixed bottom-5 left-5 transition-opacity duration-300">
-                    We offer a comprehensive suite of digital services, from strategic planning and brand development to
-                    technical implementation and user experience design. Our capabilities span the full spectrum of modern
-                    digital needs, helping businesses thrive in today's connected world.
-                </p>
+                </div>
             </div>
         </div>
     );
