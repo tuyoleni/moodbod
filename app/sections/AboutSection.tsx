@@ -24,7 +24,7 @@ function AboutSection() {
 
     return (
         <section ref={sectionRef} className="w-full h-full relative">
-            <div className="sticky top-0 w-full h-screen px-4 sm:px-12 md:px-14 xl:px-44">
+            <div className="sticky top-0 w-full h-screen px-4 sm:px-12 md:px-14 xl:px-4 overflow-hidden">
                 <div className="w-full h-full flex flex-col justify-around">
                     {listItems.map((item, index) => (
                         <motion.div

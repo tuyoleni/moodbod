@@ -1,10 +1,24 @@
 'use client';
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
+import android from '@/public/icons/android-chrome-192x192.png';
 
-const paperInfo = [
+interface PaperInfo {
+    title: string;
+    description: string;
+    image: string;
+    tag: string;
+    width: number;
+    height: number;
+    edge: string;
+    offsetPercent: number;
+    startRotation: number;
+}
+
+const paperInfo: PaperInfo[] = [
     {
         title: "Digital Strategy",
-        description: "Data-driven approaches to transform your digital presence and market position",
+        description: "Data driven approaches to transform your digital presence and market position",
         image: "/api/placeholder/400/320",
         tag: "Strategy",
         width: 280,
@@ -26,7 +40,7 @@ const paperInfo = [
     },
     {
         title: "Development",
-        description: "Building scalable, robust solutions with cutting-edge technology",
+        description: "Building scalable, robust solutions with cutting edge technology",
         image: "/api/placeholder/400/320",
         tag: "Tech",
         width: 260,
@@ -78,38 +92,29 @@ const paperInfo = [
         edge: "bottom",
         offsetPercent: 0.8,
         startRotation: 12
-    },
-    {
-        title: "Innovation",
-        description: "Pushing boundaries with emerging technologies and trends",
-        image: "/api/placeholder/400/320",
-        tag: "Future",
-        width: 255,
-        height: 330,
-        edge: "left",
-        offsetPercent: 0.9,
-        startRotation: -18
     }
 ];
+
+interface Paper {
+    element: HTMLDivElement;
+    startX: number;
+    startY: number;
+    startRotation: number;
+    finalX: number;
+    finalY: number;
+    rotationSpeed: number;
+    rotationDirection: number;
+    active: boolean;
+}
 
 const ServicesSection = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    let papers: Array<{
-        element: HTMLDivElement;
-        startX: number;
-        startY: number;
-        startRotation: number;
-        finalX: number;
-        finalY: number;
-        rotationSpeed: number;
-        rotationDirection: number;
-        active: boolean;
-    }> = [];
-    let lastScrollProgress = 0;
-    let animationFrameId: number;
+    const papersRef = useRef<Paper[]>([]);
+    const lastScrollProgressRef = useRef(0);
+    const animationFrameIdRef = useRef<number | null>(null);
 
-    const getEdgePosition = (info: any) => {
+    const getEdgePosition = (info: PaperInfo) => {
         const w = window.innerWidth;
         const h = window.innerHeight;
         const centerX = w / 2;
@@ -125,6 +130,8 @@ const ServicesSection = () => {
                 return { x: centerX + (w * info.offsetPercent - w / 2), y: h + buffer };
             case "left":
                 return { x: -buffer, y: centerY + (h * info.offsetPercent - h / 2) };
+            default:
+                return { x: 0, y: 0 };
         }
     };
 
@@ -167,14 +174,14 @@ const ServicesSection = () => {
     useEffect(() => {
         // Initialize papers
         const paperElements = document.querySelectorAll('.paper');
-        papers = Array.from(paperElements).map((element, i) => {
+        papersRef.current = Array.from(paperElements).map((element, i) => {
             const info = paperInfo[i];
             const startPosition = getEdgePosition(info);
             const finalPosition = getFinalPosition(info.edge);
             return {
                 element: element as HTMLDivElement,
-                startX: startPosition?.x || 0,
-                startY: startPosition?.y || 0,
+                startX: startPosition.x,
+                startY: startPosition.y,
                 finalX: finalPosition.x,
                 finalY: finalPosition.y,
                 startRotation: info.startRotation || Math.random() * 30 - 15,
@@ -187,19 +194,18 @@ const ServicesSection = () => {
         function updatePapers() {
             if (!containerRef.current || !sectionRef.current) return;
 
-            const container = containerRef.current;
             const section = sectionRef.current;
             const rect = section.getBoundingClientRect();
 
             // Calculate progress based on container position
             const progress = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));
-            const scrollingUp = progress < lastScrollProgress;
-            lastScrollProgress = progress;
+            const scrollingUp = progress < lastScrollProgressRef.current;
+            lastScrollProgressRef.current = progress;
 
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
 
-            papers.forEach((paper, index) => {
+            papersRef.current.forEach((paper, index) => {
                 const paperTrigger = index * 0.1;
                 const paperProgress = Math.max(0, Math.min(1, (progress - paperTrigger) * 5));
                 const easedProgress = 1 - Math.pow(1 - paperProgress, 3);
@@ -224,7 +230,7 @@ const ServicesSection = () => {
                 }
             });
 
-            animationFrameId = requestAnimationFrame(updatePapers);
+            animationFrameIdRef.current = requestAnimationFrame(updatePapers);
         }
 
         // Start animation
@@ -232,11 +238,11 @@ const ServicesSection = () => {
 
         // Handle resize
         const handleResize = () => {
-            papers.forEach((paper, i) => {
+            papersRef.current.forEach((paper, i) => {
                 const startPosition = getEdgePosition(paperInfo[i]);
                 const finalPosition = getFinalPosition(paperInfo[i].edge);
-                paper.startX = startPosition?.x || 0;
-                paper.startY = startPosition?.y || 0;
+                paper.startX = startPosition.x;
+                paper.startY = startPosition.y;
                 paper.finalX = finalPosition.x;
                 paper.finalY = finalPosition.y;
             });
@@ -246,8 +252,8 @@ const ServicesSection = () => {
 
         return () => {
             window.removeEventListener('resize', handleResize);
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
+            if (animationFrameIdRef.current) {
+                cancelAnimationFrame(animationFrameIdRef.current);
             }
         };
     }, []);
@@ -266,9 +272,11 @@ const ServicesSection = () => {
                                 className="paper absolute bg-[#1a1a1a] shadow-lg transform-gpu flex flex-col justify-start items-start p-5 rounded overflow-hidden border border-white/10 w-[290px] h-[380px] opacity-[0.99] will-change-transform"
                                 data-edge={info.edge}
                             >
-                                <img
+                                <Image
                                     src="/api/placeholder/400/320"
                                     alt={info.title}
+                                    width={400}
+                                    height={320}
                                     className="w-full bg-slate-400 h-[180px] object-cover mb-4 filter grayscale-[20%] contrast-120"
                                 />
                                 <div className="font-semibold text-lg text-white mb-2.5 tracking-wider uppercase">
@@ -285,7 +293,7 @@ const ServicesSection = () => {
                         <p className="text-2xl h-full max-w-[500px] sm:max-w-[500px] md:max-w-[650px] xl:max-w-[800px] text-center">
                             <span className="text-4xl font-black tracking-tight relative group animate-pulse">
                                 Moodbod
-                                <img src="/logo-icon.svg" className="absolute -top-6 -right-6 w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity" alt="Moodbod icon" />
+                                <Image src={android} width={32} height={32} className="absolute -top-6 -right-6 w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity" alt="Moodbod icon" />
                                 <span className="absolute -left-4 -top-4 text-sm opacity-0 group-hover:opacity-100 transition-all duration-500">⚡</span>
                             </span> will help your <span className="text-3xl font-bold relative inline-block group">
                                 business grow
