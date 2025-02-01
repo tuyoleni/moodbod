@@ -24,7 +24,7 @@ function AboutSection() {
 
     return (
         <section ref={sectionRef} className="w-full h-full relative">
-            <div className="sticky top-0 w-full h-screen px-4 sm:px-12 md:px-14 xl:px-4 overflow-hidden">
+            <div className="sticky top-0 w-full h-screen overflow-hidden">
                 <div className="w-full h-full flex flex-col justify-around">
                     {listItems.map((item, index) => (
                         <motion.div
@@ -43,13 +43,12 @@ function AboutSection() {
 
                     <motion.h1
                         style={headerAnimation}
-                        className="text-[clamp(60px,10vw,80pt)] text-wrap font-black leading-[0.85] uppercase pr-4 relative z-10"
+                        className="text-[clamp(60px,10vw,80pt)] text-wrap font-black leading-[0.85] uppercase pr-4 relative z-10 px-4 sm:px-12 md:px-14 xl:px-44"
                     >
                         At Moodbod, we help you win online.
                     </motion.h1>
 
-                    {/* List Items */}
-                    <ul className="text-[clamp(18px,12vw,35px)] font-black space-y-2 sm:max-w-[90%] text-black/70 relative z-10">
+                    <ul className="text-[clamp(18px,12vw,35px)] font-black space-y-2 sm:max-w-[90%] text-black/70 relative z-10 px-4 sm:px-12 md:px-14 xl:px-44">
                         {listItems.map((item, index) => (
                             <motion.li
                                 key={item.text}

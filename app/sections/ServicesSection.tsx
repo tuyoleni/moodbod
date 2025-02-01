@@ -2,6 +2,14 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import android from '@/public/icons/android-chrome-192x192.png';
+import {
+    moodbodAnalytics,
+    moodbodBrandDesign,
+    moodbodDevelopment,
+    moodbodDigitalStrategy,
+    moodbodMarketing,
+    moodbodUserExperience
+} from '@/public/assets';
 
 interface PaperInfo {
     title: string;
@@ -19,7 +27,7 @@ const paperInfo: PaperInfo[] = [
     {
         title: "Digital Strategy",
         description: "Data driven approaches to transform your digital presence and market position",
-        image: "/api/placeholder/400/320",
+        image: moodbodDigitalStrategy,
         tag: "Strategy",
         width: 280,
         height: 340,
@@ -30,7 +38,7 @@ const paperInfo: PaperInfo[] = [
     {
         title: "Brand Design",
         description: "Crafting memorable identities that resonate with your target audience",
-        image: "/api/placeholder/400/320",
+        image: moodbodBrandDesign,
         tag: "Branding",
         width: 240,
         height: 320,
@@ -41,7 +49,7 @@ const paperInfo: PaperInfo[] = [
     {
         title: "Development",
         description: "Building scalable, robust solutions with cutting edge technology",
-        image: "/api/placeholder/400/320",
+        image: moodbodDevelopment,
         tag: "Tech",
         width: 260,
         height: 330,
@@ -52,7 +60,7 @@ const paperInfo: PaperInfo[] = [
     {
         title: "User Experience",
         description: "Creating intuitive interfaces that delight and engage users",
-        image: "/api/placeholder/400/320",
+        image: moodbodUserExperience,
         tag: "UX/UI",
         width: 270,
         height: 350,
@@ -63,7 +71,7 @@ const paperInfo: PaperInfo[] = [
     {
         title: "Marketing",
         description: "Strategic campaigns that drive growth and engagement",
-        image: "/api/placeholder/400/320",
+        image: moodbodMarketing,
         tag: "Growth",
         width: 250,
         height: 325,
@@ -74,24 +82,13 @@ const paperInfo: PaperInfo[] = [
     {
         title: "Analytics",
         description: "Deep insights and metrics to optimize performance",
-        image: "/api/placeholder/400/320",
+        image: moodbodAnalytics,
         tag: "Data",
         width: 290,
         height: 360,
         edge: "right",
         offsetPercent: 0.7,
         startRotation: -15
-    },
-    {
-        title: "Content",
-        description: "Engaging storytelling that builds lasting connections",
-        image: "/api/placeholder/400/320",
-        tag: "Creative",
-        width: 265,
-        height: 335,
-        edge: "bottom",
-        offsetPercent: 0.8,
-        startRotation: 12
     }
 ];
 
@@ -273,11 +270,15 @@ const ServicesSection = () => {
                                 data-edge={info.edge}
                             >
                                 <Image
-                                    src="/api/placeholder/400/320"
+                                    src={info.image}
                                     alt={info.title}
                                     width={400}
                                     height={320}
-                                    className="w-full bg-slate-400 h-[180px] object-cover mb-4 filter grayscale-[20%] contrast-120"
+                                    className="w-full h-[180px] object-cover mb-4 filter grayscale hover:grayscale-0 contrast-125 hover:contrast-100 brightness-90 hover:brightness-100 transition-all duration-300"
+                                    priority={true}
+                                    quality={85}
+                                    placeholder="blur"
+                                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/2wBDAR0XFyAeIRshGxsdIR0hHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                                 />
                                 <div className="font-semibold text-lg text-white mb-2.5 tracking-wider uppercase">
                                     {info.title}
@@ -316,7 +317,6 @@ const ServicesSection = () => {
                             </span>, <span className="text-4xl font-black tracking-tight group">
                                 Moodbod
                                 <span className="absolute -top-3 -right-3 text-lg opacity-0 group-hover:opacity-100 transition-all duration-500">💫</span>
-                                <span className="absolute -left-3 bottom-0 text-white/30">&lt;</span>
                             </span> makes <span className="text-3xl font-extrabold relative group">
                                 digital growth
                                 <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-white/30 to-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></span>
