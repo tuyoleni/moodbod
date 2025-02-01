@@ -9,21 +9,45 @@ import ServicesSection from './sections/ServicesSection';
 export default function HomePage() {
   return (
     <main className="w-full relative scroll-smooth">
-      <div className="h-[180vh] sm:h-[220vh] md:h-[280vh] max-w-none sm:max-w-full">
+      <section
+        className="h-[180vh] sm:h-[220vh] md:h-[280vh] max-w-none sm:max-w-full"
+        id="hero"
+        aria-label="Hero section"
+      >
         <Header />
-      </div>
+      </section>
 
-      <div className="h-[300vh] sm:h-[350vh] md:h-[400vh] bg-black max-w-none sm:max-w-full">
+      <section
+        className="h-[300vh] sm:h-[350vh] md:h-[400vh] bg-black max-w-none sm:max-w-full"
+        id="intro"
+        aria-label="Introduction"
+      >
         <ScrollingText />
-      </div>
+      </section>
 
-      <div className="h-[300vh] sm:h-[350vh] md:h-[350vh]">
+      <section
+        className="h-[300vh] sm:h-[350vh] md:h-[350vh]"
+        id="about"
+        aria-label="About us"
+      >
         <AboutSection />
-      </div>
-      <div className="h-[300vh]">
+      </section>
+
+      <section
+        className="h-[300vh]"
+        id="services"
+        aria-label="Our services"
+      >
         <ServicesSection />
-      </div>
-      <MaintenanceSection />
+      </section>
+
+      <section
+        className=""
+        id="maintenance"
+        aria-label="Maintenance services"
+      >
+        <MaintenanceSection />
+      </section>
     </main>
   );
 }
