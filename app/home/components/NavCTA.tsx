@@ -14,7 +14,7 @@ export function NavCTA({ isCTASectionVisible, className = "" }: Props) {
             transition={{ duration: 0.3 }}
             className={`px-6 py-2 rounded-full font-medium ${className}`}
         >
-            Let's Talk
+            Let&apos;s Talk
         </motion.button>
     );
 } 

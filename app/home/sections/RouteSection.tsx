@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RoutePaths } from "../components/RoutePaths";
 import { RoutePoint } from "../components/RoutePoint";
@@ -24,7 +24,6 @@ const relativeRoutePoints = [
 export function RouteSection() {
     const { routePoints, routeContainerRef } = useRoutePoints(relativeRoutePoints);
     const isVisible = useVisibilityObserver(routeContainerRef as React.RefObject<HTMLElement>);
-    const [highlightedPoint, setHighlightedPoint] = useState<number | null>(null);
 
     const moodbodPath = useMemo(() => generateSmoothPath(routePoints, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]), [routePoints]);
     const othersPath = useMemo(() => generateSmoothPath(routePoints, [1, 4, 6, 10]), [routePoints]);
@@ -36,7 +35,7 @@ export function RouteSection() {
                 <RoutePaths moodbodPath={moodbodPath} othersPath={othersPath} isVisible={isVisible} />
                 <AnimatePresence>
                     {routePoints.map((point, index) => (
-                        <RoutePoint key={index} {...point} onHover={() => setHighlightedPoint(index)} onLeave={() => setHighlightedPoint(null)} />
+                        <RoutePoint key={index} {...point} onHover={() => { }} onLeave={() => { }} />
                     ))}
                 </AnimatePresence>
             </motion.div>

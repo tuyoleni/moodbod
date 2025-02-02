@@ -4,11 +4,14 @@ export function useVisibilityObserver(ref: React.RefObject<HTMLElement>, thresho
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
+        const currentRef = ref.current;
         const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), { threshold });
 
-        if (ref.current) observer.observe(ref.current);
-        return () => ref.current && observer.unobserve(ref.current);
-    }, [ref]);
+        if (currentRef) observer.observe(currentRef);
+        return () => {
+            if (currentRef) observer.unobserve(currentRef);
+        };
+    }, [ref, threshold]);
 
     return isVisible;
 }

@@ -20,7 +20,7 @@ export function CTASection({ onVisibilityChange }: Props) {
             <div className="flex flex-col">
                 <div className="relative">
                     <h2 className="text-[64pt] md:text-[96pt] lg:text-[128pt] font-black leading-none">
-                        Let's hear.
+                        Let&apos;s hear.
                     </h2>
                     <h2 className="text-[64pt] md:text-[96pt] lg:text-[128pt] font-black leading-none mt-[-20px] md:mt-[-40px]">
                         your idea.
@@ -30,7 +30,7 @@ export function CTASection({ onVisibilityChange }: Props) {
                 <div className="mt-20">
                     <p className="text-xl md:text-2xl max-w-[800px] mb-12">
                         We will help make things faster and easier. Digital tools can save you time,
-                        reach more people, and grow your business. Let's go digital and make your
+                        reach more people, and grow your business. Let&apos;s go digital and make your
                         work smoother and more efficient.
                     </p>
                     <motion.button
@@ -40,7 +40,7 @@ export function CTASection({ onVisibilityChange }: Props) {
                         }}
                         className="px-6 py-2 rounded-full font-medium bg-white text-black hover:bg-black hover:text-white transition-colors duration-300"
                     >
-                        Let's Talk
+                        Let&apos;s Talk
                     </motion.button>
                 </div>
             </div>
