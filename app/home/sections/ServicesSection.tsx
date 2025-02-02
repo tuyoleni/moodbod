@@ -136,34 +136,37 @@ const ServicesSection = () => {
         const w = window.innerWidth;
         const h = window.innerHeight;
         const textSpace = 200;
-        const padding = 100;
+        const padding = 150;
         const centerX = w / 2;
         const centerY = h / 2;
 
-        let x, y;
-        const centerPull = 0.6;
+        const randomOffset = () => (Math.random() - 0.5) * 0.6;
 
+        let x, y;
         switch (startEdge) {
             case "left":
-                x = padding + (centerX - padding) * (0.3 + Math.random() * centerPull);
-                y = centerY + (Math.random() - 0.5) * (h - textSpace - 2 * padding) * 0.8;
+                x = centerX + (w * 0.25) * randomOffset();
+                y = centerY + (h - textSpace) * randomOffset();
                 break;
             case "right":
-                x = centerX + (w - centerX - padding) * (0.7 - Math.random() * centerPull);
-                y = centerY + (Math.random() - 0.5) * (h - textSpace - 2 * padding) * 0.8;
+                x = centerX + (w * 0.25) * randomOffset();
+                y = centerY + (h - textSpace) * randomOffset();
                 break;
             case "top":
-                x = centerX + (Math.random() - 0.5) * (w - 2 * padding) * 0.8;
-                y = padding + (centerY - padding) * (0.3 + Math.random() * centerPull);
+                x = centerX + (w * 0.3) * randomOffset();
+                y = centerY + (h - textSpace) * 0.25 * randomOffset();
                 break;
             case "bottom":
-                x = centerX + (Math.random() - 0.5) * (w - 2 * padding) * 0.8;
-                y = centerY + (h - textSpace - centerY - padding) * (0.7 - Math.random() * centerPull);
+                x = centerX + (w * 0.3) * randomOffset();
+                y = centerY + (h - textSpace) * 0.25 * randomOffset();
                 break;
             default:
-                x = centerX + (Math.random() - 0.5) * (w - 2 * padding) * 0.8;
-                y = centerY + (Math.random() - 0.5) * (h - textSpace - 2 * padding) * 0.8;
+                x = centerX + (w * 0.25) * randomOffset();
+                y = centerY + (h - textSpace) * randomOffset();
         }
+
+        x = Math.max(padding, Math.min(w - padding, x));
+        y = Math.max(padding, Math.min(h - textSpace - padding, y));
 
         return { x, y };
     };
@@ -266,7 +269,7 @@ const ServicesSection = () => {
                         {paperInfo.map((info, i) => (
                             <div
                                 key={i}
-                                className="paper absolute bg-[#1a1a1a] shadow-lg transform-gpu flex flex-col justify-start items-start p-5 rounded overflow-hidden border border-white/10 w-[290px] h-[380px] opacity-[0.99] will-change-transform"
+                                className="paper absolute bg-[#1a1a1a] shadow-lg transform-gpu flex flex-col justify-start items-start p-5 rounded overflow-hidden border border-white/10 w-[290px] h-[380px] opacity-[0.99] will-change-transform mb-40"
                                 data-edge={info.edge}
                             >
                                 <Image
@@ -291,40 +294,11 @@ const ServicesSection = () => {
                                 </div>
                             </div>
                         ))}
-                        <p className="text-2xl h-full max-w-[500px] sm:max-w-[500px] md:max-w-[650px] xl:max-w-[800px] text-center">
-                            <span className="text-4xl font-black tracking-tight relative group animate-pulse">
-                                Moodbod
-                                <Image src={android} width={32} height={32} className="absolute -top-6 -right-6 w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity" alt="Moodbod icon" />
-                                <span className="absolute -left-4 -top-4 text-sm opacity-0 group-hover:opacity-100 transition-all duration-500">⚡</span>
-                            </span> will help your <span className="text-3xl font-bold relative inline-block group">
-                                business grow
-                                <span className="absolute -top-3 -right-3 text-lg opacity-0 group-hover:opacity-100 transition-all duration-500">🚀</span>
-                                <span className="absolute -left-2 top-1/2 text-white/30 transform -translate-y-1/2">&lt;</span>
-                            </span> online with clear and effective solutions. From creating <span className="text-2xl font-extrabold tracking-wide relative group">
-                                strong brand identities
-                                <span className="absolute -right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500">✨</span>
-                                <span className="absolute -right-3 -bottom-2 text-white/30">&gt;</span>
-                            </span> to building <span className="relative group">amazing
-                                <span className="absolute -top-4 -right-4 text-sm opacity-0 group-hover:opacity-100 transition-all duration-500">⚡</span>
-                                <span className="absolute -left-2 bottom-0 text-white/30">/&gt;</span>
-                            </span> digital experiences, everything is designed to <span className="text-3xl font-black relative inline-block group">
-                                attract more customers
-                                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-white/50 scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></span>
-                                <span className="absolute -right-3 top-0 text-white/30">&gt;</span>
-                            </span>. With smart use of <span className="text-2xl font-bold tracking-widest group relative inline-block animate-pulse">
-                                TECH
-                                <span className="absolute -top-2 -right-2 text-xs opacity-0 group-hover:opacity-100 transition-all duration-500">&lt;/&gt;</span>
-                            </span>, <span className="text-4xl font-black tracking-tight group">
-                                Moodbod
-                                <span className="absolute -top-3 -right-3 text-lg opacity-0 group-hover:opacity-100 transition-all duration-500">💫</span>
-                            </span> makes <span className="text-3xl font-extrabold relative group">
-                                digital growth
-                                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-white/30 to-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></span>
-                                <span className="absolute -right-3 -top-2 text-white/30">/&gt;</span>
-                            </span> easy.
-                        </p>
                     </div>
                 </div>
+                <p className="max-w-[100%] md:max-w-[80%] xl:max-w-[70%] absolute bottom-20 left-0 px-4 sm:px-12 md:px-14 xl:px-44 text-white">
+                    Moodbod will help your business grow online with clear and effective solutions. From crafting strong brand identities to building exceptional digital experiences, every aspect is designed to attract more customers. By leveraging technology strategically, Moodbod simplifies digital growth.
+                </p>
             </div>
         </div>
     );
