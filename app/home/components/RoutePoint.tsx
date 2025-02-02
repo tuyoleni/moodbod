@@ -18,10 +18,10 @@ export function RoutePoint({ x, y, label, onHover, onLeave, isActive = false, on
     return (
         <div className="relative">
             <motion.div
-                className="absolute w-4 h-4 bg-black outline outline-4 outline-white rounded-full cursor-pointer hover:scale-150 transition-transform"
-                style={{ left: x - 8, top: y - 8 }}
+                className="absolute w-8 h-8 bg-black outline outline-4 outline-white rounded-full cursor-pointer hover:scale-125 transition-transform"
+                style={{ left: x - 16, top: y - 16 }}
                 initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: isActive ? 1.5 : 1 }}
+                animate={{ opacity: 1, scale: isActive ? 1.25 : 1 }}
                 exit={{ opacity: 0, scale: 0 }}
                 transition={{ duration: 0.5 }}
                 onMouseEnter={() => {
