@@ -4,7 +4,6 @@ import HeaderSection from "./sections/HeaderSection";
 import ScrollingText from "./sections/ScrollingText";
 import AboutSection from "./sections/AboutSection";
 import ServicesSection from "./sections/ServicesSection";
-import MaintenanceSection from "./sections/MaintenanceSection";
 import { RouteSection } from "./sections/RouteSection";
 import { CTASection } from "./sections/CTASection";
 
