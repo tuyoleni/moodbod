@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import android from '@/public/icons/android-chrome-192x192.png';
 import {
     moodbodAnalytics,
     moodbodBrandDesign,

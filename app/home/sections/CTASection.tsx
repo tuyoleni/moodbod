@@ -24,7 +24,7 @@ export const CTASection = memo(({ onVisibilityChange }: Props) => {
             <div className="flex flex-col">
                 <div className="relative leading-none">
                     <h1 className="text-[clamp(80px,12vw,200pt)]  text-wrap font-black block leading-[0.85] uppercase">
-                        Let's hear your idea.
+                        Let&apos;s hear your idea.
                     </h1>
                 </div>
 
@@ -49,3 +49,5 @@ export const CTASection = memo(({ onVisibilityChange }: Props) => {
         </section>
     );
 });
+
+CTASection.displayName = 'CTASection';
