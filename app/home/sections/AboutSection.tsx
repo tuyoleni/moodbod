@@ -1,7 +1,7 @@
 'use client'
+import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
 import { motion } from 'framer-motion';
 import { useRef } from 'react';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 function AboutSection() {
     const sectionRef = useRef<HTMLElement>(null) as React.RefObject<HTMLElement>;
@@ -25,7 +25,7 @@ function AboutSection() {
     return (
         <section ref={sectionRef} className="w-full h-full relative">
             <div className="sticky top-0 w-full h-screen overflow-hidden">
-                <div className="w-full h-full flex flex-col justify-around">
+                <div className="w-full h-full flex flex-col justify-evenly">
                     {listItems.map((item, index) => (
                         <motion.div
                             key={`bg-${item.text}`}

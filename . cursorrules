@@ -37,7 +37,6 @@ Project Structure
 const projectStructure = `
 project-root/
 │
-├── src/
 │   ├── app/
 │   │   ├── (routes)/             # Grouped route sections
 │   │   │   ├── [route-group]/

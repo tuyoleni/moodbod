@@ -121,13 +121,7 @@ export async function generateMetadata(): Promise<Metadata> {
           alt: 'Moodbod - Web & App Development',
         },
       ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: baseTitle,
-      description: baseDescription,
-      images: ['/images/og-image.jpg'],
-    },
+    }
   };
 }
 
