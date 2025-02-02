@@ -29,7 +29,7 @@ export const CTASection = memo(({ onVisibilityChange }: Props) => {
                 </div>
 
                 <div className="mt-20">
-                    <p className="max-w-[800px] mb-12">
+                    <p className="max-w-[100%] md:max-w-[80%] xl:max-w-[70%] mb-12">
                         We will help make things faster and easier. Digital tools can save you time,
                         reach more people, and grow your business. Let&apos;s go digital and make your
                         work smoother and more efficient.

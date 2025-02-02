@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RoutePaths } from "../components/RoutePaths";
 import { RoutePoint } from "../components/RoutePoint";
@@ -24,38 +24,57 @@ const relativeRoutePoints = [
 export function RouteSection() {
     const { routePoints, routeContainerRef } = useRoutePoints(relativeRoutePoints);
     const isVisible = useVisibilityObserver(routeContainerRef as React.RefObject<HTMLElement>);
+    const [activePointIndex, setActivePointIndex] = useState<number | null>(null);
 
     const moodbodPath = useMemo(() => generateSmoothPath(routePoints, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]), [routePoints]);
     const othersPath = useMemo(() => generateSmoothPath(routePoints, [1, 4, 6, 10]), [routePoints]);
 
-    return (
+    const handlePointClick = (index: number) => {
+        setActivePointIndex(activePointIndex === index ? null : index);
+    };
 
+    return (
         <div className="py-40">
-            <motion.div ref={routeContainerRef} className="relative bg-white flex flex-col h-screen">
+            <motion.div
+                ref={routeContainerRef}
+                className="relative bg-white flex flex-col h-[40vw] min-h-[400px] max-h-screen"
+                onClick={(e) => {
+                    if (e.target === e.currentTarget) {
+                        setActivePointIndex(null);
+                    }
+                }}
+            >
                 <RoutePaths moodbodPath={moodbodPath} othersPath={othersPath} isVisible={isVisible} />
                 <AnimatePresence>
                     {routePoints.map((point, index) => (
-                        <RoutePoint key={index} {...point} onHover={() => { }} onLeave={() => { }} />
+                        <RoutePoint
+                            key={index}
+                            {...point}
+                            isActive={activePointIndex === index}
+                            onHover={() => { }}
+                            onLeave={() => { }}
+                            onClick={() => handlePointClick(index)}
+                        />
                     ))}
                 </AnimatePresence>
             </motion.div>
 
             <div className="px-4 sm:px-12 md:px-14 xl:px-44">
-                <h1 className="text-[48pt] font-black">Route</h1>
-                <div className="max-w-[100%] md:max-w-[80%] xl:max-w-[70%] flex gap-[10%]">
-                    <p className="mt-4">
+                <h1 className="text-[48pt] font-black mb-4">Route</h1>
+                <div className="flex gap-4 mb-2 font-bold">
+                    <p className="text-gray-500">
+                        MOODBOD
+                    </p>
+                    <p className="text-black">
+                        OTHERS
+                    </p>
+                </div>
+                <div className="max-w-[100%] md:max-w-[80%] xl:max-w-[70%]">
+                    <p>
                         Many agencies focus on finishing projects quickly, but we do things differently. We work closely
                         with you, truly understanding your needs, creating lasting solutions, and helping your business
                         grow and succeed over time.
                     </p>
-                    <div className="flex gap-8 pt-4">
-                        <p className="text-black">
-                            MOODBOD
-                        </p>
-                        <p className="text-gray-500">
-                            OTHERS
-                        </p>
-                    </div>
                 </div>
             </div>
         </div>

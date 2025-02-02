@@ -7,10 +7,13 @@ interface RoutePointProps {
     label: string;
     onHover: () => void;
     onLeave: () => void;
+    isActive?: boolean;
+    onClick?: () => void;
 }
 
-export function RoutePoint({ x, y, label, onHover, onLeave }: RoutePointProps) {
+export function RoutePoint({ x, y, label, onHover, onLeave, isActive = false, onClick }: RoutePointProps) {
     const [isHovered, setIsHovered] = useState(false);
+    const showLabel = isHovered || isActive;
 
     return (
         <div className="relative">
@@ -18,7 +21,7 @@ export function RoutePoint({ x, y, label, onHover, onLeave }: RoutePointProps) {
                 className="absolute w-4 h-4 bg-black outline outline-4 outline-white rounded-full cursor-pointer hover:scale-150 transition-transform"
                 style={{ left: x - 8, top: y - 8 }}
                 initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
+                animate={{ opacity: 1, scale: isActive ? 1.5 : 1 }}
                 exit={{ opacity: 0, scale: 0 }}
                 transition={{ duration: 0.5 }}
                 onMouseEnter={() => {
@@ -29,8 +32,9 @@ export function RoutePoint({ x, y, label, onHover, onLeave }: RoutePointProps) {
                     setIsHovered(false);
                     onLeave();
                 }}
+                onClick={onClick}
             />
-            {isHovered && (
+            {showLabel && (
                 <motion.div
                     className="absolute whitespace-nowrap bg-black text-white px-2 py-1 rounded text-sm"
                     style={{ left: x + 8, top: y - 8 }}

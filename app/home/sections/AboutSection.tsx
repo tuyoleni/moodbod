@@ -26,21 +26,6 @@ function AboutSection() {
         <section ref={sectionRef} className="w-full h-full relative">
             <div className="sticky top-0 w-full h-screen overflow-hidden">
                 <div className="w-full h-full flex flex-col justify-evenly">
-                    {listItems.map((item, index) => (
-                        <motion.div
-                            key={`bg-${item.text}`}
-                            style={{
-                                ...getItemAnimations(index),
-                                position: 'absolute',
-                                top: `${index * 30}%`,
-                                transform: 'translateX(-50%)',
-                            }}
-                            className="text-[clamp(30vh,10vw,20vh)] font-black text-black/5 whitespace-nowrap pointer-events-none select-none"
-                        >
-                            {item.bgText}
-                        </motion.div>
-                    ))}
-
                     <motion.h1
                         style={headerAnimation}
                         className="text-[clamp(60px,10vw,80pt)] text-wrap font-black leading-[0.85] uppercase pr-4 relative z-10 px-4 sm:px-12 md:px-14 xl:px-44"
@@ -59,6 +44,22 @@ function AboutSection() {
                             </motion.li>
                         ))}
                     </ul>
+
+                    {listItems.map((item, index) => (
+                        <motion.div
+                            key={`bg-${item.text}`}
+                            style={{
+                                ...getItemAnimations(index),
+                                position: 'absolute',
+                                top: `${index * 30}%`,
+                                transform: 'translateX(-50%)'
+                            }}
+                            transition={{ delay: index * 0.2 + 0.5 }} // Added 0.5s delay to appear after main text
+                            className="text-[clamp(30vh,10vw,20vh)] font-black text-black/5 whitespace-nowrap pointer-events-none select-none"
+                        >
+                            {item.bgText}
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </section>
