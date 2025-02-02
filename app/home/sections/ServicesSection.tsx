@@ -109,6 +109,8 @@ const ServicesSection = () => {
     const papersRef = useRef<Paper[]>([]);
     const lastScrollProgressRef = useRef(0);
     const animationFrameIdRef = useRef<number | null>(null);
+    const isTouch = useRef(false);
+    const lastTouchY = useRef(0);
 
     const getEdgePosition = (info: PaperInfo) => {
         const w = window.innerWidth;
@@ -196,8 +198,15 @@ const ServicesSection = () => {
             const section = sectionRef.current;
             const rect = section.getBoundingClientRect();
 
-            // Calculate progress based on container position
-            const progress = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));
+            // Calculate progress with touch dampening
+            let progress = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));
+
+            // Apply smoothing for touch devices
+            if (isTouch.current) {
+                const dampingFactor = 0.8;
+                progress = lastScrollProgressRef.current + (progress - lastScrollProgressRef.current) * dampingFactor;
+            }
+
             const scrollingUp = progress < lastScrollProgressRef.current;
             lastScrollProgressRef.current = progress;
 
@@ -205,9 +214,9 @@ const ServicesSection = () => {
             const centerY = window.innerHeight / 2;
 
             papersRef.current.forEach((paper, index) => {
-                const paperTrigger = index * 0.1;
-                const paperProgress = Math.max(0, Math.min(1, (progress - paperTrigger) * 5));
-                const easedProgress = 1 - Math.pow(1 - paperProgress, 3);
+                const paperTrigger = index * (isTouch.current ? 0.15 : 0.1); // Slower trigger for touch
+                const paperProgress = Math.max(0, Math.min(1, (progress - paperTrigger) * (isTouch.current ? 3 : 5))); // Adjusted animation speed
+                const easedProgress = 1 - Math.pow(1 - paperProgress, isTouch.current ? 2 : 3); // Smoother easing for touch
 
                 const currentX = paper.startX + (paper.finalX - paper.startX) * easedProgress;
                 const currentY = paper.startY + (paper.finalY - paper.startY) * easedProgress;
@@ -221,6 +230,9 @@ const ServicesSection = () => {
                 const offsetY = currentY - centerY;
 
                 if (paper.element) {
+                    // Add hardware acceleration hints
+                    paper.element.style.willChange = 'transform';
+
                     if (scrollingUp && paperProgress === 0) {
                         paper.element.style.transform = `translate3d(${paper.startX - centerX}px, ${paper.startY - centerY}px, 0) rotate(${baseRotation}deg)`;
                     } else {
@@ -232,30 +244,51 @@ const ServicesSection = () => {
             animationFrameIdRef.current = requestAnimationFrame(updatePapers);
         }
 
-        // Start animation
-        updatePapers();
-
-        // Handle resize
-        const handleResize = () => {
-            papersRef.current.forEach((paper, i) => {
-                const startPosition = getEdgePosition(paperInfo[i]);
-                const finalPosition = getFinalPosition(paperInfo[i].edge);
-                paper.startX = startPosition.x;
-                paper.startY = startPosition.y;
-                paper.finalX = finalPosition.x;
-                paper.finalY = finalPosition.y;
-            });
+        // Touch event handlers
+        const handleTouchStart = (e: TouchEvent) => {
+            isTouch.current = true;
+            lastTouchY.current = e.touches[0].clientY;
         };
 
+        const handleTouchMove = (e: TouchEvent) => {
+            const touchY = e.touches[0].clientY;
+            const deltaY = touchY - lastTouchY.current;
+            lastTouchY.current = touchY;
+
+            // Prevent default only if scrolling up at the top or down at the bottom
+            if ((deltaY > 0 && window.scrollY <= 0) ||
+                (deltaY < 0 && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight)) {
+                e.preventDefault();
+            }
+        };
+
+        // Start animation and add event listeners
+        updatePapers();
+        window.addEventListener('touchstart', handleTouchStart, { passive: false });
+        window.addEventListener('touchmove', handleTouchMove, { passive: false });
         window.addEventListener('resize', handleResize);
 
         return () => {
+            window.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchmove', handleTouchMove);
             window.removeEventListener('resize', handleResize);
             if (animationFrameIdRef.current) {
                 cancelAnimationFrame(animationFrameIdRef.current);
             }
         };
     }, []);
+
+    // Handle resize
+    const handleResize = () => {
+        papersRef.current.forEach((paper, i) => {
+            const startPosition = getEdgePosition(paperInfo[i]);
+            const finalPosition = getFinalPosition(paperInfo[i].edge);
+            paper.startX = startPosition.x;
+            paper.startY = startPosition.y;
+            paper.finalX = finalPosition.x;
+            paper.finalY = finalPosition.y;
+        });
+    };
 
     return (
         <div ref={sectionRef} className="w-full h-full relative">
@@ -268,7 +301,11 @@ const ServicesSection = () => {
                         {paperInfo.map((info, i) => (
                             <div
                                 key={i}
-                                className="paper absolute bg-[#1a1a1a] shadow-lg transform-gpu flex flex-col justify-start items-start p-5 rounded overflow-hidden border border-white/10 w-[290px] h-[380px] opacity-[0.99] will-change-transform mb-40"
+                                className="paper absolute bg-[#1a1a1a] shadow-lg transform-gpu flex flex-col justify-start items-start p-5 rounded overflow-hidden border border-white/10 w-[290px] h-[380px] opacity-[0.99] will-change-transform mb-40 touch-none"
+                                style={{
+                                    perspective: '1000px',
+                                    backfaceVisibility: 'hidden'
+                                }}
                                 data-edge={info.edge}
                             >
                                 <Image
