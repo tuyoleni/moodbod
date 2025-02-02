@@ -2,7 +2,8 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { FirestoreAdapter } from "@auth/firebase-adapter";
 import { cert } from "firebase-admin/app";
-import { Adapter } from "next-auth/adapters";
+import { Adapter, AdapterUser } from "next-auth/adapters";
+import { Session } from "next-auth";
 
 export const authOptions = {
     providers: [
@@ -31,8 +32,17 @@ export const authOptions = {
     },
     debug: process.env.NODE_ENV === 'development',
     callbacks: {
-        async session({ session, user }: { session: any, user: any }) {
-            session.user.id = user.id;
+        async session({
+            session,
+            user
+        }: {
+            session: Session;
+            user: AdapterUser;
+        }) {
+            if (session.user) {
+                session.user.email = user.email;
+                session.user.name = user.name;
+            }
             return session;
         },
     },

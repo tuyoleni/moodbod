@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import Link from 'next/link';
 
 export default function Register() {
-    const { data: session, status } = useSession();
+    const { status } = useSession();
     const router = useRouter();
 
     useEffect(() => {
