@@ -2,6 +2,7 @@
 
 import { useVisibilityObserver } from "@/lib/hooks/useVisibilityObserver";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useRef, useEffect, memo } from "react";
 
 interface Props {
@@ -40,9 +41,11 @@ export const CTASection = memo(({ onVisibilityChange }: Props) => {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <button className="px-6 py-2 rounded-full font-medium bg-white text-black hover:bg-black hover:text-white transition-colors duration-300">
-                            Let&apos;s Talk
-                        </button>
+                        <Link href="/register">
+                            <button className={`px-6 py-2 rounded-full font-medium bg-white text-black hover:bg-black hover:text-white transition-colors duration-300`}>
+                                Start a Project
+                            </button>
+                        </Link>
                     </motion.div>
                 </div>
             </div>
