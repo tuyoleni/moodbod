@@ -5,6 +5,8 @@ import Home from "./home/app";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { logo } from '@/public/assets';
+import Image from 'next/image';
 
 export default function App() {
   const [isCTASectionVisible, setIsCTASectionVisible] = useState(false);
@@ -20,7 +22,7 @@ export default function App() {
   if (status === "loading" || status === "authenticated") {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+        <Image src={logo} alt="Moodbod" width={100} height={32} className="w-auto h-6" />
       </div>
     );
   }
