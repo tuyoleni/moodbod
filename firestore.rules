@@ -1,17 +1,48 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Projects
+    match /projects/{projectId} {
+      allow read: if isAuthenticated() && isOwner(resource.data.userId);
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated() && isOwner(resource.data.userId);
+    }
+
+    // Payments
+    match /payments/{paymentId} {
+      allow read: if isAuthenticated() && isOwner(resource.data.userId);
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && isOwner(resource.data.userId);
+    }
+
+    // Invoices
+    match /invoices/{invoiceId} {
+      allow read: if isAuthenticated() && isOwner(resource.data.userId);
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && isOwner(resource.data.userId);
+    }
+
+    // Services (public read, admin only write)
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if false; // Restrict to admin via Functions
+    }
+
+    // Auth collections (managed by NextAuth.js)
     match /users/{userId} {
-      allow read, write: if true;
+      allow read, write: if isAuthenticated() && isOwner(userId);
     }
-    match /accounts/{id} {
-      allow read, write: if true;
-    }
-    match /sessions/{id} {
-      allow read, write: if true;
-    }
-    match /verification_tokens/{id} {
-      allow read, write: if true;
+    match /{path=**}/users/{userId} {
+      allow read, write: if isAuthenticated() && isOwner(userId);
     }
   }
 } 
