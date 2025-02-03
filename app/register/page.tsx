@@ -64,7 +64,7 @@ export default function Register() {
                             </span>
                         </p>
                         <blockquote className="text-white/85 text-sm leading-relaxed mt-3">
-                            Inspiration and creativity have always been my way of bringing people closer, a way to tell stories that words alone cannot. This journey began with a simple desire to create something meaningful that connects us all. It's about sharing moments, ideas, and visions that remind us we're in this together.
+                            Inspiration and creativity have always been my way of bringing people closer, a way to tell stories that words alone cannot. This journey began with a simple desire to create something meaningful that connects us all. It&apos;s about sharing moments, ideas, and visions that remind us we&apos;re in this together.
                         </blockquote>
                     </div>
                 </div>

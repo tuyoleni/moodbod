@@ -173,6 +173,18 @@ const ServicesSection = () => {
     };
 
     useEffect(() => {
+        // Handle resize
+        const handleResize = () => {
+            papersRef.current.forEach((paper, i) => {
+                const startPosition = getEdgePosition(paperInfo[i]);
+                const finalPosition = getFinalPosition(paperInfo[i].edge);
+                paper.startX = startPosition.x;
+                paper.startY = startPosition.y;
+                paper.finalX = finalPosition.x;
+                paper.finalY = finalPosition.y;
+            });
+        };
+
         // Initialize papers
         const paperElements = document.querySelectorAll('.paper');
         papersRef.current = Array.from(paperElements).map((element, i) => {
@@ -277,18 +289,6 @@ const ServicesSection = () => {
             }
         };
     }, []);
-
-    // Handle resize
-    const handleResize = () => {
-        papersRef.current.forEach((paper, i) => {
-            const startPosition = getEdgePosition(paperInfo[i]);
-            const finalPosition = getFinalPosition(paperInfo[i].edge);
-            paper.startX = startPosition.x;
-            paper.startY = startPosition.y;
-            paper.finalX = finalPosition.x;
-            paper.finalY = finalPosition.y;
-        });
-    };
 
     return (
         <div ref={sectionRef} className="w-full h-full relative">
