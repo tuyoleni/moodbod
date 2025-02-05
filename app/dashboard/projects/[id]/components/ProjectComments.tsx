@@ -3,7 +3,6 @@
 import { Project } from '@/lib/types/database';
 import { useState } from 'react';
 import { Send } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 
 interface Comment {
