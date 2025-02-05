@@ -1,8 +1,9 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
 import {
     LayoutDashboard,
     FolderKanban,
@@ -10,15 +11,32 @@ import {
     MessageSquare,
     Settings,
     LogOut,
-    Plus,
-    Bell
+    Bell,
 } from 'lucide-react';
 import Image from 'next/image';
-import { signOut } from 'next-auth/react';
+import { cn } from '@/lib/utils';
+// import { useDashboard } from '../DashboardProvider';
+import { logo } from '@/public/assets';
+import { Session } from 'next-auth';
+
 
 export default function Sidebar() {
+    // const { navigate, loading } = useDashboard();
     const pathname = usePathname();
+    const router = useRouter();
     const { data: session } = useSession();
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    // Auto-collapse on mobile
+    useEffect(() => {
+        const handleResize = () => {
+            setIsExpanded(window.innerWidth >= 1024);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const links = [
         { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
@@ -29,72 +47,110 @@ export default function Sidebar() {
         { href: '/dashboard/settings', label: 'Settings', icon: Settings },
     ];
 
+    const handleSignOut = async () => {
+        await signOut({ redirect: false });
+        router.push('/register');
+        router.refresh();
+    };
+
     return (
-        <aside className="w-64 min-h-screen bg-white border-r border-gray-200 flex flex-col">
-            {/* User Profile Section */}
-            <div className="p-6 border-b border-gray-200">
-                <div className="flex items-center gap-3 mb-4">
-                    {session?.user?.image ? (
+        <aside className={cn(
+            "h-screen bg-white border-r border-gray-200 transition-all duration-300 flex flex-col justify-between",
+            isExpanded ? "w-64" : "w-16",
+        )}>
+            {/* Navigation */}
+            <nav className={cn(
+                "flex-1 overflow-y-auto",
+                isExpanded ? "p-4" : "p-2",
+                "space-y-2"
+            )}>
+                <div className="">
+                    <Link href="/dashboard">
                         <Image
-                            src={session.user.image}
-                            alt={session.user.name || 'User'}
-                            width={40}
-                            height={40}
-                            className="rounded-full"
+                            src={logo}
+                            alt="Moodbod"
+                            width={100}
+                            height={32}
+                            className="w-auto h-6"
                         />
-                    ) : (
-                        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                            <span className="text-lg font-medium text-gray-600">
-                                {session?.user?.name?.[0] || 'U'}
-                            </span>
-                        </div>
-                    )}
-                    <div>
-                        <h3 className="font-medium">{session?.user?.name}</h3>
-                        <p className="text-sm text-gray-600">{session?.user?.email}</p>
-                    </div>
+                    </Link>
                 </div>
 
-                {/* New Project Button */}
-                <button
-                    onClick={() => window.location.href = '/dashboard/new'}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors"
-                >
-                    <Plus className="w-4 h-4" />
-                    New Project
-                </button>
-            </div>
+                {/* Profile Section */}
+                <div className={
+                    "border-b border-gray-200 py-4"}>
+                    {isExpanded ? (
+                        <div className="flex items-center gap-4">
+                            <UserAvatar session={session} />
+                            <div className="min-w-0 flex-1">
+                                <h2 className="text-sm font-medium text-gray-900 truncate">
+                                    {session?.user?.name}
+                                </h2>
+                                <p className="text-xs text-gray-500 truncate">
+                                    {session?.user?.email}
+                                </p>
+                            </div>
+                        </div>
+                    ) : (
+                        <UserAvatar session={session} />
+                    )}
+                </div>
 
-            {/* Navigation Links */}
-            <nav className="flex-1 p-6 space-y-1">
-                {links.map((link) => {
-                    const Icon = link.icon;
-                    return (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${pathname === link.href
-                                    ? 'bg-black text-white'
-                                    : 'text-gray-600 hover:bg-gray-100'
-                                }`}
-                        >
-                            <Icon className="w-5 h-5" />
-                            {link.label}
-                        </Link>
-                    );
-                })}
+                {/* Navigation Links*/}
+                {links.map((link) => (
+                    <Link
+                        key={link.href}
+                        href={link.href}
+                        className={cn(
+                            'flex items-center gap-3 rounded-md transition-colors',
+                            isExpanded ? 'px-3 py-2' : 'p-2 justify-center',
+                            pathname === link.href
+                                ? 'bg-gray-100 text-gray-900'
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        )}
+                        title={!isExpanded ? link.label : undefined}
+                    >
+                        <link.icon className="h-5 w-5 shrink-0" />
+                        {isExpanded && <span className="truncate">{link.label}</span>}
+                    </Link>
+                ))}
             </nav>
 
-            {/* Logout Button */}
-            <div className="p-6 border-t border-gray-200">
+            {/* Actions */}
+            <div className={cn(
+                "border-t border-gray-200",
+                isExpanded ? "p-4" : "p-2"
+            )}>
                 <button
-                    onClick={() => signOut()}
-                    className="flex items-center gap-3 px-4 py-2 text-gray-600 hover:text-gray-900 w-full rounded-lg hover:bg-gray-100 transition-colors"
+                    onClick={handleSignOut}
+                    className={cn(
+                        'flex items-center gap-3 rounded-md transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                        isExpanded ? 'px-3 py-2 w-full' : 'p-2 justify-center w-full'
+                    )}
+                    title={!isExpanded ? "Sign out" : undefined}
                 >
-                    <LogOut className="w-5 h-5" />
-                    Sign Out
+                    <LogOut className="h-5 w-5 shrink-0" />
+                    {isExpanded && <span>Sign out</span>}
                 </button>
             </div>
         </aside>
     );
-} 
+}
+
+function UserAvatar({ session }: { session: Session | null }) {
+    return session?.user?.image ? (
+        <Image
+            src={session.user.image}
+            alt={session.user.name || 'User'}
+            width={40}
+            height={40}
+            className="rounded-full"
+        />
+    ) : (
+        <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
+            <span className="text-sm font-medium text-gray-600">
+                {session?.user?.name?.[0] || 'U'}
+            </span>
+        </div>
+    );
+}

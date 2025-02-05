@@ -1,0 +1,36 @@
+📂 src
+│── 📂 app
+│   │── 📂 components
+│   │   │── 📂 addons
+│   │   │   ├── AddonsStep.tsx
+│   │   │   ├── AddonsList.tsx (if needed)
+│   │   │   └── AddonCard.tsx (if splitting further)
+│   │   └── (Other reusable components)
+│   │── 📂 props
+│   │   ├── AddonsStepProps.ts
+│   │   └── (Other prop types)
+│   │── 📂 lib
+│   │   ├── 📂 data
+│   │   │   ├── services.ts (contains `additionalServices`)
+│   │   │   └── (Other static data files)
+│   │   ├── 📂 types
+│   │   │   ├── database.ts (contains `Service` type)
+│   │   │   └── (Other global types)
+│   │   ├── 📂 hooks
+│   │   └── 📂 utils
+│   │── 📂 redux (If using Redux)
+│   │   ├── store.ts
+│   │   ├── slices/
+│   │   ├── hooks.ts
+│   │   └── (Other state-related files)
+│   └── (Other app-level logic)
+│
+│── 📂 public
+│── 📂 styles (if using global styles)
+│── 📂 pages (if using `pages` directory)
+│── 📂 assets (icons, images, etc.)
+│── tsconfig.json
+│── next.config.js
+│── package.json
+│── .eslintrc.js
+│── .gitignore

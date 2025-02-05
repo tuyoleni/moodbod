@@ -1,14 +1,10 @@
+'use client';
+
 import { websitePackages } from '@/lib/data/services';
 import { motion } from 'framer-motion';
 import { PricingPackage } from '@/lib/types/database';
 import { Check } from 'lucide-react';
-
-interface PackageSelectionStepProps {
-    formData: any;
-    setFormData: (data: any) => void;
-    onNext: () => void;
-    onBack: () => void;
-}
+import { PackageSelectionStepProps } from '@/props/PackageSelectionStepProps';
 
 export default function PackageSelectionStep({ formData, setFormData, onNext }: PackageSelectionStepProps) {
     const relevantPackages = websitePackages.filter(pkg => pkg.category === formData.type);
@@ -31,8 +27,8 @@ export default function PackageSelectionStep({ formData, setFormData, onNext }: 
                             onNext();
                         }}
                         className={`cursor-pointer p-6 rounded-xl border-2 transition-colors ${formData.selectedPackage?.id === pkg.id
-                                ? 'border-black bg-black/5'
-                                : 'border-gray-200 hover:border-black/20'
+                            ? 'border-black bg-black/5'
+                            : 'border-gray-200 hover:border-black/20'
                             }`}
                     >
                         <h4 className="font-medium text-lg mb-2">{pkg.name}</h4>
@@ -53,4 +49,4 @@ export default function PackageSelectionStep({ formData, setFormData, onNext }: 
             </div>
         </div>
     );
-} 
+}

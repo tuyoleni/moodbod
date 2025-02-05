@@ -1,5 +1,5 @@
-import { db } from './config';
-import { collection, query, where, getDocs, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, doc, serverTimestamp, getDoc } from 'firebase/firestore';
+import { db } from '../config';
 import { Project, Payment, Invoice } from '@/lib/types/database';
 
 // Collections
@@ -19,6 +19,26 @@ export const fetchUserProjects = async (userId: string): Promise<Project[]> => {
     } catch (error) {
         console.error('Error fetching projects:', error);
         return [];
+    }
+};
+
+// Project Services
+export const getProjectById = async (projectId: string): Promise<Project | null> => {
+    if (!projectId) throw new Error("Project ID is required");
+
+    try {
+        const projectRef = doc(db, "projects", projectId);
+        const projectSnap = await getDoc(projectRef);
+
+        if (!projectSnap.exists()) {
+            console.warn(`Project with ID ${projectId} not found.`);
+            return null;
+        }
+
+        return { id: projectSnap.id, ...projectSnap.data() } as Project;
+    } catch (error) {
+        console.error("Error fetching project:", error);
+        throw new Error("Failed to retrieve project");
     }
 };
 

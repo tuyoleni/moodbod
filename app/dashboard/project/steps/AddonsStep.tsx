@@ -2,12 +2,8 @@
 
 import { additionalServices } from '@/lib/data/services';
 import { motion } from 'framer-motion';
-import { Service } from '@/lib/types/database';
-
-interface AddonsStepProps {
-    formData: any;
-    setFormData: (data: any) => void;
-}
+import { Service, ServiceStatus } from '@/lib/types/database';
+import { AddonsStepProps } from '@/props/AddonsStepProps';
 
 export default function AddonsStep({ formData, setFormData }: AddonsStepProps) {
     const relevantServices = additionalServices.filter(service =>
@@ -17,16 +13,16 @@ export default function AddonsStep({ formData, setFormData }: AddonsStepProps) {
     const calculateTotal = () => {
         const basePrice = formData.selectedPackage?.basePrice || 0;
         const addonsTotal = formData.additionalServices.reduce(
-            (sum: number, service: Service) => sum + service.basePrice,
+            (sum, service) => sum + service.basePrice,
             0
         );
         return basePrice + addonsTotal;
     };
 
     const toggleService = (service: Service) => {
-        const isSelected = formData.additionalServices.some((s: Service) => s.id === service.id);
+        const isSelected = formData.additionalServices.some((s) => s.id === service.id);
         const updatedServices = isSelected
-            ? formData.additionalServices.filter((s: Service) => s.id !== service.id)
+            ? formData.additionalServices.filter((s) => s.id !== service.id)
             : [...formData.additionalServices, service];
 
         setFormData({ ...formData, additionalServices: updatedServices });
@@ -46,10 +42,10 @@ export default function AddonsStep({ formData, setFormData }: AddonsStepProps) {
                         key={service.id}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={() => toggleService(service as Service)}
-                        className={`cursor-pointer p-6 rounded-xl border-2 transition-colors ${formData.additionalServices.some((s: Service) => s.id === service.id)
-                                ? 'border-black bg-black/5'
-                                : 'border-gray-200 hover:border-black/20'
+                        onClick={() => toggleService({ ...service, status: ServiceStatus.PENDING })}
+                        className={`cursor-pointer p-6 rounded-xl border-2 transition-colors ${formData.additionalServices.some((s) => s.id === service.id)
+                            ? 'border-black bg-black/5'
+                            : 'border-gray-200 hover:border-black/20'
                             }`}
                     >
                         <h4 className="font-medium mb-2">{service.name}</h4>
@@ -69,4 +65,4 @@ export default function AddonsStep({ formData, setFormData }: AddonsStepProps) {
             </div>
         </div>
     );
-} 
+}

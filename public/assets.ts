@@ -8,5 +8,5 @@ export const moodbodUserExperience = '/assets/moodbod user experience.jpg'
 
 
 export const logo = '/assets/moodbod logo.svg'
-
+export const logoSmall = '/assets/moodbod logo small.svg'
 export const simeon = '/assets/simeon tuyoleni.jpg'

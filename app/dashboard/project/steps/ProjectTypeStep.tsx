@@ -1,19 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { ProjectTypeStepProps } from '@/props/ProjectTypeStepProps';
 import { Globe, ShoppingCart, Palette, Sparkles, LucideIcon } from 'lucide-react';
 import { projectTypes } from '@/lib/data/projectTypes';
 import { ProjectType } from '@/lib/types/database';
 
-interface ProjectTypeStepProps {
-    formData: {
-        type: ProjectType;
-    };
-    setFormData: (data: any) => void;
-    onNext: () => void;
-}
-
-const icons: Record<string, LucideIcon> = {
+export const icons: Record<string, LucideIcon> = {
     Globe,
     ShoppingCart,
     Palette,
@@ -43,8 +36,8 @@ export default function ProjectTypeStep({ formData, setFormData, onNext }: Proje
                             whileTap={{ scale: 0.98 }}
                             onClick={() => handleSelect(type.id as ProjectType)}
                             className={`cursor-pointer p-6 rounded-xl border-2 transition-colors ${formData.type === type.id
-                                    ? 'border-black bg-black/5'
-                                    : 'border-gray-200 hover:border-black/20'
+                                ? 'border-black bg-black/5'
+                                : 'border-gray-200 hover:border-black/20'
                                 }`}
                         >
                             <div className="flex items-center gap-4">
@@ -60,4 +53,4 @@ export default function ProjectTypeStep({ formData, setFormData, onNext }: Proje
             </div>
         </div>
     );
-} 
+}
