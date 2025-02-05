@@ -1,4 +1,4 @@
-import { Service, PricingPackage, ProjectType } from '@/lib/types/database';
+import { PricingPackage, ProjectType } from '@/lib/types/database';
 
 export const websitePackages: PricingPackage[] = [
     {

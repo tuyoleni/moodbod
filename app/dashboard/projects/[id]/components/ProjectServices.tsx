@@ -1,6 +1,6 @@
 'use client';
 
-import { Project, Service } from '@/lib/types/database';
+import { Project } from '@/lib/types/database';
 import { useState } from 'react';
 import { Plus, Package, ArrowRight } from 'lucide-react';
 import { additionalServices } from '@/lib/data/services';

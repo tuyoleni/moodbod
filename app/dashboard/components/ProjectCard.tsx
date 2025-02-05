@@ -7,12 +7,9 @@ import {
     CheckCircle2,
     AlertCircle,
     ArrowRight,
-    MessageSquare,
     Phone,
     Calendar,
-    DollarSign,
     Package,
-    BarChart,
     Plus,
     Bell,
     ArrowUpRight

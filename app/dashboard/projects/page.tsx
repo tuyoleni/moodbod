@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { Project } from '@/lib/types/database';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';

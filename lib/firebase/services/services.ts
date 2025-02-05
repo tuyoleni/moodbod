@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs, addDoc, updateDoc, doc, serverTimestamp, getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, doc, serverTimestamp, getDoc } from 'firebase/firestore';
 import { db } from '../config';
 import { Project, Payment, Invoice } from '@/lib/types/database';
 

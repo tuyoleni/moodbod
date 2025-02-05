@@ -156,6 +156,6 @@ function getStatusColor(status: string) {
     }
 }
 
-function formatDate(date: any) {
+function formatDate(date: { seconds: number }) {
     return new Date(date.seconds * 1000).toLocaleDateString();
 } 

@@ -21,7 +21,7 @@ const DashboardContext = createContext<DashboardContextType>({
 
 export function DashboardProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(false);
-    const [currentSection, setCurrentSection] = useState('');
+    const [currentSection] = useState('');
     const router = useRouter();
     const [queryClient] = useState(() => new QueryClient());
 

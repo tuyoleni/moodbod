@@ -15,12 +15,13 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { useDashboard } from '../DashboardProvider';
+// import { useDashboard } from '../DashboardProvider';
 import { logo } from '@/public/assets';
+import { Session } from 'next-auth';
 
 
 export default function Sidebar() {
-    const { navigate, loading } = useDashboard();
+    // const { navigate, loading } = useDashboard();
     const pathname = usePathname();
     const router = useRouter();
     const { data: session } = useSession();
@@ -136,8 +137,7 @@ export default function Sidebar() {
     );
 }
 
-// Helper component for user avatar
-function UserAvatar({ session }: { session: any }) {
+function UserAvatar({ session }: { session: Session | null }) {
     return session?.user?.image ? (
         <Image
             src={session.user.image}
@@ -153,4 +153,4 @@ function UserAvatar({ session }: { session: any }) {
             </span>
         </div>
     );
-} 
+}

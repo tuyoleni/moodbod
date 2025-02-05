@@ -1,71 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { formatCurrency } from '@/lib/utils';
 import { ProjectReviewStepProps } from '@/props/ProjectReviewStepProps';
-import { useDataSubmit } from '@/lib/hooks/useDataSubmit';
-import { createProject } from '@/lib/firebase/services/services';
 
-export default function ProjectReviewStep({ formData, onNext, onBack }: ProjectReviewStepProps) {
-
-
-    // const handleSubmit = async () => {
-    //     // if (!session?.user?.email) {
-    //     //     toast.error('You must be logged in to create a project');
-    //     //     return;
-    //     // }
-
-    //     // if (!formData.selectedPackage) {
-    //     //     toast.error('Please select a package');
-    //     //     return;
-    //     // }
-
-    //     // try {
-    //     //     setIsSubmitting(true);
-    //     //     const response = await fetch('/api/projects', {
-    //     //         method: 'POST',
-    //     //         headers: {
-    //     //             'Content-Type': 'application/json',
-    //     //         },
-    //     //         body: JSON.stringify({
-    //     //             type: formData.type,
-    //     //             name: formData.name,
-    //     //             description: formData.description,
-    //     //             selectedPackage: formData.selectedPackage,
-    //     //             additionalServices: formData.additionalServices,
-    //     //             requirements: formData.requirements,
-    //     //             projectGoals: formData.projectGoals,
-    //     //             targetAudience: formData.targetAudience,
-    //     //             status: 'requested',
-    //     //             totalCost: totalCost,
-    //     //             paidAmount: 0,
-    //     //             createdAt: new Date(),
-    //     //             updatedAt: new Date(),
-    //     //         })
-    //     //     });
-
-    //     //     if (!response.ok) {
-    //     //         throw new Error('Failed to create project');
-    //     //     }
-
-    //     //     toast.success('Project created successfully!');
-    //     //     router.push('/dashboard/projects');
-    //     // } catch (error) {
-    //     //     console.error('Error creating project:', error);
-    //     //     toast.error('Failed to create project. Please try again.');
-    //     // } finally {
-    //     //     setIsSubmitting(false);
-    //     // }
-
-
-    //     const { handleSubmit, isSubmitting } = useDataSubmit({
-    //         onSubmit: createNewProject,
-    //         successMessage: 'Project created!'
-    //     });
-
-    // };
+export default function ProjectReviewStep({ formData }: ProjectReviewStepProps) {
 
     return (
         <div className="space-y-6">
@@ -129,8 +67,10 @@ export default function ProjectReviewStep({ formData, onNext, onBack }: ProjectR
             <div className="mt-8 p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-blue-800">
                     By submitting this project request, you agree to our terms and conditions.
-                    We'll review your project and get back to you within 24 hours. <span> <a href="/privacy" className="text-blue-800">Privacy Policy</a></span>
+                    We&apos;ll review your project and get back to you within 24 hours.
+                    <span> <a href="/privacy" className="text-blue-800">Privacy Policy</a></span>
                 </p>
+
             </div>
         </div>
     );
