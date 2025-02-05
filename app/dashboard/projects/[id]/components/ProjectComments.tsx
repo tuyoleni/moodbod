@@ -15,11 +15,10 @@ interface Comment {
 }
 
 export default function ProjectComments({ project }: { project: Project }) {
-    const { data: session } = useSession();
     const [newComment, setNewComment] = useState('');
     const queryClient = useQueryClient();
 
-    const { data: comments = [], isLoading } = useQuery<Comment[]>({
+    const { data: comments = [] } = useQuery<Comment[]>({
         queryKey: ['comments', project.id],
         queryFn: async () => {
             const res = await fetch(`/api/projects/${project.id}/comments`);
