@@ -4,19 +4,14 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Project } from '@/lib/types/database';
-import { fetchUserProjects } from '@/lib/firebase/services';
-import ProjectsSection from './sections/ProjectsSection';
-import PricingSection from './sections/PricingSection';
-import MessagesSection from './sections/MessagesSection';
-import ActivitySection from './sections/ActivitySection';
-import NewProjectWizard from './components/NewProjectWizard';
-
+import ProjectWizard from './project/page';
+import ProjectCard from './components/ProjectCard';
+import { fetchUserProjects } from '@/lib/firebase/services/services';
 export default function DashboardPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
-    const [activeSection, setActiveSection] = useState('projects');
     const [projects, setProjects] = useState<Project[]>([]);
-    const showWizard = usePathname() === '/dashboard/new';
+    const showWizard = usePathname() === '/dashboard/project';
 
     useEffect(() => {
         if (status === 'unauthenticated') {
@@ -35,29 +30,58 @@ export default function DashboardPage() {
         </div>;
     }
 
-    const renderSection = () => {
-        switch (activeSection) {
-            case 'projects':
-                return <ProjectsSection projects={projects} onNewProject={() => router.push('/dashboard/new')} />;
-            case 'pricing':
-                return <PricingSection />;
-            case 'messages':
-                return <MessagesSection />;
-            case 'activity':
-                return <ActivitySection />;
-            default:
-                return <ProjectsSection projects={projects} onNewProject={() => router.push('/dashboard/new')} />;
-        }
-    };
+    const activeProjects = projects.filter(p => p.status !== 'completed');
+    const needsReview = projects.filter(p => p.status === 'in_review');
+    const totalValue = projects.reduce((sum, p) => sum + p.totalCost, 0).toLocaleString();
+
+    // Stats data
+    const stats = [
+        {
+            title: 'Active Projects',
+            value: activeProjects.length,
+        },
+        {
+            title: 'Needs Review',
+            value: needsReview.length,
+        },
+        {
+            title: 'Total Value',
+            value: `$${totalValue}`,
+        },
+    ];
 
     return (
         <div className="relative">
             <div className={`transition-all duration-200 ${showWizard ? 'mr-[800px]' : ''}`}>
-                {renderSection()}
+                <div className="p-8 space-y-8">
+                    <h1 className="text-3xl font-semibold">Overview</h1>
+
+                    {/* Quick Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {stats.map((stat, index) => (
+                            <div key={index} className="p-6 bg-white rounded-lg border border-gray-200">
+                                <h3 className="text-sm text-gray-600">{stat.title}</h3>
+                                <p className="text-2xl font-semibold mt-1">{stat.value}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Recent Projects */}
+                    <div>
+                        <h2 className="text-xl font-semibold mb-4">Recent Projects</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {activeProjects.slice(0, 4).map((project) => (
+                                <ProjectCard
+                                    key={project.id}
+                                    project={project}
+                                    variant="overview"
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
-            {showWizard && <NewProjectWizard isOpen={false} onClose={function (): void {
-                throw new Error('Function not implemented.');
-            }} />}
+            {showWizard && <ProjectWizard />}
         </div>
     );
-} 
+}

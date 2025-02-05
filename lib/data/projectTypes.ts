@@ -1,30 +1,28 @@
 import { ProjectType } from '@/lib/types/database';
 
-export const projectTypes = [
+export const projectTypes: { id: ProjectType; name: string; description: string; icon: string }[] = [
     {
-        id: 'website',
+        id: ProjectType.WEBSITE,
         name: 'Website',
-        description: 'Create a professional website for your business',
+        description: 'Build a responsive website',
         icon: 'Globe'
     },
     {
-        id: 'ecommerce',
+        id: ProjectType.ECOMMERCE,
         name: 'E-commerce',
-        description: 'Build an online store to sell your products',
+        description: 'Create an online store',
         icon: 'ShoppingCart'
     },
     {
-        id: 'branding',
+        id: ProjectType.BRANDING,
         name: 'Branding',
-        description: 'Develop your brand identity with logo, colors, and guidelines',
+        description: 'Design a unique brand identity',
         icon: 'Palette'
     },
     {
-        id: 'custom',
-        name: 'Custom Project',
-        description: "Have a unique project in mind? Let's discuss your specific needs",
+        id: ProjectType.MARKETING,
+        name: 'Marketing',
+        description: 'Promote your product or service',
         icon: 'Sparkles'
     }
-] as const;
-
-export type ProjectTypeId = typeof projectTypes[number]['id']; 
+];

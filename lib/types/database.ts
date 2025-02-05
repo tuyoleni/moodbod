@@ -1,105 +1,204 @@
+// types/database.ts
 import { Timestamp } from 'firebase/firestore';
 
-// User-related types
+// ======================
+// ENUM DEFINITIONS
+// ======================
+export enum ProjectStatus {
+    REQUESTED = 'requested',
+    IN_PROGRESS = 'in_progress',
+    IN_REVIEW = 'in_review',
+    COMPLETED = 'completed'
+}
+
+export enum PaymentMethod {
+    BANK_TRANSFER = 'bank_transfer',
+    CREDIT_CARD = 'credit_card',
+    PAYPAL = 'paypal'
+}
+
+export enum ServiceStatus {
+    PENDING = 'pending',
+    IN_PROGRESS = 'in_progress',
+    COMPLETED = 'completed'
+}
+
+export enum FeedbackType {
+    REVISION = 'revision',
+    APPROVAL = 'approval',
+    COMMENT = 'comment'
+}
+
+export enum FeedbackStatus {
+    PENDING = 'pending',
+    ADDRESSED = 'addressed'
+}
+
+export enum InvoiceStatus {
+    DRAFT = 'draft',
+    SENT = 'sent',
+    PAID = 'paid'
+}
+
+export enum ProjectType {
+    WEBSITE = 'website',
+    ECOMMERCE = 'ecommerce',
+    BRANDING = 'branding',
+    MARKETING = 'marketing'
+}
+
+// ======================
+// USER RELATED TYPES
+// ======================
 export interface User {
     id: string;
     email: string;
     name: string;
     company?: string;
     role: 'client' | 'admin';
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-// Project-related types
-export interface Project {
-    [x: string]: any;
-    id: string;
-    userId: string;
-    name: string;
-    description: string;
-    type: 'website' | 'ecommerce' | 'branding' | 'custom';
-    status: 'requested' | 'received' | 'in_discussion' | 'in_progress' | 'in_review' | 'completed' | 'on_hold' | 'cancelled' | 'pending';
-    package: ProjectPackage;
-    additionalServices: ProjectService[];
-    requirements: string;
-    services: Service[];
-    totalCost: number;
-    paidAmount: number;
     createdAt: Timestamp;
     updatedAt: Timestamp;
-    contactEnabled: boolean;
-    lastContactDate?: Timestamp;
 }
 
+// ======================
+// PROJECT CORE TYPES
+// ======================
+export interface Project {
+    id: string;
+    userId: string; // Reference to User document
+    name: string;
+    description: string;
+    type: ProjectType;
+    status: ProjectStatus;
+
+    // Package and Services
+    package: ProjectPackage;
+    additionalServices: Service[];
+
+    // Project Details
+    requirements: string;
+    projectGoals: string[];
+    targetAudience: string;
+
+    // Financial (values in cents to avoid floating point issues)
+    totalCost: number;    // In cents (100 = $1.00)
+    paidAmount: number;   // In cents (paidAmount <= totalCost)
+
+    // Optional Details
+    liveUrl?: string;
+
+    // Timestamps
+    createdAt: Timestamp;
+    updatedAt: Timestamp;
+
+    // Comments and Feedback
+    comments: Comment[];
+    feedback: Feedback[];
+
+    // Milestones
+    milestones: Milestone[];
+
+    // Payments
+    payments: Payment[];
+}
+
+// ======================
+// PROJECT COMPONENTS
+// ======================
 export interface ProjectPackage {
     id: string;
     name: string;
     description: string;
-    basePrice: number;
-    category: 'website' | 'ecommerce' | 'branding' | 'marketing' | 'maintenance';
-    features: string[];
-    status: 'active' | 'completed';
+    basePrice: number; // In cents
+    features?: string[];
 }
 
-export interface ProjectService {
+export interface Service {
     id: string;
     name: string;
+    category: string;
     description: string;
-    basePrice: number;
-    category: 'website' | 'ecommerce' | 'branding' | 'marketing' | 'maintenance';
-    status: 'pending' | 'in_progress' | 'completed';
-    addedAt: Date;
+    basePrice: number; // In cents
+    status: ServiceStatus;
 }
 
+// ======================
+// COMMUNICATION TYPES
+// ======================
+export interface Comment {
+    id: string;
+    projectId: string;
+    userId: string;     // Reference to User document
+    content: string;
+    createdAt: Timestamp;
+}
+
+export interface Feedback {
+    id: string;
+    projectId: string;
+    userId: string;     // Reference to User document
+    type: FeedbackType;
+    content: string;
+    status: FeedbackStatus;
+    createdAt: Timestamp;
+}
+
+// ======================
+// MILESTONES & PAYMENTS
+// ======================
 export interface Milestone {
     id: string;
     title: string;
     description: string;
-    dueDate: Date;
-    status: 'pending' | 'in_progress' | 'completed';
-    paymentRequired?: number;
+    dueDate: Timestamp;
+    status: ServiceStatus; // Reusing ServiceStatus enum
+    paymentRequired?: number; // In cents
 }
 
-// Payment-related types
 export interface Payment {
     id: string;
     projectId: string;
-    userId: string;
-    amount: number;
+    userId: string;     // Reference to User document
+    amount: number;     // In cents
     type: 'initial' | 'milestone' | 'final';
     status: 'pending' | 'completed' | 'failed';
-    method: 'bank_transfer' | 'credit_card';
-    date: Date;
+    method: PaymentMethod;
+    date: Timestamp;
     invoice?: Invoice;
 }
 
+// ======================
+// FINANCIAL TYPES
+// ======================
 export interface Invoice {
     id: string;
     projectId: string;
-    userId: string;
-    amount: number;
+    userId: string;     // Reference to User document
+    paymentRef?: string; // Reference to Payment document
+    amount: number;     // In cents
     items: InvoiceItem[];
-    status: 'draft' | 'sent' | 'paid';
-    dueDate: Date;
-    paidDate?: Date;
+    status: InvoiceStatus;
+    dueDate: Timestamp;
+    paidDate?: Timestamp;
 }
 
 export interface InvoiceItem {
     description: string;
-    amount: number;
+    amount: number;     // In cents
     quantity: number;
 }
 
-// Communication-related types
+// ======================
+// ADDITIONAL TYPES
+// ======================
 export interface Message {
     id: string;
     projectId: string;
-    userId: string;
+    userId: string;     // Reference to User document
     content: string;
     attachments?: Attachment[];
-    createdAt: Date;
-    readBy: string[];
+    createdAt: Timestamp;
+    readBy: string[];   // Array of user IDs
 }
 
 export interface Attachment {
@@ -107,34 +206,24 @@ export interface Attachment {
     name: string;
     url: string;
     type: string;
-    size: number;
-}
-
-export interface Service {
-    id: string;
-    name: string;
-    description: string;
-    basePrice: number;
-    category: 'website' | 'ecommerce' | 'branding' | 'marketing' | 'maintenance';
-    features: string[];
-    status?: 'pending' | 'in_progress' | 'completed' | 'active';
-}
-
-export interface Feature {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    status: 'pending' | 'in_progress' | 'completed';
+    size: number;       // In bytes
 }
 
 export interface PricingPackage {
     id: string;
     name: string;
     description: string;
-    basePrice: number;
+    basePrice: number;  // In cents
     features: string[];
-    category: 'website' | 'ecommerce' | 'branding' | 'marketing' | 'maintenance';
+    category: ProjectType | 'maintenance';
 }
 
-export type ProjectType = 'website' | 'ecommerce' | 'branding' | 'custom'; 
+// ======================
+// VALIDATION INTERFACES
+// ======================
+export interface ProjectValidation {
+    isValid: boolean;
+    balanceDue?: number; // In cents
+    progress?: number;   // 0-100 percentage
+    nextMilestone?: Milestone;
+}

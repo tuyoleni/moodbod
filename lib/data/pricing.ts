@@ -1,4 +1,4 @@
-import { PricingPackage } from '@/lib/types/database';
+import { PricingPackage, ProjectType } from '@/lib/types/database';
 
 export const pricingPackages: PricingPackage[] = [
     {
@@ -6,7 +6,7 @@ export const pricingPackages: PricingPackage[] = [
         name: 'Basic Single-Page Website',
         description: 'Perfect for individuals or small businesses just starting out.',
         basePrice: 1800,
-        category: 'website',
+        category: ProjectType.WEBSITE,
         features: [
             'Simple one-page design',
             'Mobile-friendly (responsive design)',
@@ -21,7 +21,7 @@ export const pricingPackages: PricingPackage[] = [
         name: 'Standard Website',
         description: 'Ideal for growing businesses looking for more features.',
         basePrice: 4500,
-        category: 'website',
+        category: ProjectType.WEBSITE,
         features: [
             'Up to 3 pages',
             'Custom design',
@@ -37,7 +37,7 @@ export const pricingPackages: PricingPackage[] = [
         name: 'E-commerce Website',
         description: 'For businesses ready to sell products online.',
         basePrice: 8000,
-        category: 'ecommerce',
+        category: ProjectType.ECOMMERCE,
         features: [
             'Up to 5 pages',
             'Custom design for online store',

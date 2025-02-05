@@ -19,6 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: baseTitle,
     description: baseDescription,
+    metadataBase: new URL("https://moodbod.com"),
     manifest: '/manifest.json',
     icons: {
       icon: '/icons/favicon.ico',
@@ -91,7 +92,12 @@ export async function generateMetadata(): Promise<Metadata> {
       "marketing agency",
       "business consultant",
       "local business solutions",
-      "Moodbod"
+      "Moodbod",
+      "Moodbod.com",
+      "Moodbod.co.uk",
+      "Moodbod.co",
+      "Moodbod.com.au",
+      "Moodbod.com.au",
     ],
     robots: {
       index: true,
