@@ -11,6 +11,6 @@ export default function robots(): MetadataRoute.Robots {
                 '/auth/',
             ],
         },
-        sitemap: 'https://moodbod.com/sitemap.xml',
+        sitemap: 'https://moodbod.design/sitemap.xml',
     }
 } 
