@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: baseTitle,
     description: baseDescription,
-    metadataBase: new URL("https://moodbod.design"),
+    metadataBase: new URL("https://www.moodbod.design"),
     manifest: '/manifest.json',
     icons: {
       icon: '/icons/favicon.ico',
@@ -111,7 +111,7 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     alternates: {
-      canonical: 'https://moodbod.design',
+      canonical: 'https://www.moodbod.design',
     },
     openGraph: {
       title: baseTitle,

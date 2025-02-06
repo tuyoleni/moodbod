@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
                 '/auth/',
             ],
         },
-        sitemap: 'https://moodbod.design/sitemap.xml',
+        sitemap: 'https://www.moodbod.design/sitemap.xml',
     }
 } 
