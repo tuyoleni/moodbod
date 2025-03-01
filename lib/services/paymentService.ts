@@ -64,3 +64,16 @@ export const updateInvoiceStatus = async (invoiceId: string, status: InvoiceStat
         throw error;
     }
 };
+
+export const getAllPayments = async (): Promise<Payment[]> => {
+    try {
+        const querySnapshot = await getDocs(paymentsRef);
+        return querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        })) as Payment[];
+    } catch (error) {
+        console.error('Error fetching all payments:', error);
+        return [];
+    }
+};

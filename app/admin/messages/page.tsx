@@ -3,12 +3,12 @@
 import { useState, useEffect } from 'react';
 import { Message } from '@/lib/types/communication';
 import { getAllMessages } from '@/lib/services/communicationService';
-import { useAuth } from '@/lib/hooks/useAuth';
+// import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function MessagesPage() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [loading, setLoading] = useState(true);
-    const { session } = useAuth();
+    // const { session } = useAuth();
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -37,16 +37,15 @@ export default function MessagesPage() {
                     <div key={message.id} className="p-4 border rounded-lg shadow-sm">
                         <div className="space-y-2">
                             <div className="flex justify-between items-start">
-                                <h3 className="font-semibold">{message.subject}</h3>
+                                <h3 className="font-semibold">{message.content}</h3>
                                 <span className="text-sm text-gray-500">
-                                    {new Date(message.timestamp).toLocaleString()}
+                                    {new Date(message.createdAt).toLocaleString()}
                                 </span>
                             </div>
                             <p className="text-sm text-gray-600">{message.content}</p>
                             <div className="flex gap-4 text-sm text-gray-600">
-                                <p>From: {message.senderId}</p>
-                                <p>To: {message.recipientId}</p>
-                                <p>Status: {message.status}</p>
+                                <p>From: {message.userId}</p>
+                                <p>To: {message.readBy}</p>
                             </div>
                         </div>
                     </div>

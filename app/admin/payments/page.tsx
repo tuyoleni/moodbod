@@ -3,12 +3,12 @@
 import { useState, useEffect } from 'react';
 import { Payment } from '@/lib/types/payment';
 import { getAllPayments } from '@/lib/services/paymentService';
-import { useAuth } from '@/lib/hooks/useAuth';
+// import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function PaymentsPage() {
     const [payments, setPayments] = useState<Payment[]>([]);
     const [loading, setLoading] = useState(true);
-    const { session } = useAuth();
+    // const { session } = useAuth();
 
     useEffect(() => {
         const fetchPayments = async () => {
@@ -42,7 +42,7 @@ export default function PaymentsPage() {
                                 <p>Status: {payment.status}</p>
                             </div>
                             <p className="text-sm text-gray-600">Project: {payment.projectId}</p>
-                            <p className="text-sm text-gray-600">Date: {new Date(payment.date).toLocaleDateString()}</p>
+                            <p className="text-sm text-gray-600">Date: {new Date(payment.createdAt).toLocaleDateString()}</p>
                         </div>
                     </div>
                 ))}

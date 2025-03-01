@@ -38,6 +38,19 @@ export const getProjectMessages = async (projectId: string): Promise<Message[]> 
     }
 };
 
+export const getAllMessages = async (): Promise<Message[]> => {
+    try {
+        const querySnapshot = await getDocs(messagesRef);
+        return querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        })) as Message[];
+    } catch (error) {
+        console.error('Error fetching all messages:', error);
+        return [];
+    }
+};
+
 export const submitFeedback = async (feedbackData: Omit<Feedback, 'id' | 'createdAt'>): Promise<string> => {
     try {
         const docRef = await addDoc(feedbackRef, {

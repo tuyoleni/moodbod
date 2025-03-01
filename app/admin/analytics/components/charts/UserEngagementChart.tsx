@@ -25,7 +25,7 @@ export function UserEngagementChart({ loading: initialLoading }: { loading?: boo
   const fetchEngagementData = async () => {
     try {
       setLoading(true);
-      const [users, projects] = await Promise.all([
+      const [, projects] = await Promise.all([
         fetchUsers(),
         fetchAllProjects()
       ]);
@@ -43,7 +43,7 @@ export function UserEngagementChart({ loading: initialLoading }: { loading?: boo
 
       const messagesByHour = hours.map(hour => {
         return allMessages.filter(msg => {
-          const msgHour = msg.createdAt?.toDate().getHours() || 0;
+          const msgHour = msg.createdAt?.getHours() || 0;
           return msgHour >= hour && msgHour < (hour + 2);
         }).length;
       });
@@ -52,7 +52,7 @@ export function UserEngagementChart({ loading: initialLoading }: { loading?: boo
         const uniqueUsers = new Set(
           allMessages
             .filter(msg => {
-              const msgHour = msg.createdAt?.toDate().getHours() || 0;
+              const msgHour = msg.createdAt?.getHours() || 0;
               return msgHour >= hour && msgHour < (hour + 2);
             })
             .map(msg => msg.userId)

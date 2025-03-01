@@ -13,6 +13,7 @@ export interface Payment {
     user?: User;
     createdAt: Date;
     updatedAt?: Date;
+    method: PaymentMethod;
 }
 
 export interface Invoice {
