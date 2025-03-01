@@ -2,7 +2,9 @@ export enum ProjectStatus {
     REQUESTED = 'requested',
     IN_PROGRESS = 'in_progress',
     IN_REVIEW = 'in_review',
-    COMPLETED = 'completed'
+    COMPLETED = 'completed',
+    ACTIVE = "ACTIVE",
+    REJECTED = "REJECTED"
 }
 
 export enum PaymentMethod {
@@ -13,8 +15,12 @@ export enum PaymentMethod {
 
 export enum ServiceStatus {
     PENDING = 'pending',
+    APPROVED = 'approved',
+    REJECTED = 'rejected',
+    ACTIVE = 'active',
     IN_PROGRESS = 'in_progress',
-    COMPLETED = 'completed'
+    COMPLETED = 'completed',
+    REMOVED = 'removed'
 }
 
 export enum FeedbackType {

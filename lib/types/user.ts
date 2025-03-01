@@ -1,11 +1,11 @@
-import { Timestamp } from 'firebase/firestore';
+import { Project } from './project';
 
 export interface User {
     id: string;
-    email: string;
     name: string;
-    company?: string;
-    role: 'client' | 'admin';
-    createdAt: Timestamp;
-    updatedAt: Timestamp;
+    email: string;
+    role: 'admin' | 'client';
+    projects?: Project[];
+    createdAt?: Date;
+    updatedAt?: Date;
 }

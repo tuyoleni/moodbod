@@ -1,4 +1,4 @@
-import { ProjectType } from '@/lib/types/database';
+import { ProjectType } from "../types";
 
 export const projectTypes: { id: ProjectType; name: string; description: string; icon: string }[] = [
     {

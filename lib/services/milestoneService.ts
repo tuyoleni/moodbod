@@ -1,7 +1,7 @@
 import { collection, query, where, getDocs, addDoc, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Milestone, ServiceStatus } from '@/lib/types/database';
 import { validateAmount } from '@/lib/utils/validation';
+import { Milestone, ServiceStatus } from '../types';
 
 const milestonesRef = collection(db, 'milestones');
 

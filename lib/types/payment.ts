@@ -1,16 +1,18 @@
 import { Timestamp } from 'firebase/firestore';
 import { PaymentMethod, InvoiceStatus } from './enums';
+import { Project } from './project';
+import { User } from './user';
 
 export interface Payment {
     id: string;
+    amount: number;
+    status: 'pending' | 'completed' | 'failed';
     projectId: string;
     userId: string;
-    amount: number;
-    type: 'initial' | 'milestone' | 'final';
-    status: 'pending' | 'completed' | 'failed';
-    method: PaymentMethod;
-    date: Timestamp;
-    invoice?: Invoice;
+    project?: Project;
+    user?: User;
+    createdAt: Date;
+    updatedAt?: Date;
 }
 
 export interface Invoice {

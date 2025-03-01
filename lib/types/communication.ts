@@ -1,6 +1,8 @@
 import { Timestamp } from 'firebase/firestore';
 import { FeedbackType, FeedbackStatus } from './enums';
 import { Attachment } from './file';
+import { Project } from './project';
+import { User } from './user';
 
 export interface Comment {
     id: string;
@@ -22,10 +24,13 @@ export interface Feedback {
 
 export interface Message {
     id: string;
+    content: string;
     projectId: string;
     userId: string;
-    content: string;
+    project?: Project;
+    user?: User;
     attachments?: Attachment[];
-    createdAt: Timestamp;
+    createdAt: Date;
+    updatedAt?: Date;
     readBy: string[];
 }

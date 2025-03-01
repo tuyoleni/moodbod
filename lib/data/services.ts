@@ -5,7 +5,7 @@ export const websitePackages: PricingPackage[] = [
         id: 'basic-website',
         name: 'Basic Single-Page Website',
         description: 'Perfect for individuals or small businesses just starting out.',
-        basePrice: 1800,
+        price: 1800,
         category: ProjectType.WEBSITE,
         features: {
             pages: 1,
@@ -21,7 +21,7 @@ export const websitePackages: PricingPackage[] = [
         id: 'standard-website',
         name: 'Standard Website',
         description: 'Ideal for growing businesses looking for more features.',
-        basePrice: 4500,
+        price: 4500,
         category: ProjectType.WEBSITE,
         features: {
             pages: 3,
@@ -37,7 +37,7 @@ export const websitePackages: PricingPackage[] = [
         id: 'ecommerce-website',
         name: 'E-commerce Website',
         description: 'For businesses ready to sell products online.',
-        basePrice: 8000,
+        price: 8000,
         category: ProjectType.ECOMMERCE,
         features: {
             pages: 5,
@@ -59,7 +59,7 @@ export const additionalServices = [
         id: 'additional-pages',
         name: 'Additional Website Pages',
         description: 'Expand your website with up to 5 additional pages of custom content.',
-        basePrice: 500,
+        price: 500,
         category: 'website',
         features: ['Custom design', 'Content integration', 'Mobile responsive']
     },
@@ -67,7 +67,7 @@ export const additionalServices = [
         id: 'advanced-seo',
         name: 'Advanced SEO Package',
         description: 'Comprehensive keyword research and optimization to improve your search rankings.',
-        basePrice: 1500,
+        price: 1500,
         category: 'marketing',
         features: ['Keyword research', 'On-page optimization', 'Monthly reports']
     },
@@ -75,7 +75,7 @@ export const additionalServices = [
         id: 'branding-package',
         name: 'Business Branding Package',
         description: 'Comprehensive branding including logo design, color palette, and brand guidelines.',
-        basePrice: 2500,
+        price: 2500,
         category: 'branding',
         features: ['Logo design', 'Color palette', 'Brand guidelines']
     },
@@ -83,7 +83,7 @@ export const additionalServices = [
         id: 'content-writing',
         name: 'Content Writing & Strategy',
         description: 'Professional content creation to engage your target audience.',
-        basePrice: 300,
+        price: 300,
         category: 'marketing',
         features: ['SEO-optimized content', 'Professional writing', 'Per page pricing']
     },
@@ -91,7 +91,7 @@ export const additionalServices = [
         id: 'extra-revisions',
         name: 'Extra Design Revisions',
         description: 'Additional design adjustments beyond the included revision rounds.',
-        basePrice: 250,
+        price: 250,
         category: 'website',
         features: ['Per revision pricing', 'Quick turnaround', 'Unlimited changes']
     },
@@ -99,7 +99,7 @@ export const additionalServices = [
         id: 'priority-support',
         name: 'Priority Support',
         description: 'Fast-track support with priority response for your website needs.',
-        basePrice: 300,
+        price: 300,
         category: 'maintenance',
         features: ['Monthly subscription', 'Priority response', 'Direct support']
     },
@@ -107,7 +107,7 @@ export const additionalServices = [
         id: 'website-maintenance',
         name: 'Website Maintenance',
         description: 'Regular updates, backups, and technical maintenance of your site.',
-        basePrice: 600,
+        price: 600,
         category: 'maintenance',
         features: ['Regular updates', 'Daily backups', 'Security monitoring']
     },
@@ -115,7 +115,7 @@ export const additionalServices = [
         id: 'ecommerce-setup',
         name: 'E-commerce Setup',
         description: 'Professional setup of your online store with up to 100 products.',
-        basePrice: 1500,
+        price: 1500,
         category: 'ecommerce',
         features: ['Product setup', 'Category organization', 'Payment integration']
     },
@@ -123,7 +123,7 @@ export const additionalServices = [
         id: 'analytics-setup',
         name: 'Analytics Setup',
         description: 'Installation and configuration of advanced tracking and reporting tools.',
-        basePrice: 800,
+        price: 800,
         category: 'marketing',
         features: ['Google Analytics setup', 'Custom reporting', 'Goal tracking']
     }
@@ -134,7 +134,7 @@ export const infrastructureServices = [
         id: 'ssl-certificate',
         name: 'SSL Certificate',
         description: 'Secure your website with HTTPS encryption.',
-        basePrice: 250,
+        price: 250,
         category: 'maintenance',
         features: ['Yearly subscription', 'HTTPS encryption', 'Security badge']
     },
@@ -142,7 +142,7 @@ export const infrastructureServices = [
         id: 'premium-hosting',
         name: 'Premium Hosting',
         description: 'High-performance hosting for your website.',
-        basePrice: 100,
+        price: 100,
         category: 'maintenance',
         features: ['Monthly subscription', 'High performance', 'Daily backups']
     }

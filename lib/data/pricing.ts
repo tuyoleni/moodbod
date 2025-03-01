@@ -1,72 +1,101 @@
-import { PricingPackage, ProjectType } from '@/lib/types/database';
+import { PricingPackage } from "../types";
+import { ProjectType, ServiceStatus } from "../types/enums";
+import { Service } from "../types/service";
+
 
 export const pricingPackages: PricingPackage[] = [
     {
         id: 'basic-website',
         name: 'Basic Single-Page Website',
         description: 'Perfect for individuals or small businesses just starting out.',
-        basePrice: 1800,
+        price: 1800,
         category: ProjectType.WEBSITE,
-        features: [
-            'Simple one-page design',
-            'Mobile-friendly (responsive design)',
-            'Basic contact form',
-            '2 revisions',
-            'Social media links',
-            'Basic SEO setup'
-        ]
+        features: {
+            pages: 1,
+            revisions: 2,
+            mobileResponsive: true,
+            contactForm: true,
+            socialMediaLinks: true,
+            seoSetup: true,
+            customDesign: false
+        }
     },
     {
         id: 'standard-website',
         name: 'Standard Website',
         description: 'Ideal for growing businesses looking for more features.',
-        basePrice: 4500,
+        price: 4500,
         category: ProjectType.WEBSITE,
-        features: [
-            'Up to 3 pages',
-            'Custom design',
-            'Mobile-friendly (responsive design)',
-            'Contact form',
-            '3 revisions',
-            'Social media integration',
-            'Basic SEO setup'
-        ]
+        features: {
+            pages: 3,
+            revisions: 3,
+            mobileResponsive: true,
+            contactForm: true,
+            socialMediaLinks: true,
+            seoSetup: true,
+            customDesign: true
+        }
     },
     {
         id: 'ecommerce',
         name: 'E-commerce Website',
         description: 'For businesses ready to sell products online.',
-        basePrice: 8000,
+        price: 8000,
         category: ProjectType.ECOMMERCE,
-        features: [
-            'Up to 5 pages',
-            'Custom design for online store',
-            'Product listings (up to 30 products)',
-            'Shopping cart functionality',
-            'Basic payment gateway setup',
-            'Mobile-friendly design',
-            '4 revisions',
-            'Basic SEO setup'
-        ]
+        features: {
+            pages: 5,
+            revisions: 4,
+            mobileResponsive: true,
+            contactForm: true,
+            socialMediaLinks: true,
+            seoSetup: true,
+            customDesign: true,
+            productListings: 30,
+            shoppingCart: true,
+            paymentGateway: true
+        }
     }
 ];
 
-export const additionalServices = [
+export const additionalServices: Service[] = [
     {
-        id: 'additional-pages',
-        name: 'Additional Website Pages',
-        description: 'Expand your website with up to 5 additional pages of custom content.',
-        basePrice: 500,
+        id: 'additional-page',
+        name: 'Additional Website Page',
         category: 'website',
-        features: ['Custom design', 'Content integration', 'Mobile responsive']
+        description: 'Add an extra page to your website with custom content.',
+        price: 500,
+        status: ServiceStatus.PENDING
     },
     {
         id: 'seo-package',
         name: 'Advanced SEO Package',
-        description: 'Comprehensive keyword research and optimization to improve your search rankings.',
-        basePrice: 1500,
         category: 'marketing',
-        features: ['Keyword research', 'On-page optimization', 'Technical SEO', 'Monthly reports']
+        description: 'Comprehensive keyword research and optimization to improve your search rankings.',
+        price: 1500,
+        status: ServiceStatus.PENDING
     },
-    // Add more services as needed
-]; 
+    {
+        id: 'branding-package',
+        name: 'Brand Identity Package',
+        category: 'branding',
+        description: 'Complete brand identity design including logo and brand guidelines.',
+        price: 2000,
+        status: ServiceStatus.PENDING
+    },
+    {
+        id: 'maintenance-package',
+        name: 'Website Maintenance',
+        category: 'maintenance',
+        description: 'Keep your website secure and up-to-date with regular maintenance.',
+        price: 200,
+        status: ServiceStatus.PENDING
+    },
+    {
+        id: 'extra-products',
+        name: 'Additional Product Listings',
+        category: 'ecommerce',
+        description: 'Add more product listings to your e-commerce website.',
+        price: 300,
+        status: ServiceStatus.PENDING
+    }
+];

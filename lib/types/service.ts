@@ -1,10 +1,14 @@
+import { Project } from './project';
 import { ServiceStatus } from './enums';
 
 export interface Service {
+    requestedAt: any;
     id: string;
     name: string;
-    category: string;
     description: string;
-    basePrice: number;
+    projectId: string;
+    project?: Project;
+    createdAt: Date;
+    updatedAt?: Date;
     status: ServiceStatus;
 }

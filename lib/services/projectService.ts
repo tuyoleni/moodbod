@@ -1,9 +1,22 @@
-import { collection, query, where, getDocs, addDoc, doc, serverTimestamp, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, doc, serverTimestamp, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Project, ProjectStatus, ProjectType } from '@/lib/types/database';
 import { validateFeatures } from '@/lib/utils/validation';
+import { Project, ProjectStatus } from '../types';
 
 const projectsRef = collection(db, 'projects');
+
+export const fetchAllProjects = async (): Promise<Project[]> => {
+    try {
+        const querySnapshot = await getDocs(projectsRef);
+        return querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        })) as Project[];
+    } catch (error) {
+        console.error('Error fetching all projects:', error);
+        return [];
+    }
+};
 
 export const fetchUserProjects = async (userId: string): Promise<Project[]> => {
     try {
@@ -54,6 +67,19 @@ export const createProject = async (projectData: Omit<Project, 'id'>): Promise<s
     }
 };
 
+export const updateProject = async (projectId: string, projectData: Partial<Project>): Promise<void> => {
+    try {
+        const projectRef = doc(projectsRef, projectId);
+        await updateDoc(projectRef, {
+            ...projectData,
+            updatedAt: serverTimestamp()
+        });
+    } catch (error) {
+        console.error('Error updating project:', error);
+        throw error;
+    }
+};
+
 export const updateProjectStatus = async (projectId: string, status: ProjectStatus): Promise<void> => {
     try {
         const projectRef = doc(projectsRef, projectId);
@@ -63,6 +89,16 @@ export const updateProjectStatus = async (projectId: string, status: ProjectStat
         });
     } catch (error) {
         console.error('Error updating project status:', error);
+        throw error;
+    }
+};
+
+export const deleteProject = async (projectId: string): Promise<void> => {
+    try {
+        const projectRef = doc(projectsRef, projectId);
+        await deleteDoc(projectRef);
+    } catch (error) {
+        console.error('Error deleting project:', error);
         throw error;
     }
 };

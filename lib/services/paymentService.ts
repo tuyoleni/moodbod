@@ -1,7 +1,7 @@
 import { collection, query, where, getDocs, addDoc, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Payment, Invoice, InvoiceStatus } from '@/lib/types/database';
 import { validateAmount, validatePaymentMethod } from '@/lib/utils/validation';
+import { Payment, Invoice, InvoiceStatus } from '../types';
 
 const paymentsRef = collection(db, 'payments');
 const invoicesRef = collection(db, 'invoices');

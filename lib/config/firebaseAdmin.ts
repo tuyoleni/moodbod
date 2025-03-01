@@ -11,4 +11,11 @@ if (!admin.apps.length) {
 }
 
 const dbAdmin = admin.firestore();
-export { dbAdmin, admin };
+
+export async function getFirebaseAdmin() {
+  return admin;
+}
+
+export async function getFirestoreAdmin() {
+  return dbAdmin;
+}
