@@ -24,18 +24,12 @@ export function UserDetailsDialog({ user, open, onOpenChange }: UserDetailsDialo
     const [projectServices, setProjectServices] = useState<Record<string, Service[]>>({});
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (open && user && user.role === 'client' && (user.projects?.length ?? 0) > 0) {
-            fetchProjectDetails();
-        }
-    }, [open, user]);
-
     const fetchProjectDetails = async () => {
         if (!user?.projects) return;
         
         setLoading(true);
         try {
-            const [messages, payments, services] = await Promise.all([
+            const [, payments, services] = await Promise.all([
                 Promise.all(user.projects.map(p => getProjectMessages(p.id))),
                 Promise.all(user.projects.map(p => getPaymentsByProject(p.id))),
                 Promise.all(user.projects.map(p => getProjectServices(p.id)))
@@ -57,6 +51,12 @@ export function UserDetailsDialog({ user, open, onOpenChange }: UserDetailsDialo
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (open && user && user.role === 'client' && (user.projects?.length ?? 0) > 0) {
+            fetchProjectDetails();
+        }
+    }, [open, user, fetchProjectDetails]);
 
     if (!user) return null;
 

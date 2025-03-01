@@ -1,9 +1,9 @@
 import { Project } from './project';
 
 export interface User {
-    messages: any;
-    payments: any;
-    services: any;
+    messages: Record<string, unknown>;
+    payments: Record<string, unknown>;
+    services: Record<string, unknown>;
     id: string;
     name: string;
     email: string;

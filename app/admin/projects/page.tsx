@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Project } from '@/lib/types/project';
 import { fetchAllProjects } from '@/lib/services/projectService';
-import { useAuth } from '@/lib/hooks/useAuth';
+import { Project } from '@/lib/types/project';
+// import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function ProjectsPage() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
-    const { session } = useAuth();
+    // const { session } = useAuth();
 
     useEffect(() => {
         const fetchProjects = async () => {

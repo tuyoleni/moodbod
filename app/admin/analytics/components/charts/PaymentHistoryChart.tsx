@@ -1,16 +1,36 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getPaymentsByProject } from '@/lib/services/paymentService';
-import { fetchAllProjects } from '@/lib/services/projectService';
-import { format } from 'date-fns';
+import { getAllPayments } from '@/lib/services/paymentService';
+import { Payment } from '@/lib/types/payment';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-export function PaymentHistoryChart({ loading: initialLoading }: { loading?: boolean }) {
+interface PaymentHistoryChartProps {
+  loading?: boolean;
+}
+
+export function PaymentHistoryChart({ loading: initialLoading }: PaymentHistoryChartProps) {
   const [loading, setLoading] = useState(initialLoading);
   const [paymentData, setPaymentData] = useState<{
     labels: string[];
@@ -24,27 +44,13 @@ export function PaymentHistoryChart({ loading: initialLoading }: { loading?: boo
   const fetchPaymentData = async () => {
     try {
       setLoading(true);
-      const projects = await fetchAllProjects();
-      const payments = await Promise.all(
-        projects.map(project => getPaymentsByProject(project.id))
-      );
+      const payments = await getAllPayments();
+      const sortedPayments = payments.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-      const paymentsByMonth = payments.flat().reduce((acc, payment) => {
-        if (payment.date) {
-          const month = format(payment.date.toDate(), 'MMM yyyy');
-          acc[month] = (acc[month] || 0) + payment.amount;
-        }
-        return acc;
-      }, {} as Record<string, number>);
+      const labels = sortedPayments.map(payment => new Date(payment.createdAt).toLocaleDateString());
+      const amounts = sortedPayments.map(payment => payment.amount);
 
-      const sortedMonths = Object.keys(paymentsByMonth)
-        .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
-        .slice(-6); // Show last 6 months
-
-      setPaymentData({
-        labels: sortedMonths,
-        amounts: sortedMonths.map(month => paymentsByMonth[month])
-      });
+      setPaymentData({ labels, amounts });
     } catch (error) {
       console.error('Error fetching payment data:', error);
     } finally {
@@ -52,46 +58,45 @@ export function PaymentHistoryChart({ loading: initialLoading }: { loading?: boo
     }
   };
 
-  if (loading) return <Skeleton className="h-[200px]" />;
+  if (loading) {
+    return <Skeleton className="h-[300px] w-full" />;
+  }
 
   const data = {
     labels: paymentData.labels,
-    datasets: [{
-      label: 'Monthly Payments',
-      data: paymentData.amounts,
-      backgroundColor: '#22c55e',
-      borderRadius: 4,
-    }]
+    datasets: [
+      {
+        label: 'Payment Amount',
+        data: paymentData.amounts,
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        tension: 0.1,
+      }
+    ]
   };
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'bottom' as const,
-        labels: { boxWidth: 10, padding: 10 }
+        position: 'top' as const,
       },
       tooltip: {
         callbacks: {
-          label: (context: any) => `$${context.raw.toLocaleString()}`
+          label: (tooltipItem: { raw: unknown }) => `Amount: $${tooltipItem.raw as number}`
         }
       }
     },
     scales: {
-      x: { grid: { display: false } },
-      y: { 
-        grid: { color: '#e5e7eb' },
-        ticks: {
-          callback: (value: number) => `$${value.toLocaleString()}`
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Amount ($)'
         }
       }
     }
   };
 
-  return (
-    <div className="h-[200px]">
-      <Bar data={data} options={options} />
-    </div>
-  );
+  return <Line options={options} data={data} />;
 }

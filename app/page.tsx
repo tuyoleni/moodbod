@@ -9,7 +9,7 @@ import Image from 'next/image';
 
 export default function App() {
     const [isCTASectionVisible, setIsCTASectionVisible] = useState(false);
-    const { isLoading, isAuthenticated, user } = useAuth();
+    const { isLoading, isAuthenticated } = useAuth();
 
     if (isLoading || isAuthenticated) {
         return (

@@ -4,7 +4,6 @@ import {
   MessageSquare, 
   BarChart,
   Clock,
-  Users,
   Shield,
 } from 'lucide-react';
 
@@ -15,7 +14,7 @@ export type NavSection = {
 
 export type NavItem = {
   href: string;
-  icon: any;
+  icon: React.ComponentType;
   label: string;
 };
 

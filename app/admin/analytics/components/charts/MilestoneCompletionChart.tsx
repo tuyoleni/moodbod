@@ -38,10 +38,6 @@ export function MilestoneCompletionChart({ loading: initialLoading }: MilestoneC
     completionRates: number[];
   }>({ labels: [], completionRates: [] });
 
-  useEffect(() => {
-    fetchMilestoneData();
-  }, []);
-
   const fetchMilestoneData = async () => {
     try {
       setLoading(true);
@@ -63,6 +59,10 @@ export function MilestoneCompletionChart({ loading: initialLoading }: MilestoneC
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchMilestoneData();
+  }, [fetchMilestoneData]);
 
   const calculateCompletionRates = (projectMilestones: { project: Project; milestones: Milestone[] }[]) => {
     const labels: string[] = [];

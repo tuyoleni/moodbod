@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend, TooltipItem } from 'chart.js';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchAllProjects } from '@/lib/services/projectService';
 import { getProjectServices } from '@/lib/services/serviceManagementService';
@@ -39,7 +39,7 @@ export function RevenueByServiceChart({ loading: initialLoading }: { loading?: b
         const revenuePerService = totalProjectRevenue / serviceCount;
 
         services.forEach(service => {
-          acc[service.type] = (acc[service.type] || 0) + revenuePerService;
+          acc[service.name] = (acc[service.name] || 0) + revenuePerService;
         });
         return acc;
       }, {} as Record<string, number>);
@@ -77,7 +77,7 @@ export function RevenueByServiceChart({ loading: initialLoading }: { loading?: b
       },
       tooltip: {
         callbacks: {
-          label: (context: any) => `$${context.raw.toLocaleString()}`
+          label: (tooltipItem: TooltipItem<'bar'>) => `$${(tooltipItem.raw as number).toLocaleString()}`
         }
       }
     },
@@ -90,7 +90,9 @@ export function RevenueByServiceChart({ loading: initialLoading }: { loading?: b
         beginAtZero: true,
         grid: { color: '#e5e7eb' },
         ticks: {
-          callback: (value: number) => `$${value.toLocaleString()}`
+          callback: function(value: string | number) {
+            return `$${Number(value).toLocaleString()}`;
+          }
         }
       }
     }

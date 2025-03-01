@@ -20,7 +20,7 @@ export function UserProjectsDialog({ user, open, onOpenChange }: UserProjectsDia
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-3xl">
                 <DialogHeader>
-                    <DialogTitle>{user.name}'s Projects</DialogTitle>
+                    <DialogTitle>{user.name}&apos;s Projects</DialogTitle>
                 </DialogHeader>
                 <div className="py-4">
                     <Table>

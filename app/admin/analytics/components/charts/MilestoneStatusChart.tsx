@@ -83,10 +83,10 @@ export function MilestoneStatusChart({ loading: initialLoading }: { loading?: bo
       },
       tooltip: {
         callbacks: {
-          label: (context: any) => {
-            const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
-            const percentage = ((context.raw / total) * 100).toFixed(1);
-            return `${context.label}: ${context.raw} (${percentage}%)`;
+          label: (tooltipItem: { dataset: { data: number[] }; raw: unknown; label: string; }) => {
+            const total = tooltipItem.dataset.data.reduce((a: number, b: number) => a + b, 0);
+            const percentage = ((tooltipItem.raw as number / total) * 100).toFixed(1);
+            return `${tooltipItem.label}: ${tooltipItem.raw} (${percentage}%)`;
           }
         }
       }

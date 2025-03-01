@@ -1,4 +1,3 @@
-import { FirestoreAdapter } from "@auth/firebase-adapter";
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { AuthSession, AuthUser } from "../types/auth";
@@ -13,8 +12,6 @@ const ADMIN_EMAILS = [
 ];
 
 declare module 'next-auth' {
-    interface Session extends AuthSession {}
-    interface User extends AuthUser {}
     interface JWT {
         role?: 'admin' | 'user';
     }
@@ -52,7 +49,7 @@ export const createAuthOptions = (): NextAuthOptions => ({
                     });
                 }
                 
-                user.role = role;
+                (user as AuthUser).role = role;
                 user.id = userId;
                 return true;
             } catch (error) {

@@ -31,11 +31,15 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { MoreVertical, Search } from 'lucide-react';
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 import { UserDetailsDialog } from './user-details/UserDetailsDialog';
 import { UserEditDialog } from './UserEditDialog';
 import { UserRoleDialog } from './UserRoleDialog';
 import { UserProjectsDialog } from './UserProjectsDialog';
+
+interface UsersTableProps {
+    users: User[];
+}
 
 export default function UsersTable() {
     const [users, setUsers] = useState<UserWithProjects[]>([]);

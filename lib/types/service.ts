@@ -2,7 +2,7 @@ import { Project } from './project';
 import { ServiceStatus } from './enums';
 
 export interface Service {
-    requestedAt: any;
+    requestedAt: Record<string, unknown>;
     id: string;
     name: string;
     description: string;

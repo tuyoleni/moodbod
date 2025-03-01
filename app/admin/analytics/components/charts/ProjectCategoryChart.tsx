@@ -2,13 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, TooltipItem } from 'chart.js';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchAllProjects } from '@/lib/services/projectService';
+import { Project } from '@/lib/types/project';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export function ProjectCategoryChart({ loading: initialLoading }: { loading?: boolean }) {
+interface ProjectCategoryChartProps {
+  loading?: boolean;
+}
+
+export function ProjectCategoryChart({ loading: initialLoading }: ProjectCategoryChartProps) {
   const [loading, setLoading] = useState(initialLoading);
   const [categoryData, setCategoryData] = useState<{
     labels: string[];
@@ -24,11 +29,11 @@ export function ProjectCategoryChart({ loading: initialLoading }: { loading?: bo
       setLoading(true);
       const projects = await fetchAllProjects();
       
-      const categoryCounts = projects.reduce((acc, project) => {
-        const category = project.category || 'Uncategorized';
+      const categoryCounts = projects.reduce((acc: Record<string, number>, project: Project) => {
+        const category = project.type || 'Uncategorized';
         acc[category] = (acc[category] || 0) + 1;
         return acc;
-      }, {} as Record<string, number>);
+      }, {});
 
       setCategoryData({
         labels: Object.keys(categoryCounts),
@@ -69,10 +74,10 @@ export function ProjectCategoryChart({ loading: initialLoading }: { loading?: bo
       },
       tooltip: {
         callbacks: {
-          label: (context: any) => {
-            const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
-            const percentage = ((context.raw / total) * 100).toFixed(1);
-            return `${context.label}: ${context.raw} (${percentage}%)`;
+          label: (tooltipItem: TooltipItem<'pie'>) => {
+            const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+            const percentage = ((tooltipItem.raw as number / total) * 100).toFixed(1);
+            return `${tooltipItem.label}: ${tooltipItem.raw} (${percentage}%)`;
           }
         }
       }

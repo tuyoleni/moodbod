@@ -10,7 +10,11 @@ import { format } from 'date-fns';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-export function RevenueChart({ loading: initialLoading }: { loading?: boolean }) {
+interface RevenueChartProps {
+  loading?: boolean;
+}
+
+export function RevenueChart({ loading: initialLoading }: RevenueChartProps) {
   const [loading, setLoading] = useState(initialLoading);
   const [revenueData, setRevenueData] = useState<{ labels: string[]; amounts: number[] }>({ labels: [], amounts: [] });
 
@@ -26,8 +30,8 @@ export function RevenueChart({ loading: initialLoading }: { loading?: boolean })
       const monthlyRevenue = new Map<string, number>();
 
       projectPayments.flat().forEach(payment => {
-        if (payment.date) {
-          const monthYear = format(payment.date.toDate(), 'MMM');
+        if (payment.createdAt) {
+          const monthYear = format(payment.createdAt, 'MMM');
           monthlyRevenue.set(monthYear, (monthlyRevenue.get(monthYear) || 0) + payment.amount);
         }
       });
@@ -68,7 +72,7 @@ export function RevenueChart({ loading: initialLoading }: { loading?: boolean })
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: (context: any) => `$${context.raw.toLocaleString()}`
+          label: (tooltipItem: { raw: unknown }) => `$${(tooltipItem.raw as number).toLocaleString()}`
         }
       }
     },
@@ -76,7 +80,7 @@ export function RevenueChart({ loading: initialLoading }: { loading?: boolean })
       x: { grid: { display: false } },
       y: { 
         grid: { color: '#e5e7eb' },
-        ticks: { callback: (value: number) => `$${value.toLocaleString()}` }
+        ticks: { callback: function(tickValue: string | number) { return `$${Number(tickValue).toLocaleString()}`; } }
       }
     }
   };

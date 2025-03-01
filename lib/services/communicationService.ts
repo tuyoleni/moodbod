@@ -1,7 +1,6 @@
-import { collection, query, where, getDocs, addDoc, doc, serverTimestamp, updateDoc, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, serverTimestamp, orderBy } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Message, Feedback, FeedbackStatus } from '../types';
-
 
 const messagesRef = collection(db, 'messages');
 const feedbackRef = collection(db, 'feedback');
