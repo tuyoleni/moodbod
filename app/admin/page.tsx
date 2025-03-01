@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/lib/hooks/useAuth";
 
-export default function Dashboard() {
+export default function AdminDashboard() {
     const { session, isLoading } = useAuth();
 
     if (isLoading) {
@@ -11,7 +11,7 @@ export default function Dashboard() {
 
     return (
         <div>
-            <h1>User Dashboard</h1>
+            <h1>Admin Dashboard</h1>
             <p>Welcome, {session?.user?.name}</p>
             <p>Role: {session?.user?.role}</p>
         </div>

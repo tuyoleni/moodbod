@@ -2,35 +2,27 @@
 
 import { Navbar } from "@/components/common/Navbar";
 import Home from "./home/app";
-import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAuth } from "@/lib/hooks/useAuth";
 import { logo } from '@/public/assets';
 import Image from 'next/image';
 
 export default function App() {
-  const [isCTASectionVisible, setIsCTASectionVisible] = useState(false);
-  const { status } = useSession();
-  const router = useRouter();
+    const [isCTASectionVisible, setIsCTASectionVisible] = useState(false);
+    const { isLoading, isAuthenticated, user } = useAuth();
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/dashboard");
+    if (isLoading || isAuthenticated) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <Image src={logo} alt="Moodbod" width={100} height={32} className="w-auto h-6" />
+            </div>
+        );
     }
-  }, [status, router]);
 
-  if (status === "loading" || status === "authenticated") {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Image src={logo} alt="Moodbod" width={100} height={32} className="w-auto h-6" />
-      </div>
+        <main>
+            <Navbar isCTASectionVisible={isCTASectionVisible} />
+            <Home onCTAVisibilityChange={setIsCTASectionVisible} />
+        </main>
     );
-  }
-
-  return (
-    <main>
-      <Navbar isCTASectionVisible={isCTASectionVisible} />
-      <Home onCTAVisibilityChange={setIsCTASectionVisible} />
-    </main>
-  );
 }

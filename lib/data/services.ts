@@ -1,4 +1,4 @@
-import { PricingPackage, ProjectType } from '@/lib/types/database';
+import { PricingPackage, ProjectType } from "../types";
 
 export const websitePackages: PricingPackage[] = [
     {
@@ -7,14 +7,15 @@ export const websitePackages: PricingPackage[] = [
         description: 'Perfect for individuals or small businesses just starting out.',
         basePrice: 1800,
         category: ProjectType.WEBSITE,
-        features: [
-            'Simple one-page design',
-            'Mobile-friendly (responsive design)',
-            'Basic contact form',
-            '2 revisions',
-            'Social media links',
-            'Basic SEO setup'
-        ]
+        features: {
+            pages: 1,
+            revisions: 2,
+            mobileResponsive: true,
+            contactForm: true,
+            socialMediaLinks: true,
+            seoSetup: true,
+            customDesign: false
+        }
     },
     {
         id: 'standard-website',
@@ -22,15 +23,15 @@ export const websitePackages: PricingPackage[] = [
         description: 'Ideal for growing businesses looking for more features.',
         basePrice: 4500,
         category: ProjectType.WEBSITE,
-        features: [
-            'Up to 3 pages',
-            'Custom design',
-            'Mobile-friendly (responsive design)',
-            'Contact form',
-            '3 revisions',
-            'Social media integration',
-            'Basic SEO setup'
-        ]
+        features: {
+            pages: 3,
+            revisions: 3,
+            mobileResponsive: true,
+            contactForm: true,
+            socialMediaLinks: true,
+            seoSetup: true,
+            customDesign: true
+        }
     },
     {
         id: 'ecommerce-website',
@@ -38,16 +39,18 @@ export const websitePackages: PricingPackage[] = [
         description: 'For businesses ready to sell products online.',
         basePrice: 8000,
         category: ProjectType.ECOMMERCE,
-        features: [
-            'Up to 5 pages',
-            'Custom design for online store',
-            'Product listings (up to 30 products)',
-            'Shopping cart functionality',
-            'Basic payment gateway setup',
-            'Mobile-friendly design',
-            '4 revisions',
-            'Basic SEO setup'
-        ]
+        features: {
+            pages: 5,
+            revisions: 4,
+            mobileResponsive: true,
+            contactForm: true,
+            socialMediaLinks: true,
+            seoSetup: true,
+            customDesign: true,
+            productListings: 30,
+            shoppingCart: true,
+            paymentGateway: true
+        }
     }
 ];
 
@@ -143,4 +146,4 @@ export const infrastructureServices = [
         category: 'maintenance',
         features: ['Monthly subscription', 'High performance', 'Daily backups']
     }
-]; 
+];

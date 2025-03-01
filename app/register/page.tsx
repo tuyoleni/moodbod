@@ -1,24 +1,16 @@
 'use client';
 
-import { useSession, signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { signIn } from "next-auth/react";
 import { motion } from "framer-motion";
 import Link from 'next/link';
 import Image from 'next/image';
 import { simeon, logo } from '@/public/assets';
+import { useAuth } from "@/lib/hooks/useAuth";
 
 export default function Register() {
-    const { status } = useSession();
-    const router = useRouter();
+    const { isLoading } = useAuth();
 
-    useEffect(() => {
-        if (status === "authenticated") {
-            router.push("/dashboard");
-        }
-    }, [status, router]);
-
-    if (status === "loading") {
+    if (isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <Image src={logo} alt="Moodbod" width={100} height={32} className="w-auto h-6" />
@@ -176,4 +168,4 @@ export default function Register() {
             </motion.div>
         </div>
     );
-} 
+}
