@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -12,20 +11,19 @@ interface UserServicesTabProps {
 
 export function UserServicesTab({ projects, services }: UserServicesTabProps) {
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Services</CardTitle>
-            </CardHeader>
-            <CardContent>
-                {projects?.map(project => (
-                    <div key={project.id} className="mb-6">
-                        <h4 className="font-medium mb-2">{project.name}</h4>
-                        <Table>
-                            <TableHeader>
+        <div>
+            {projects?.map(project => (
+                <div key={project.id} className="mb-6">
+                    <h4 className="font-medium mb-2">{project.name}</h4>
+                    <div className="overflow-x-auto">
+                        <Table className="min-w-full">
+                            <TableHeader className="bg-gray-100">
                                 <TableRow>
                                     <TableHead>Service</TableHead>
                                     <TableHead>Status</TableHead>
                                     <TableHead>Requested</TableHead>
+                                    <TableHead>Start Date</TableHead>
+                                    <TableHead>End Date</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -44,11 +42,12 @@ export function UserServicesTab({ projects, services }: UserServicesTabProps) {
                                         <TableCell>
                                             {format(service.requestedAt.toDate(), 'PP')}
                                         </TableCell>
+                                        <TableCell>{format(new Date(service.requestedAt), 'dd/MM/yyyy')}</TableCell>
                                     </TableRow>
                                 ))}
                                 {!services[project.id]?.length && (
                                     <TableRow>
-                                        <TableCell colSpan={4} className="text-center text-muted-foreground">
+                                        <TableCell colSpan={6} className="text-center text-muted-foreground">
                                             No services found for this project
                                         </TableCell>
                                     </TableRow>
@@ -56,8 +55,8 @@ export function UserServicesTab({ projects, services }: UserServicesTabProps) {
                             </TableBody>
                         </Table>
                     </div>
-                ))}
-            </CardContent>
-        </Card>
+                </div>
+            ))}
+        </div>
     );
 }

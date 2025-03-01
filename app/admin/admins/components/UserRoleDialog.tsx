@@ -13,6 +13,8 @@ interface UserRoleDialogProps {
     onSave: (role: 'client' | 'admin') => Promise<void>;
 }
 
+
+
 export function UserRoleDialog({ user, open, onOpenChange, onSave }: UserRoleDialogProps) {
     const [role, setRole] = useState<'client' | 'admin'>(user?.role || 'client');
     const [isSubmitting, setIsSubmitting] = useState(false);

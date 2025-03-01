@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/table';
 
 type UserWithProjects = User & { projects: any[] };
+
 import { 
     DropdownMenu,
     DropdownMenuContent,
@@ -212,19 +213,13 @@ export default function UsersTable() {
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem
                                                     onClick={() => {
-                                                        setSelectedUser(user);
-                                                        setIsViewOpen(true);
+                                                        if (user.role === 'client') {
+                                                            setSelectedUser(user);
+                                                            setIsViewOpen(true);
+                                                        }
                                                     }}
                                                 >
                                                     View Details
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={() => {
-                                                        setSelectedUser(user);
-                                                        setIsEditOpen(true);
-                                                    }}
-                                                >
-                                                    Edit User
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onClick={() => {

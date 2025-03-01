@@ -8,6 +8,8 @@ import { Payment } from './payment';
 import { User } from './user';
 
 export interface Project {
+    startDate: string | number | Date;
+    endDate: string | number | Date;
     id: string;
     userId: string;
     name: string;

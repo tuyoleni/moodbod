@@ -1,19 +1,13 @@
 'use client';
 
-import { useAuth } from "@/lib/hooks/useAuth";
+import { AnalyticsDashboard } from "./analytics/components/AnalyticsDashboard";
 
-export default function AdminDashboard() {
-    const { session, isLoading } = useAuth();
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    return (
-        <div>
-            <h1>Admin Dashboard</h1>
-            <p>Welcome, {session?.user?.name}</p>
-            <p>Role: {session?.user?.role}</p>
-        </div>
-    );
+export default function AnalyticsPage() {
+  return (
+    <div className="container mx-auto py-6">
+      <h1 className="text-2xl font-bold mb-4">Analytics Dashboard</h1>
+      <AnalyticsDashboard />
+    </div>
+  );
 }

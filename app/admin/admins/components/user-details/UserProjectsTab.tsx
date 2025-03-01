@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -10,11 +9,8 @@ interface UserProjectsTabProps {
 
 export function UserProjectsTab({ projects }: UserProjectsTabProps) {
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Projects ({projects?.length || 0})</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <div>
+            <div>
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -46,7 +42,7 @@ export function UserProjectsTab({ projects }: UserProjectsTabProps) {
                         ))}
                     </TableBody>
                 </Table>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     );
 }

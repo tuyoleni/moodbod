@@ -9,6 +9,5 @@ export interface Service {
     projectId: string;
     project?: Project;
     createdAt: Date;
-    updatedAt?: Date;
     status: ServiceStatus;
 }
