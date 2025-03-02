@@ -27,7 +27,7 @@ export function UserGrowthChart({ loading: initialLoading }: { loading?: boolean
       
       const usersByMonth = users.reduce((acc, user) => {
         if (user.createdAt) {
-          const month = format(user.createdAt.toDate(), 'MMM yyyy');
+          const month = format(user.createdAt, 'MMM yyyy');
           acc[month] = (acc[month] || 0) + 1;
         }
         return acc;
