@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -38,7 +38,7 @@ export function MilestoneCompletionChart({ loading: initialLoading }: MilestoneC
     completionRates: number[];
   }>({ labels: [], completionRates: [] });
 
-  const fetchMilestoneData = async () => {
+  const fetchMilestoneData = useCallback(async () => {
     try {
       setLoading(true);
       const projects = await fetchAllProjects();
@@ -58,7 +58,7 @@ export function MilestoneCompletionChart({ loading: initialLoading }: MilestoneC
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchMilestoneData();
