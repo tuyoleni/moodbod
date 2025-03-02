@@ -1,8 +1,10 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
-import { Project } from "@/lib/types/project";
-import { Service } from "@/lib/types/service";
+'use client';
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { format } from 'date-fns';
+import { Project } from '@/lib/types/project';
+import { Service } from '@/lib/types/service';
 
 interface UserServicesTabProps {
     projects: Project[];
@@ -40,9 +42,14 @@ export function UserServicesTab({ projects, services }: UserServicesTabProps) {
                                             </Badge>
                                         </TableCell>
                                         <TableCell>
-                                            {format(service.requestedAt.toDate(), 'PP')}
+                                            {service.requestedAt && typeof (service.requestedAt as any).toDate === 'function'
+                                            ? format((service.requestedAt as any).toDate(), 'PP')
+                                            : format(new Date(service.requestedAt as unknown as string), 'PP')}
                                         </TableCell>
-                                        <TableCell>{format(new Date(service.requestedAt), 'dd/MM/yyyy')}</TableCell>
+                                        <TableCell>{service.requestedAt && typeof (service.requestedAt as any).toDate === 'function'
+                                            ? format((service.requestedAt as any).toDate(), 'dd/MM/yyyy')
+                                            : format(new Date(service.requestedAt as unknown as string), 'dd/MM/yyyy')}
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                                 {!services[project.id]?.length && (
