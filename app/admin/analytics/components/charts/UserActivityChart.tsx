@@ -46,13 +46,13 @@ export function UserActivityChart({ loading: initialLoading }: { loading?: boole
       const labels = last5Days.map(date => format(date, 'EEE'));
       const clientActivity = last5Days.map(date =>
         allMessages.filter(msg => 
-          msg.createdAt?.toDate().toDateString() === date.toDateString() &&
+          msg.createdAt.toDateString() === date.toDateString() &&
           clientIds.has(msg.userId)
         ).length
       );
       const adminActivity = last5Days.map(date =>
         allMessages.filter(msg => 
-          msg.createdAt?.toDate().toDateString() === date.toDateString() &&
+          msg.createdAt.toDateString() === date.toDateString() &&
           adminIds.has(msg.userId)
         ).length
       );
