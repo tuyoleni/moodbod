@@ -132,20 +132,16 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body
-        className={`${inter.variable} font-sans antialiased`}>
-        <Providers>
-          <main>{children}</main>
-        </Providers>
-        <Analytics />
-      </body>
-    </html>
-  );
+import '../styles/globals.css';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+    return (
+        <html lang="en">
+            <body>
+                <Providers>
+                    {children}
+                </Providers>
+            </body>
+        </html>
+    );
 }

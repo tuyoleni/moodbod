@@ -1,56 +1,52 @@
 'use client';
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { User } from "@/lib/types/user";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
+import { User } from '@/lib/types/user';
 
 interface UserEditDialogProps {
     user: User | null;
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    onSave: (userData: User) => Promise<void>;
+    onSave: (userData: User) => void;
 }
 
 export function UserEditDialog({ user, open, onOpenChange, onSave }: UserEditDialogProps) {
-    const [formData, setFormData] = useState<Partial<User>>({});
+    const [formData, setFormData] = useState<User>(user || {} as User);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = () => {
+        onSave(formData);
+    };
 
     if (!user) return null;
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (user) {
-            await onSave({ ...user, ...formData });
-            onOpenChange(false);
-        }
-    };
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Edit User</DialogTitle>
                 </DialogHeader>
-                <form onSubmit={handleSubmit}>
-                    <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="name" className="text-right">
-                                Name
-                            </Label>
-                            <Input
-                                id="name"
-                                defaultValue={user.name}
-                                className="col-span-3"
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            />
-                        </div>
+                <div className="space-y-4">
+                    <div>
+                        <Label htmlFor="name">Name</Label>
+                        <Input id="name" name="name" value={formData.name} onChange={handleChange} />
                     </div>
-                    <DialogFooter>
-                        <Button type="submit">Save changes</Button>
-                    </DialogFooter>
-                </form>
+                    <div>
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" name="email" value={formData.email} onChange={handleChange} />
+                    </div>
+                    <div className="flex justify-end">
+                        <Button onClick={handleSubmit}>Save</Button>
+                    </div>
+                </div>
             </DialogContent>
         </Dialog>
     );
