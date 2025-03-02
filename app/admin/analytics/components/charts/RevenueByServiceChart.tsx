@@ -39,7 +39,9 @@ export function RevenueByServiceChart({ loading: initialLoading }: { loading?: b
         const revenuePerService = totalProjectRevenue / serviceCount;
 
         services.forEach(service => {
-          acc[service.name] = (acc[service.name] || 0) + revenuePerService;
+          if (service.name) {
+            acc[service.name] = (acc[service.name] || 0) + revenuePerService;
+          }
         });
         return acc;
       }, {} as Record<string, number>);
