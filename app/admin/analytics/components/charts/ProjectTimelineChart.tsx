@@ -27,7 +27,7 @@ export function ProjectTimelineChart({ loading: initialLoading }: { loading?: bo
       const projects = await fetchAllProjects();
       const monthlyData = new Map<string, { started: number; completed: number }>();
 
-      projects.forEach(project => {
+      projects.forEach((project) => {
         if (project.startDate) {
           const startMonth = format(new Date(project.startDate), 'MMM yyyy');
           const current = monthlyData.get(startMonth) || { started: 0, completed: 0 };
@@ -41,8 +41,8 @@ export function ProjectTimelineChart({ loading: initialLoading }: { loading?: bo
       });
 
       const sortedMonths = Array.from(monthlyData.keys()).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
-      const started = sortedMonths.map(month => monthlyData.get(month)?.started || 0);
-      const completed = sortedMonths.map(month => monthlyData.get(month)?.completed || 0);
+      const started = sortedMonths.map((month) => monthlyData.get(month)?.started || 0);
+      const completed = sortedMonths.map((month) => monthlyData.get(month)?.completed || 0);
 
       setTimelineData({ labels: sortedMonths, started, completed });
     } catch (error) {
@@ -68,8 +68,8 @@ export function ProjectTimelineChart({ loading: initialLoading }: { loading?: bo
         data: timelineData.completed,
         backgroundColor: '#22c55e',
         borderRadius: 4,
-      }
-    ]
+      },
+    ],
   };
 
   const options = {
@@ -78,19 +78,28 @@ export function ProjectTimelineChart({ loading: initialLoading }: { loading?: bo
     plugins: {
       legend: {
         position: 'bottom' as const,
-        labels: { boxWidth: 10, padding: 10 }
-      }
+        labels: {
+          boxWidth: 10,
+          padding: 10,
+        },
+      },
     },
     scales: {
-      x: { 
-        grid: { display: false },
-        ticks: { maxRotation: 45 }
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          maxRotation: 45,
+        },
       },
-      y: { 
+      y: {
         beginAtZero: true,
-        grid: { color: '#e5e7eb' }
-      }
-    }
+        grid: {
+          color: '#e5e7eb',
+        },
+      },
+    },
   };
 
   return (
