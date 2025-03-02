@@ -29,7 +29,9 @@ export function ServiceDistributionChart({ loading: initialLoading }: { loading?
       );
 
       const serviceCounts = services.flat().reduce((acc, service) => {
-        acc[service.name] = (acc[service.name] || 0) + 1;
+        if (service.name) {
+          acc[service.name] = (acc[service.name] || 0) + 1;
+        }
         return acc;
       }, {} as Record<string, number>);
 
