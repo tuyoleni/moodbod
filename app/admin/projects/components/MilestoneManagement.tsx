@@ -10,6 +10,7 @@ import { Milestone, ServiceStatus } from '@/lib/types';
 import { createMilestone, getProjectMilestones, updateMilestoneStatus } from '@/lib/services/milestoneService';
 import { toast } from 'sonner';
 import { serverTimestamp } from 'firebase/firestore';
+import { Timestamp } from 'firebase/firestore';
 
 type MilestoneManagementProps = {
     projectId: string;
@@ -49,7 +50,7 @@ export function MilestoneManagement({ projectId }: MilestoneManagementProps) {
                 projectId,
                 title: formData.title,
                 description: formData.description,
-                dueDate: new Date(formData.dueDate),
+                dueDate: Timestamp.fromDate(new Date(formData.dueDate)),
                 paymentRequired: parseFloat(formData.paymentRequired) || 0,
                 status: ServiceStatus.PENDING,
                 updatedAt: serverTimestamp(),
