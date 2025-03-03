@@ -66,10 +66,30 @@ export function MilestoneManagement({ projectId }: MilestoneManagementProps) {
             toast.error('Failed to create milestone');
         }
     };
+    
+    // Add this status determination logic
+    const getMilestoneStatus = (index: number) => {
+        if (index === 0) return ServiceStatus.IN_PROGRESS;
+        const previous = milestones[index - 1];
+        return previous.status === ServiceStatus.COMPLETED 
+            ? ServiceStatus.IN_PROGRESS 
+            : ServiceStatus.PENDING;
+    };
 
+    // Update status change handler to manage progression
     const handleStatusChange = async (milestoneId: string, status: ServiceStatus) => {
         try {
             await updateMilestoneStatus(milestoneId, status);
+            
+            // If completing a milestone, auto-update next one
+            if (status === ServiceStatus.COMPLETED) {
+                const index = milestones.findIndex(m => m.id === milestoneId);
+                const nextMilestone = milestones[index + 1];
+                if (nextMilestone) {
+                    await updateMilestoneStatus(nextMilestone.id, ServiceStatus.IN_PROGRESS);
+                }
+            }
+            
             toast.success('Milestone status updated');
             fetchMilestones();
         } catch (error) {
@@ -137,8 +157,13 @@ export function MilestoneManagement({ projectId }: MilestoneManagementProps) {
                 {milestones.length === 0 ? (
                     <p className="text-center text-muted-foreground">No milestones created yet</p>
                 ) : (
-                    milestones.map((milestone) => (
-                        <Card key={milestone.id} className="p-4">
+                    milestones.map((milestone, index) => (
+                        <Card key={milestone.id} className="p-4 relative">
+                            {milestone.status === ServiceStatus.IN_PROGRESS && (
+                                <div className="absolute top-2 right-2 bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+                                    Current
+                                </div>
+                            )}
                             <div className="space-y-2">
                                 <div className="flex justify-between items-start">
                                     <h3 className="font-semibold">{milestone.title}</h3>
