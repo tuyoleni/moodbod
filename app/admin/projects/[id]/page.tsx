@@ -1,28 +1,25 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, use } from 'react'; // Import use from React
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { MilestoneManagement } from '../components/MilestoneManagement';
 import { ServiceManagement } from '../components/ServiceManagement';
 import { Project, ProjectStatus } from '@/lib/types';
-import { getProjectById, updateProject } from '@/lib/services/projectService';
+import { getProjectById, updateProjectStatus } from '@/lib/services/projectService';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 
-export default function ProjectDetailsPage({ params }: { params: Promise<{ id: string }> | { id: string } }) {
-    const resolvedParams = use(params);
+// Fix the params type to match Next.js 13+ App Router expectations
+export default function ProjectDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+    const resolvedParams = use(params); // Unwrap the params using use()
     const router = useRouter();
     const searchParams = useSearchParams();
     const [project, setProject] = useState<Project | null>(null);
     const [loading, setLoading] = useState(true);
-    const [adminNotes, setAdminNotes] = useState('');
-    const [isSaving, setIsSaving] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchProject();
@@ -32,39 +29,12 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
         if (statusChanged === 'true' && activeTab === 'milestones') {
             toast.info('Project status has been updated. Please update the milestones accordingly.');
         }
-    }, [resolvedParams.id, searchParams]);
-    
-    // Auto-save admin notes when changed
-    useEffect(() => {
-        const saveTimeout = setTimeout(async () => {
-            if (!project || adminNotes === project.adminNotes) return;
-            
-            setIsSaving(true);
-            try {
-                const updatedProject = {
-                    ...project,
-                    adminNotes,
-                    updatedAt: new Date()
-                };
-                await updateProject(project.id, updatedProject);
-                setProject(updatedProject);
-                toast.success('Admin notes saved');
-            } catch (error) {
-                console.error('Error saving admin notes:', error);
-                toast.error('Failed to save admin notes');
-                setError('Failed to save admin notes. Please try again.');
-            } finally {
-                setIsSaving(false);
-            }
-        }, 1000); // Debounce save for 1 second
-    
-        return () => clearTimeout(saveTimeout);
-    }, [adminNotes, project]);
+    }, [resolvedParams.id, searchParams]); // Use resolvedParams.id instead of params.id
+
     const fetchProject = async () => {
         try {
-            const projectData = await getProjectById(resolvedParams.id);
+            const projectData = await getProjectById(resolvedParams.id); // Use resolvedParams.id
             setProject(projectData);
-            setAdminNotes(projectData.adminNotes || '');
         } catch (error) {
             console.error('Error fetching project:', error);
             toast.error('Failed to load project details');
@@ -77,14 +47,8 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
         if (!project) return;
 
         try {
-            const updatedProject = {
-                ...project,
-                status: newStatus,
-                adminNotes,
-                updatedAt: new Date()
-            };
-            await updateProject(project.id, updatedProject);
-            setProject(updatedProject);
+            await updateProjectStatus(project.id, newStatus);
+            setProject({ ...project, status: newStatus });
             toast.success('Project status updated successfully');
         } catch (error) {
             console.error('Error updating project:', error);
@@ -110,12 +74,11 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
             </div>
 
             <Tabs defaultValue="details" className="w-full">
-                <TabsList className="grid w-full grid-cols-5">
+                <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="details">Details</TabsTrigger>
                     <TabsTrigger value="management">Management</TabsTrigger>
                     <TabsTrigger value="services">Services</TabsTrigger>
                     <TabsTrigger value="milestones">Milestones</TabsTrigger>
-                    <TabsTrigger value="payments">Payments</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="details" className="space-y-4">
@@ -194,32 +157,6 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
                                     </SelectContent>
                                 </Select>
                             </div>
-
-                            <div className="space-y-2">
-                                <h3 className="font-semibold">Admin Notes</h3>
-                                <div className="relative">
-                                    <Textarea
-                                        value={adminNotes}
-                                        onChange={(e) => {
-                                            setAdminNotes(e.target.value);
-                                            setError(null);
-                                        }}
-                                        placeholder="Add admin notes here..."
-                                        rows={4}
-                                        disabled={isSaving}
-                                    />
-                                    {isSaving && (
-                                        <div className="absolute right-2 top-2 text-sm text-muted-foreground">
-                                            Saving...
-                                        </div>
-                                    )}
-                                    {error && (
-                                        <div className="text-sm text-red-500 mt-1">
-                                            {error}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -230,18 +167,6 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
 
                 <TabsContent value="milestones" className="space-y-4">
                     <MilestoneManagement projectId={resolvedParams.id} />
-                </TabsContent>
-
-                <TabsContent value="payments" className="space-y-4">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Payment Management</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            {/* Add payment management components here */}
-                            <p>Payment management coming soon...</p>
-                        </CardContent>
-                    </Card>
                 </TabsContent>
             </Tabs>
         </div>
