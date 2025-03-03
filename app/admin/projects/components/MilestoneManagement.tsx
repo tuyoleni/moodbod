@@ -6,16 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Milestone, ServiceStatus } from '@/lib/types';
+import { ServiceStatus } from '@/lib/types';
 import { createMilestone, getProjectMilestones, updateMilestoneStatus } from '@/lib/services/milestoneService';
 import { toast } from 'sonner';
 
-interface MilestoneManagementProps {
+type MilestoneManagementProps = {
     projectId: string;
 }
 
 export function MilestoneManagement({ projectId }: MilestoneManagementProps) {
-    const [milestones, setMilestones] = useState<Milestone[]>([]);
+    const [milestones, setMilestones] = useState<Array<Milestone>>([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({
@@ -49,7 +49,10 @@ export function MilestoneManagement({ projectId }: MilestoneManagementProps) {
                 title: formData.title,
                 description: formData.description,
                 dueDate: new Date(formData.dueDate),
-                paymentRequired: parseFloat(formData.paymentRequired) || 0
+                paymentRequired: parseFloat(formData.paymentRequired) || 0,
+                status: ServiceStatus.PENDING, // Add default status
+                updatedAt: serverTimestamp(), // Use serverTimestamp for Firestore compatibility
+                updatedBy: 'system' // Or use the current user's ID if available
             };
 
             await createMilestone(milestone);
