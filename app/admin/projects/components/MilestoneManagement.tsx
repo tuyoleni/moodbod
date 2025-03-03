@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Milestone, ServiceStatus } from '@/lib/types';
 import { createMilestone, getProjectMilestones, updateMilestoneStatus } from '@/lib/services/milestoneService';
 import { toast } from 'sonner';
+import { serverTimestamp } from 'firebase/firestore';
 
 type MilestoneManagementProps = {
     projectId: string;
