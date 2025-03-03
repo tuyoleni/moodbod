@@ -1,27 +1,8 @@
-import { collection, query, where, getDocs, addDoc, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { validateAmount } from '@/lib/utils/validation';
 import { Milestone, ServiceStatus } from '../types';
 
 const milestonesRef = collection(db, 'milestones');
-
-export const createMilestone = async (milestone: Omit<Milestone, 'id'>): Promise<string> => {
-    try {
-        if (milestone.paymentRequired && !validateAmount(milestone.paymentRequired)) {
-            throw new Error('Invalid payment amount');
-        }
-
-        const docRef = await addDoc(milestonesRef, {
-            ...milestone,
-            status: ServiceStatus.PENDING,
-            createdAt: serverTimestamp()
-        });
-        return docRef.id;
-    } catch (error) {
-        console.error('Error creating milestone:', error);
-        throw error;
-    }
-};
 
 export const getProjectMilestones = async (projectId: string): Promise<Milestone[]> => {
     try {
@@ -32,8 +13,22 @@ export const getProjectMilestones = async (projectId: string): Promise<Milestone
             ...doc.data()
         })) as Milestone[];
     } catch (error) {
-        console.error('Error fetching milestones:', error);
+        console.error('Error fetching project milestones:', error);
         return [];
+    }
+};
+
+export const createMilestone = async (milestoneData: Omit<Milestone, 'id'>): Promise<string> => {
+    try {
+        const docRef = await addDoc(milestonesRef, {
+            ...milestoneData,
+            status: ServiceStatus.PENDING,
+            createdAt: serverTimestamp()
+        });
+        return docRef.id;
+    } catch (error) {
+        console.error('Error creating milestone:', error);
+        throw error;
     }
 };
 

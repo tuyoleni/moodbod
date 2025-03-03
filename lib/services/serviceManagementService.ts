@@ -86,11 +86,7 @@ export const removeProjectService = async (serviceId: string): Promise<void> => 
 
 export const getProjectServices = async (projectId: string): Promise<Service[]> => {
     try {
-        const q = query(
-            projectServicesRef,
-            where('projectId', '==', projectId),
-            where('status', 'in', [ServiceStatus.ACTIVE, ServiceStatus.PENDING])
-        );
+        const q = query(projectServicesRef, where('projectId', '==', projectId));
         const querySnapshot = await getDocs(q);
         return querySnapshot.docs.map(doc => ({
             id: doc.id,

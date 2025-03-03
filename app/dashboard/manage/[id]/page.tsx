@@ -3,59 +3,72 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { getProjectById, updateProjectStatus } from '@/lib/services/projectService';
-import { Project, ProjectStatus } from '@/lib/types';
+import { getProjectServices } from '@/lib/services/serviceManagementService';
+import { getProjectMilestones } from '@/lib/services/milestoneService';
+import { Project, ProjectStatus, Service, Milestone } from '@/lib/types';
+import ProjectActions from './components/ProjectActions';
+import ProjectTabs from './components/ProjectTabs';
 
 export default function ManageProject() {
   const { id } = useParams();
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
+  const [milestones, setMilestones] = useState<Milestone[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadProject = async () => {
+    const loadProjectData = async () => {
       if (id) {
         try {
           const projectData = await getProjectById(id);
+          const projectMilestones = await getProjectMilestones(id);
+          const projectServices = await getProjectServices(id);
           setProject(projectData);
+          setMilestones(projectMilestones);
+          setServices(projectServices);
         } catch (error) {
-          console.error('Error loading project:', error);
+          console.error('Error loading project data:', error);
         } finally {
           setLoading(false);
         }
       }
     };
 
-    loadProject();
+    loadProjectData();
   }, [id]);
 
-  const handleStatusChange = async (newStatus: ProjectStatus) => {
-    if (project) {
-      try {
-        await updateProjectStatus(project.id, newStatus);
-        setProject({ ...project, status: newStatus });
-      } catch (error) {
-        console.error('Error updating project status:', error);
-      }
-    }
-  };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse">Loading...</div>
+      </div>
+    );
   }
 
   if (!project) {
-    return <div>Project not found.</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-muted-foreground">Project not found</div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>Manage Project: {project.name}</h1>
-      <p>Description: {project.description}</p>
-      <p>Status: {project.status}</p>
-      <p>Total Cost: ${project.totalCost.toLocaleString()}</p>
-      <button onClick={() => handleStatusChange(ProjectStatus.IN_PROGRESS)}>Start Project</button>
-      <button onClick={() => handleStatusChange(ProjectStatus.COMPLETED)}>Complete Project</button>
-      {/* Add more project management features here */}
+    <div className="container max-w-6xl mx-auto py-8 px-4 space-y-8">
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-2xl font-medium tracking-tight">{project.name}</h1>
+          <p className="text-muted-foreground mt-2">{project.description}</p>
+        </div>
+      </div>
+
+      <ProjectTabs 
+        project={project} 
+        milestones={milestones} 
+        services={services} 
+      />
     </div>
   );
 }

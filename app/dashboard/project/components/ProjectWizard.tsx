@@ -11,6 +11,8 @@ import { useProjectForm } from '@/lib/hooks/useProjectForm';
 import { BasicInformation, PackageSelection, ServiceSelection } from './form';
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ProjectStatus } from '@/lib/types';
+
 
 const steps = [
   { id: 'basic', title: 'Basic Information' },
@@ -32,12 +34,10 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
     calculateTotalPrice,
     handleFormChange,
     handlePackageSelect,
-    handleServiceToggle,
-    resetForm
-  } = useProjectForm();
+    handleServiceToggle  } = useProjectForm();
 
   const handleSubmit = async () => {
-    if (!session?.user?.id || !formData.name) return;
+    if (!session?.user?.id || !formData.name || !formData.package?.price) return;
 
     try {
       setLoading(true);
@@ -45,18 +45,27 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
         ...formData,
         userId: session.user.id,
         totalCost: calculateTotalPrice(),
-        startDate: new Date(),
-        endDate: new Date(),
+        status: ProjectStatus.REQUESTED,
+        startDate: Timestamp.fromDate(new Date()),
+        endDate: Timestamp.fromDate(new Date()),
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
-        requirements: '',
-        projectGoals: [],
-        targetAudience: '',
+        requirements: formData.requirements || '',
+        projectGoals: formData.projectGoals || [],
+        targetAudience: formData.targetAudience || '',
         paidAmount: 0,
         comments: [],
         feedback: [],
         milestones: [],
-        payments: []
+        payments: [],
+        package: {
+          id: formData.package.id,
+          name: formData.package.name,
+          description: formData.package.description || '',
+          price: formData.package.price,
+          features: formData.package.features || {}
+        },
+        additionalServices: formData.additionalServices || []
       };
 
       await createProject(projectData);

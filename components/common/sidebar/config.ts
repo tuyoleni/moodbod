@@ -24,9 +24,8 @@ export const clientNavigation: NavSection[] = [
     title: 'Main',
     items: [
       { href: '/dashboard', icon: FileText, label: 'My Projects' },
-      { href: '/dashboard/milestones', icon: Clock, label: 'Milestones' },
       { href: '/dashboard/payments', icon: CreditCard, label: 'Payments' },
-      { href: '/dashboard/messages', icon: MessageSquare, label: 'Messages' },
+      { href: '/dashboard/notification', icon: Bell, label: 'Notification' },
     ]
   }
 ];
