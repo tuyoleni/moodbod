@@ -8,6 +8,7 @@ import { ProjectStatus, ServiceStatus } from '@/lib/types/enums';
 import { Project } from '@/lib/types/project';
 import { fetchAllProjects, updateProject } from '@/lib/services/projectService';
 import { toast } from 'sonner';
+import { serverTimestamp } from 'firebase/firestore'; // Import serverTimestamp
 
 export function NotificationCenter() {
     const [notifications, setNotifications] = useState<Project[]>([]);
@@ -49,32 +50,29 @@ export function NotificationCenter() {
         }
     };
 
-    const handleApprove = async (project) => {
+    const handleApprove = async (project: Project) => {
         try {
-            const updatedProject = {
-                ...project,
-                status: ProjectStatus.IN_PROGRESS,
-                updatedAt: new Date()
+            const projectUpdate: Partial<Project> = {
+                status: ProjectStatus.IN_PROGRESS
             };
-            await updateProject(project.id, updatedProject);
+            await updateProject(project.id, projectUpdate);
             toast.success('Project approved successfully');
-            fetchNotifications(); // Refresh notifications
+            fetchNotifications(); 
         } catch (error) {
             console.error('Error approving project:', error);
             toast.error('Failed to approve project');
         }
     };
 
-    const handleReject = async (project) => {
+    const handleReject = async (project: Project) => {
         try {
-            const updatedProject = {
-                ...project,
-                status: ProjectStatus.REJECTED,
-                updatedAt: new Date()
+            const projectUpdate: Partial<Project> = {
+                status: ProjectStatus.REJECTED
+
             };
-            await updateProject(project.id, updatedProject);
+            await updateProject(project.id, projectUpdate);
             toast.success('Project rejected');
-            fetchNotifications(); // Refresh notifications
+            fetchNotifications();
         } catch (error) {
             console.error('Error rejecting project:', error);
             toast.error('Failed to reject project');
