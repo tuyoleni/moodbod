@@ -51,9 +51,9 @@ export function MilestoneManagement({ projectId }: MilestoneManagementProps) {
                 description: formData.description,
                 dueDate: new Date(formData.dueDate),
                 paymentRequired: parseFloat(formData.paymentRequired) || 0,
-                status: ServiceStatus.PENDING, // Add default status
-                updatedAt: serverTimestamp(), // Use serverTimestamp for Firestore compatibility
-                updatedBy: 'system' // Or use the current user's ID if available
+                status: ServiceStatus.PENDING,
+                updatedAt: serverTimestamp(),
+                updatedBy: 'system'
             };
 
             await createMilestone(milestone);
