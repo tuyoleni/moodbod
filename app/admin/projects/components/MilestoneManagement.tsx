@@ -156,7 +156,7 @@ export function MilestoneManagement({ projectId }: MilestoneManagementProps) {
                                 </div>
                                 <p className="text-sm text-muted-foreground">{milestone.description}</p>
                                 <div className="flex justify-between text-sm">
-                                    <span>Due: {new Date(milestone.dueDate).toLocaleDateString()}</span>
+                                    <span>Due: {milestone.dueDate.toDate().toLocaleDateString()}</span>
                                     {milestone.paymentRequired && (
                                         <span>Payment: ${milestone.paymentRequired}</span>
                                     )}
