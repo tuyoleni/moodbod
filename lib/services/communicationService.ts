@@ -21,18 +21,30 @@ export const sendMessage = async (messageData: Omit<Message, 'id' | 'createdAt'>
 
 export const getProjectMessages = async (projectId: string): Promise<Message[]> => {
     try {
+        // Ensure index is used correctly
         const q = query(
             messagesRef,
             where('projectId', '==', projectId),
             orderBy('createdAt', 'desc')
         );
+        
         const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        })) as Message[];
+        
+        // Transform the data properly
+        return querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                ...data,
+                createdAt: data.createdAt?.toDate(),
+                updatedAt: data.updatedAt?.toDate()
+            };
+        }) as Message[];
     } catch (error) {
         console.error('Error fetching messages:', error);
+        if (error === 'failed-precondition') {
+            console.error('Index not ready yet. Please wait a few minutes.');
+        }
         return [];
     }
 };

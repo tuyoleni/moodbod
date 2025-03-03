@@ -7,6 +7,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { fetchUsers } from '@/lib/services/userService';
 import { getProjectMessages } from '@/lib/services/communicationService';
 import { fetchAllProjects } from '@/lib/services/projectService';
+import { Message } from '@/lib/types';
+import { convertToDate, getLocalTime } from '@/lib/utils/dateUtils';
+import { chartColors, stackedBarOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -25,17 +28,20 @@ export function UserEngagementChart({ loading: initialLoading }: { loading?: boo
   const fetchEngagementData = async () => {
     try {
       setLoading(true);
-      const [, projects] = await Promise.all([
+      const [users, projects] = await Promise.all([
         fetchUsers(),
         fetchAllProjects()
       ]);
+      
+      console.log('Projects fetched:', projects);  // Add this log
 
       const messages = await Promise.all(
         projects.map(project => getProjectMessages(project.id))
       );
-      const allMessages = messages.flat();
+      console.log('All messages:', messages.flat());  // Add this log
 
-      // Get hours of the day (0-23)
+      const allMessages: Message[] = messages.flat();
+
       const hours = Array.from({ length: 12 }, (_, i) => i * 2);
       const hourLabels = hours.map(hour => 
         `${hour.toString().padStart(2, '0')}:00-${(hour + 2).toString().padStart(2, '0')}:00`
@@ -43,7 +49,10 @@ export function UserEngagementChart({ loading: initialLoading }: { loading?: boo
 
       const messagesByHour = hours.map(hour => {
         return allMessages.filter(msg => {
-          const msgHour = msg.createdAt?.getHours() || 0;
+          const msgDate = getLocalTime(convertToDate(msg.createdAt));
+          if (!msgDate) return false;
+          
+          const msgHour = msgDate.getHours();
           return msgHour >= hour && msgHour < (hour + 2);
         }).length;
       });
@@ -52,7 +61,10 @@ export function UserEngagementChart({ loading: initialLoading }: { loading?: boo
         const uniqueUsers = new Set(
           allMessages
             .filter(msg => {
-              const msgHour = msg.createdAt?.getHours() || 0;
+              const msgDate = getLocalTime(convertToDate(msg.createdAt));
+              if (!msgDate) return false;
+              
+              const msgHour = msgDate.getHours();
               return msgHour >= hour && msgHour < (hour + 2);
             })
             .map(msg => msg.userId)
@@ -65,14 +77,19 @@ export function UserEngagementChart({ loading: initialLoading }: { loading?: boo
         messageCount: messagesByHour,
         activeUsers: activeUsersByHour
       });
+      console.log('Final engagement data:', {
+        labels: hourLabels,
+        messageCount: messagesByHour,
+        activeUsers: activeUsersByHour
+      });  // Add this log
     } catch (error) {
       console.error('Error fetching engagement data:', error);
     } finally {
       setLoading(false);
     }
-  };
+};
 
-  if (loading) return <Skeleton className="h-[200px]" />;
+  if (loading) return <Skeleton className="h-[400px] w-full" />;
 
   const data = {
     labels: engagementData.labels,
@@ -80,42 +97,21 @@ export function UserEngagementChart({ loading: initialLoading }: { loading?: boo
       {
         label: 'Messages',
         data: engagementData.messageCount,
-        backgroundColor: '#3b82f6',
+        backgroundColor: chartColors.accent,
         borderRadius: 4,
       },
       {
         label: 'Active Users',
         data: engagementData.activeUsers,
-        backgroundColor: '#22c55e',
+        backgroundColor: chartColors.success,
         borderRadius: 4,
       }
     ]
   };
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom' as const,
-        labels: { boxWidth: 10, padding: 10 }
-      }
-    },
-    scales: {
-      x: { 
-        grid: { display: false },
-        ticks: { maxRotation: 45 }
-      },
-      y: { 
-        beginAtZero: true,
-        grid: { color: '#e5e7eb' }
-      }
-    }
-  };
-
   return (
-    <div className="h-[200px]">
-      <Bar data={data} options={options} />
+    <div className="h-[400px] w-full bg-white rounded-lg p-4">
+      <Bar data={data} options={stackedBarOptions} />
     </div>
   );
 }

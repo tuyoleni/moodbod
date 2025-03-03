@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { fetchAllProjects } from '@/lib/services/projectService';
 import { getProjectMilestones } from '@/lib/services/milestoneService';
 import { ServiceStatus } from '@/lib/types';
+import { chartColors, pieChartOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -58,30 +59,27 @@ export function MilestoneStatusChart({ loading: initialLoading }: { loading?: bo
     }
   };
 
-  if (loading) return <Skeleton className="h-[200px]" />;
+  if (loading) return <Skeleton className="h-[400px]" />;
 
   const data = {
     labels: statusData.labels,
     datasets: [{
       data: statusData.counts,
       backgroundColor: [
-        '#22c55e', // Completed
-        '#3b82f6', // In Progress
-        '#ef4444', // Blocked
+        chartColors.success,    // Completed
+        chartColors.accent,     // In Progress
+        chartColors.error,      // Blocked
       ],
       borderWidth: 0
     }]
   };
 
   const options = {
-    responsive: true,
-    maintainAspectRatio: false,
+    ...pieChartOptions,
     plugins: {
-      legend: {
-        position: 'bottom' as const,
-        labels: { boxWidth: 10, padding: 10 }
-      },
+      ...pieChartOptions.plugins,
       tooltip: {
+        ...pieChartOptions.plugins.tooltip,
         callbacks: {
           label: (tooltipItem: { dataset: { data: number[] }; raw: unknown; label: string; }) => {
             const total = tooltipItem.dataset.data.reduce((a: number, b: number) => a + b, 0);
@@ -94,7 +92,7 @@ export function MilestoneStatusChart({ loading: initialLoading }: { loading?: bo
   };
 
   return (
-    <div className="h-[200px]">
+    <div className="h-[400px] w-full">
       <Doughnut data={data} options={options} />
     </div>
   );

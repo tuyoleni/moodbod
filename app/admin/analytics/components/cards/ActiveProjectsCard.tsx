@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Activity } from 'lucide-react';
 import { fetchAllProjects } from '@/lib/services/projectService';
 import { ProjectStatus } from '@/lib/types';
+import { metricCardStyles } from './MetricCardStyles';
 
 export function ActiveProjectsCard({ loading: initialLoading }: { loading?: boolean }) {
   const [loading, setLoading] = useState(initialLoading);
@@ -31,16 +32,16 @@ export function ActiveProjectsCard({ loading: initialLoading }: { loading?: bool
   };
 
   return (
-    <Card className="h-24">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Active</CardTitle>
-        <Activity className="h-4 w-4 text-muted-foreground" />
+    <Card className={metricCardStyles.card}>
+      <CardHeader className={metricCardStyles.header}>
+        <CardTitle className={metricCardStyles.title}>Active Projects</CardTitle>
+        <Activity className={metricCardStyles.icon} />
       </CardHeader>
-      <CardContent>
+      <CardContent className={metricCardStyles.content}>
         {loading ? (
-          <Skeleton className="h-8 w-20" />
+          <Skeleton className={metricCardStyles.skeleton} />
         ) : (
-          <div className="text-xl font-bold">{activeCount}</div>
+          <div className={metricCardStyles.value}>{activeCount}</div>
         )}
       </CardContent>
     </Card>

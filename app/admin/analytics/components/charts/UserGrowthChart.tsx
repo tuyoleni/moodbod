@@ -6,6 +6,8 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchUsers } from '@/lib/services/userService';
 import { format } from 'date-fns';
+import { convertToDate, getLocalTime } from '@/lib/utils/dateUtils';
+import { chartColors, commonChartOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -16,26 +18,25 @@ export function UserGrowthChart({ loading: initialLoading }: { loading?: boolean
     counts: number[];
   }>({ labels: [], counts: [] });
 
-  useEffect(() => {
-    fetchGrowthData();
-  }, []);
-
   const fetchGrowthData = async () => {
     try {
       setLoading(true);
       const users = await fetchUsers();
       
       const usersByMonth = users.reduce((acc, user) => {
-        if (user.createdAt) {
-          const month = format(user.createdAt, 'MMM yyyy');
+        const createdDate = getLocalTime(convertToDate(user.createdAt ?? null));
+        if (createdDate) {
+          const month = format(createdDate, 'MMM yyyy');
           acc[month] = (acc[month] || 0) + 1;
         }
         return acc;
       }, {} as Record<string, number>);
 
-      const sortedMonths = Object.keys(usersByMonth).sort(
-        (a, b) => new Date(a).getTime() - new Date(b).getTime()
-      );
+      const sortedMonths = Object.keys(usersByMonth).sort((a, b) => {
+        const dateA = new Date(a);
+        const dateB = new Date(b);
+        return dateA.getTime() - dateB.getTime();
+      });
 
       let cumulativeCount = 0;
       const cumulativeCounts = sortedMonths.map(month => {
@@ -54,41 +55,28 @@ export function UserGrowthChart({ loading: initialLoading }: { loading?: boolean
     }
   };
 
+  useEffect(() => {
+    fetchGrowthData();
+  }, []);
+
   if (loading) return <Skeleton className="h-[200px]" />;
 
+  // Update data and options
   const data = {
     labels: growthData.labels,
     datasets: [{
       label: 'Total Users',
       data: growthData.counts,
-      borderColor: '#3b82f6',
-      backgroundColor: '#3b82f680',
+      borderColor: chartColors.accent,
+      backgroundColor: `${chartColors.accent}20`,
       tension: 0.3,
       fill: true
     }]
   };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom' as const,
-        labels: { boxWidth: 10, padding: 10 }
-      }
-    },
-    scales: {
-      x: { grid: { display: false } },
-      y: { 
-        beginAtZero: true,
-        grid: { color: '#e5e7eb' }
-      }
-    }
-  };
-
+  
   return (
-    <div className="h-[200px]">
-      <Line data={data} options={options} />
+    <div className="h-[400px] w-full">
+      <Line data={data} options={commonChartOptions} />
     </div>
   );
 }

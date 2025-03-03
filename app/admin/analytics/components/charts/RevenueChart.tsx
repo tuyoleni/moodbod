@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { getPaymentsByProject } from '@/lib/services/paymentService';
 import { fetchAllProjects } from '@/lib/services/projectService';
 import { format } from 'date-fns';
+import { chartColors, commonChartOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -51,43 +52,23 @@ export function RevenueChart({ loading: initialLoading }: RevenueChartProps) {
     }
   };
 
-  if (loading) return <Skeleton className="h-[200px]" />;
+  if (loading) return <Skeleton className="h-[400px] w-full" />;
 
   const data = {
     labels: revenueData.labels,
     datasets: [{
       label: 'Revenue',
       data: revenueData.amounts,
-      borderColor: '#3b82f6',
-      backgroundColor: '#3b82f680',
+      borderColor: chartColors.accent,
+      backgroundColor: `${chartColors.accent}20`,
       tension: 0.3,
       fill: true
     }]
   };
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem: { raw: unknown }) => `$${(tooltipItem.raw as number).toLocaleString()}`
-        }
-      }
-    },
-    scales: {
-      x: { grid: { display: false } },
-      y: { 
-        grid: { color: '#e5e7eb' },
-        ticks: { callback: function(tickValue: string | number) { return `$${Number(tickValue).toLocaleString()}`; } }
-      }
-    }
-  };
-
   return (
-    <div className="h-[200px]">
-      <Line data={data} options={options} />
+    <div className="h-[400px] w-full bg-white rounded-lg p-4">
+      <Line data={data} options={commonChartOptions} />
     </div>
   );
 }

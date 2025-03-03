@@ -6,6 +6,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, TooltipItem } from 'char
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchAllProjects } from '@/lib/services/projectService';
 import { Project } from '@/lib/types/project';
+import { chartColors, pieChartOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -46,47 +47,26 @@ export function ProjectCategoryChart({ loading: initialLoading }: ProjectCategor
     }
   };
 
-  if (loading) return <Skeleton className="h-[200px]" />;
+  if (loading) return <Skeleton className="h-[400px] w-full" />;
 
   const data = {
     labels: categoryData.labels,
     datasets: [{
       data: categoryData.counts,
       backgroundColor: [
-        '#3b82f6',
-        '#22c55e',
-        '#eab308',
-        '#ef4444',
-        '#8b5cf6',
-        '#ec4899'
+        chartColors.accent,
+        chartColors.category2,
+        chartColors.category3,
+        chartColors.category4,
+        chartColors.category5
       ],
       borderWidth: 0
     }]
   };
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom' as const,
-        labels: { boxWidth: 10, padding: 10 }
-      },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem: TooltipItem<'pie'>) => {
-            const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
-            const percentage = ((tooltipItem.raw as number / total) * 100).toFixed(1);
-            return `${tooltipItem.label}: ${tooltipItem.raw} (${percentage}%)`;
-          }
-        }
-      }
-    }
-  };
-
   return (
-    <div className="h-[200px]">
-      <Pie data={data} options={options} />
+    <div className="h-[400px] w-full bg-white rounded-lg p-4">
+      <Pie data={data} options={pieChartOptions} />
     </div>
   );
 }

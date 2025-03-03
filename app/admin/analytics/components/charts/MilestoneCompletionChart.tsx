@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,6 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { getProjectMilestones } from '@/lib/services/milestoneService';
 import { fetchAllProjects } from '@/lib/services/projectService';
 import { ServiceStatus, Milestone, Project } from '@/lib/types';
+import { chartColors, commonChartOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(
   CategoryScale,
@@ -35,8 +36,9 @@ export function MilestoneCompletionChart({ loading: initialLoading }: MilestoneC
   const [loading, setLoading] = useState(initialLoading);
   const [milestoneData, setMilestoneData] = useState<{
     labels: string[];
-    completionRates: number[];
-  }>({ labels: [], completionRates: [] });
+    completedRates: number[];
+    pendingRates: number[];
+  }>({ labels: [], completedRates: [], pendingRates: [] });
 
   const fetchMilestoneData = useCallback(async () => {
     try {
@@ -66,7 +68,8 @@ export function MilestoneCompletionChart({ loading: initialLoading }: MilestoneC
 
   const calculateCompletionRates = (projectMilestones: { project: Project; milestones: Milestone[] }[]) => {
     const labels: string[] = [];
-    const completionRates: number[] = [];
+    const completedRates: number[] = [];
+    const pendingRates: number[] = [];
 
     projectMilestones.forEach(({ project, milestones }) => {
       if (milestones.length > 0) {
@@ -74,55 +77,57 @@ export function MilestoneCompletionChart({ loading: initialLoading }: MilestoneC
           milestone => milestone.status === ServiceStatus.ACTIVE
         ).length;
         const completionRate = (completedMilestones / milestones.length) * 100;
+        const pendingRate = 100 - completionRate;
 
         labels.push(project.name);
-        completionRates.push(Number(completionRate.toFixed(2)));
+        completedRates.push(Number(completionRate.toFixed(2)));
+        pendingRates.push(Number(pendingRate.toFixed(2)));
       }
     });
 
-    return { labels, completionRates };
+    return { labels, completedRates, pendingRates };
   };
 
   if (loading) {
     return <Skeleton className="h-[300px] w-full" />;
   }
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top' as const,
-      },
-      tooltip: {
-        callbacks: {
-          label: (context: any) => `Completion Rate: ${context.raw}%`
-        }
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 100,
-        title: {
-          display: true,
-          text: 'Completion Rate (%)'
-        }
-      }
-    }
-  };
-
   const data = {
     labels: milestoneData.labels,
     datasets: [
       {
-        label: 'Project Milestone Completion Rate',
-        data: milestoneData.completionRates,
-        borderColor: 'rgb(75, 192, 192)',
-        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-        tension: 0.1,
+        label: 'Completed',
+        data: milestoneData.completedRates,
+        backgroundColor: chartColors.success,
+        borderRadius: 4,
+      },
+      {
+        label: 'Pending',
+        data: milestoneData.pendingRates,
+        backgroundColor: chartColors.warning,
+        borderRadius: 4,
       }
     ]
   };
 
-  return <Line options={options} data={data} />;
+  return (
+    <div className="h-[400px] w-full">
+      <Bar 
+        data={data} 
+        options={{
+          ...commonChartOptions,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              title: {
+                display: true,
+                text: 'Completion Rate (%)'
+              }
+            }
+          }
+        }} 
+      />
+    </div>
+  );
 }

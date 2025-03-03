@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { DollarSign } from 'lucide-react';
 import { getPaymentsByProject } from '@/lib/services/paymentService';
 import { fetchAllProjects } from '@/lib/services/projectService';
+import { metricCardStyles } from './MetricCardStyles';
 
 export function RevenueMetricsCard({ loading: initialLoading }: { loading?: boolean }) {
   const [loading, setLoading] = useState(initialLoading);
@@ -32,16 +33,16 @@ export function RevenueMetricsCard({ loading: initialLoading }: { loading?: bool
   };
 
   return (
-    <Card className="h-24">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Revenue</CardTitle>
-        <DollarSign className="h-4 w-4 text-muted-foreground" />
+    <Card className={metricCardStyles.card}>
+      <CardHeader className={metricCardStyles.header}>
+        <CardTitle className={metricCardStyles.title}>Total Revenue</CardTitle>
+        <DollarSign className={metricCardStyles.icon} />
       </CardHeader>
-      <CardContent>
+      <CardContent className={metricCardStyles.content}>
         {loading ? (
-          <Skeleton className="h-8 w-20" />
+          <Skeleton className={metricCardStyles.skeleton} />
         ) : (
-          <div className="text-xl font-bold">
+          <div className={metricCardStyles.value}>
             ${totalRevenue.toLocaleString()}
           </div>
         )}

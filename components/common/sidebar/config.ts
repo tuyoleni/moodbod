@@ -5,6 +5,7 @@ import {
   BarChart,
   Clock,
   Shield,
+  Bell,
 } from 'lucide-react';
 
 export type NavSection = {
@@ -43,7 +44,7 @@ export const adminNavigation: NavSection[] = [
     items: [
       { href: '/admin/projects', icon: FileText, label: 'Projects' },
       { href: '/admin/payments', icon: CreditCard, label: 'Payments' },
-      { href: '/admin/messages', icon: MessageSquare, label: 'Messages' },
+      { href: '/admin/notification', icon: Bell, label: 'Notification' },
     ]
   }
 ];

@@ -6,6 +6,8 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Lege
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchAllProjects } from '@/lib/services/projectService';
 import { format } from 'date-fns';
+import { convertToDate, getLocalTime } from '@/lib/utils/dateUtils';
+import { chartColors, commonChartOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -17,6 +19,7 @@ export function ProjectTimelineChart({ loading: initialLoading }: { loading?: bo
     completed: number[];
   }>({ labels: [], started: [], completed: [] });
 
+  // Add useEffect to call fetchTimelineData
   useEffect(() => {
     fetchTimelineData();
   }, []);
@@ -27,24 +30,47 @@ export function ProjectTimelineChart({ loading: initialLoading }: { loading?: bo
       const projects = await fetchAllProjects();
       const monthlyData = new Map<string, { started: number; completed: number }>();
 
+      // Get the date range for the last 6 months by default
+      const today = new Date();
+      const months = Array.from({ length: 6 }, (_, i) => {
+        const date = new Date();
+        date.setMonth(today.getMonth() - i);
+        return format(date, 'MMM yyyy');
+      }).reverse();
+
+      // Initialize all months with zero counts
+      months.forEach(month => {
+        monthlyData.set(month, { started: 0, completed: 0 });
+      });
+
+      // Process projects
       projects.forEach((project) => {
-        if (project.startDate) {
-          const startMonth = format(new Date(project.startDate), 'MMM yyyy');
-          const current = monthlyData.get(startMonth) || { started: 0, completed: 0 };
-          monthlyData.set(startMonth, { ...current, started: current.started + 1 });
+        const startDate = getLocalTime(convertToDate(project.startDate));
+        const endDate = getLocalTime(convertToDate(project.endDate));
+
+        if (startDate) {
+          const startMonth = format(startDate, 'MMM yyyy');
+          if (monthlyData.has(startMonth)) {
+            const current = monthlyData.get(startMonth)!;
+            monthlyData.set(startMonth, { ...current, started: current.started + 1 });
+          }
         }
-        if (project.endDate) {
-          const endMonth = format(new Date(project.endDate), 'MMM yyyy');
-          const current = monthlyData.get(endMonth) || { started: 0, completed: 0 };
-          monthlyData.set(endMonth, { ...current, completed: current.completed + 1 });
+
+        if (endDate && project.status === 'completed') {
+          const endMonth = format(endDate, 'MMM yyyy');
+          if (monthlyData.has(endMonth)) {
+            const current = monthlyData.get(endMonth)!;
+            monthlyData.set(endMonth, { ...current, completed: current.completed + 1 });
+          }
         }
       });
 
-      const sortedMonths = Array.from(monthlyData.keys()).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
-      const started = sortedMonths.map((month) => monthlyData.get(month)?.started || 0);
-      const completed = sortedMonths.map((month) => monthlyData.get(month)?.completed || 0);
-
-      setTimelineData({ labels: sortedMonths, started, completed });
+      // Prepare data for chart
+      setTimelineData({
+        labels: months,
+        started: months.map(month => monthlyData.get(month)?.started || 0),
+        completed: months.map(month => monthlyData.get(month)?.completed || 0)
+      });
     } catch (error) {
       console.error('Error fetching timeline data:', error);
     } finally {
@@ -60,50 +86,35 @@ export function ProjectTimelineChart({ loading: initialLoading }: { loading?: bo
       {
         label: 'Started Projects',
         data: timelineData.started,
-        backgroundColor: '#3b82f6',
+        backgroundColor: chartColors.accent,
         borderRadius: 4,
       },
       {
         label: 'Completed Projects',
         data: timelineData.completed,
-        backgroundColor: '#22c55e',
+        backgroundColor: chartColors.success,
         borderRadius: 4,
       },
     ],
   };
 
   const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom' as const,
-        labels: {
-          boxWidth: 10,
-          padding: 10,
-        },
-      },
-    },
+    ...commonChartOptions,
     scales: {
+      ...commonChartOptions.scales,
       x: {
-        grid: {
-          display: false,
-        },
-        ticks: {
-          maxRotation: 45,
-        },
+        ...commonChartOptions.scales.x,
+        stacked: true
       },
       y: {
-        beginAtZero: true,
-        grid: {
-          color: '#e5e7eb',
-        },
-      },
-    },
+        ...commonChartOptions.scales.y,
+        stacked: true
+      }
+    }
   };
 
   return (
-    <div className="h-[200px]">
+    <div className="h-[400px]">
       <Bar data={data} options={options} />
     </div>
   );

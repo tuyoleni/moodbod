@@ -20,7 +20,7 @@ export const requestServiceAddition = async (projectId: string, serviceData: Omi
     }
 };
 
-export const getPendingServiceRequests = async (projectId?: string): Promise<Service[]> => {
+export const getServiceRequests = async (projectId?: string): Promise<Service[]> => {
     try {
         let q = query(
             projectServicesRef,

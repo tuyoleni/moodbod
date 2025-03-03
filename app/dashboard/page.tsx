@@ -1,19 +1,10 @@
-'use client';
+import React from 'react'
+import ProjectsPage from './project/page'
 
-import { useAuth } from "@/lib/hooks/useAuth";
-
-export default function Dashboard() {
-    const { session, isLoading } = useAuth();
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    return (
-        <div>
-            <h1>User Dashboard</h1>
-            <p>Welcome, {session?.user?.name}</p>
-            <p>Role: {session?.user?.role}</p>
-        </div>
-    );
+function page() {
+  return (
+    <div><ProjectsPage/></div>
+  )
 }
+
+export default page

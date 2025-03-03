@@ -6,6 +6,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchAllProjects } from '@/lib/services/projectService';
 import { ProjectStatus } from '@/lib/types';
+import { chartColors, commonChartOptions, pieChartOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -43,25 +44,19 @@ export function ProjectStatusChart({ loading: initialLoading }: { loading?: bool
     labels: statusData.labels,
     datasets: [{
       data: statusData.counts,
-      backgroundColor: ['#3b82f6', '#22c55e', '#eab308', '#ef4444'],
+      backgroundColor: [
+        chartColors.success,
+        chartColors.accent,
+        chartColors.warning,
+        chartColors.error
+      ],
       borderWidth: 0
     }]
   };
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom' as const,
-        labels: { boxWidth: 10, padding: 10 }
-      }
-    }
-  };
-
   return (
-    <div className="h-[200px]">
-      <Doughnut data={data} options={options} />
+    <div className="h-[400px] w-full bg-white rounded-lg p-4">
+      <Doughnut data={data} options={pieChartOptions} />
     </div>
   );
 }

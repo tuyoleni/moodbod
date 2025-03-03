@@ -14,7 +14,10 @@ import {
 } from 'chart.js';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAllPayments } from '@/lib/services/paymentService';
-import { Payment } from '@/lib/types/payment';
+// These imports can be removed since Payment type and convertToDate function are not used
+import { format } from 'util';
+import { convertToDate } from '@/lib/utils/dateUtils';
+import { chartColors, commonChartOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(
   CategoryScale,
@@ -45,6 +48,16 @@ export function PaymentHistoryChart({ loading: initialLoading }: PaymentHistoryC
     try {
       setLoading(true);
       const payments = await getAllPayments();
+      const monthlyData = new Map<string, number>();
+
+      payments.forEach((payment) => {
+        const paymentDate = convertToDate(payment.createdAt);
+        if (paymentDate) {
+          const month = format(paymentDate, 'MMM yyyy');
+          monthlyData.set(month, (monthlyData.get(month) || 0) + payment.amount);
+        }
+      });
+
       const sortedPayments = payments.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
       const labels = sortedPayments.map(payment => new Date(payment.createdAt).toLocaleDateString());
@@ -64,39 +77,31 @@ export function PaymentHistoryChart({ loading: initialLoading }: PaymentHistoryC
 
   const data = {
     labels: paymentData.labels,
-    datasets: [
-      {
-        label: 'Payment Amount',
-        data: paymentData.amounts,
-        borderColor: 'rgb(75, 192, 192)',
-        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-        tension: 0.1,
-      }
-    ]
+    datasets: [{
+      label: 'Payment Amount',
+      data: paymentData.amounts,
+      borderColor: chartColors.accent,
+      backgroundColor: chartColors.accentLight,
+      fill: true
+    }]
   };
 
   const options = {
-    responsive: true,
+    ...commonChartOptions,
     plugins: {
-      legend: {
-        position: 'top' as const,
-      },
+      ...commonChartOptions.plugins,
       tooltip: {
+        ...commonChartOptions.plugins.tooltip,
         callbacks: {
-          label: (tooltipItem: { raw: unknown }) => `Amount: $${tooltipItem.raw as number}`
-        }
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Amount ($)'
+          label: (tooltipItem: { raw: unknown }) => `$${(tooltipItem.raw as number).toLocaleString()}`
         }
       }
     }
   };
 
-  return <Line options={options} data={data} />;
+  return (
+    <div className="h-[400px] w-full">
+      <Line data={data} options={options} />
+    </div>
+  );
 }

@@ -6,6 +6,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getProjectServices } from '@/lib/services/serviceManagementService';
 import { fetchAllProjects } from '@/lib/services/projectService';
+import { chartColors, commonChartOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -53,30 +54,20 @@ export function ServiceDistributionChart({ loading: initialLoading }: { loading?
     datasets: [{
       data: serviceData.counts,
       backgroundColor: [
-        '#3b82f6',
-        '#22c55e',
-        '#eab308',
-        '#ef4444',
-        '#8b5cf6'
+        chartColors.accent,
+        chartColors.success,
+        chartColors.warning,
+        chartColors.error,
+        chartColors.secondary,
+        `${chartColors.accent}80`
       ],
       borderWidth: 0
     }]
   };
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom' as const,
-        labels: { boxWidth: 10, padding: 10 }
-      }
-    }
-  };
-
   return (
-    <div className="h-[200px]">
-      <Doughnut data={data} options={options} />
+    <div className="h-[400px] w-full">
+      <Doughnut data={data} options={commonChartOptions} />
     </div>
   );
 }

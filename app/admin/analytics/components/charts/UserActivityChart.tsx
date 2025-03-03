@@ -8,6 +8,9 @@ import { fetchUsersByRole } from '@/lib/services/userService';
 import { getProjectMessages } from '@/lib/services/communicationService';
 import { fetchAllProjects } from '@/lib/services/projectService';
 import { format } from 'date-fns';
+import { convertToDate, getLocalTime } from '@/lib/utils/dateUtils';
+import { chartColors, commonChartOptions } from '@/lib/config/chartConfig';
+import { ProjectStatus, ServiceStatus } from '@/lib/types';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -27,7 +30,6 @@ export function UserActivityChart({ loading: initialLoading }: { loading?: boole
     try {
       setLoading(true);
       const projects = await fetchAllProjects();
-      const messages = await Promise.all(projects.map(project => getProjectMessages(project.id)));
       const [clients, admins] = await Promise.all([
         fetchUsersByRole('client'),
         fetchUsersByRole('admin')
@@ -35,27 +37,51 @@ export function UserActivityChart({ loading: initialLoading }: { loading?: boole
 
       const clientIds = new Set(clients.map(client => client.id));
       const adminIds = new Set(admins.map(admin => admin.id));
-      const allMessages = messages.flat();
 
-      const last5Days = Array.from({ length: 5 }, (_, i) => {
+      const last3Days = Array.from({ length: 3 }, (_, i) => {
         const date = new Date();
         date.setDate(date.getDate() - i);
+        date.setHours(0, 0, 0, 0);
         return date;
       }).reverse();
 
-      const labels = last5Days.map(date => format(date, 'EEE'));
-      const clientActivity = last5Days.map(date =>
-        allMessages.filter(msg => 
-          msg.createdAt.toDateString() === date.toDateString() &&
-          clientIds.has(msg.userId)
-        ).length
-      );
-      const adminActivity = last5Days.map(date =>
-        allMessages.filter(msg => 
-          msg.createdAt.toDateString() === date.toDateString() &&
-          adminIds.has(msg.userId)
-        ).length
-      );
+      const labels = last3Days.map(date => format(date, 'EEE'));
+      
+      // Track client activities: project requests, feedback, service requests
+      const clientActivity = last3Days.map(date => {
+        const dayStart = new Date(date);
+        const dayEnd = new Date(date.getTime() + 24 * 60 * 60 * 1000 - 1);
+        
+        return projects.filter(project => {
+          const createdDate = project.createdAt?.toDate();
+          const isClientProject = clientIds.has(project.userId);
+          const hasNewServices = project.additionalServices?.length > 0;
+          const hasFeedback = project.feedback?.length > 0;
+          
+          return isClientProject && createdDate && 
+                 createdDate >= dayStart && createdDate <= dayEnd &&
+                 (hasNewServices || hasFeedback);
+        }).length;
+      });
+
+      // Track admin responses and approvals
+      const adminActivity = last3Days.map(date => {
+        const dayStart = new Date(date);
+        const dayEnd = new Date(date.getTime() + 24 * 60 * 60 * 1000 - 1);
+        
+        return projects.filter(project => {
+          const updatedDate = project.updatedAt?.toDate();
+          const statusChanged = project.status !== ProjectStatus.REQUESTED;
+          const hasAdminResponse = project.milestones?.some(m => {
+            return m.status === ServiceStatus.ACTIVE;
+          });
+          
+          return updatedDate && 
+                 updatedDate >= dayStart && 
+                 updatedDate <= dayEnd &&
+                 (statusChanged || hasAdminResponse);
+        }).length;
+      });
 
       setActivityData({ labels, clientActivity, adminActivity });
     } catch (error) {
@@ -67,45 +93,27 @@ export function UserActivityChart({ loading: initialLoading }: { loading?: boole
 
   if (loading) return <Skeleton className="h-[200px]" />;
 
-  const data = {
+  const chartData = {
     labels: activityData.labels,
     datasets: [
       {
         label: 'Clients',
         data: activityData.clientActivity,
-        backgroundColor: '#3b82f6',
+        backgroundColor: chartColors.accent,
         borderRadius: 4,
       },
       {
         label: 'Admins',
         data: activityData.adminActivity,
-        backgroundColor: '#22c55e',
+        backgroundColor: chartColors.secondary,
         borderRadius: 4,
       }
     ]
   };
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom' as const,
-        labels: { boxWidth: 10, padding: 10 }
-      }
-    },
-    scales: {
-      x: { grid: { display: false } },
-      y: { 
-        grid: { color: '#e5e7eb' },
-        beginAtZero: true
-      }
-    }
-  };
-
   return (
-    <div className="h-[200px]">
-      <Bar data={data} options={options} />
+    <div className="h-[400px] w-full">
+      <Bar data={chartData} options={commonChartOptions} />
     </div>
   );
 }

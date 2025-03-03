@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { FolderKanban } from 'lucide-react';
 import { fetchAllProjects } from '@/lib/services/projectService';
+import { metricCardStyles } from './MetricCardStyles';
 
 interface ProjectMetricsCardProps {
   loading?: boolean;
@@ -34,16 +35,16 @@ export function ProjectMetricsCard({ loading: initialLoading }: ProjectMetricsCa
   };
 
   return (
-    <Card className="h-24">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Projects</CardTitle>
-        <FolderKanban className="h-4 w-4 text-muted-foreground" />
+    <Card className={metricCardStyles.card}>
+      <CardHeader className={metricCardStyles.header}>
+        <CardTitle className={metricCardStyles.title}>Total Projects</CardTitle>
+        <FolderKanban className={metricCardStyles.icon} />
       </CardHeader>
-      <CardContent>
+      <CardContent className={metricCardStyles.content}>
         {loading ? (
-          <Skeleton className="h-8 w-20" />
+          <Skeleton className={metricCardStyles.skeleton} />
         ) : (
-          <div className="text-xl font-bold">{projectData.total}</div>
+          <div className={metricCardStyles.value}>{projectData.total}</div>
         )}
       </CardContent>
     </Card>

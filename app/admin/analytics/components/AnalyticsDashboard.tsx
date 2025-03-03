@@ -1,11 +1,10 @@
 'use client';
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { UserMetricsCard } from './cards/UserMetricsCard';
 import { ProjectMetricsCard } from './cards/ProjectMetricsCard';
 import { RevenueMetricsCard } from './cards/RevenueMetricsCard';
 import { ActiveProjectsCard } from './cards/ActiveProjectsCard';
+import { ChartWrapper } from './charts/ChartWrapper';
 import { RevenueChart } from './charts/RevenueChart';
 import { ProjectStatusChart } from './charts/ProjectStatusChart';
 import { UserActivityChart } from './charts/UserActivityChart';
@@ -28,7 +27,6 @@ export function AnalyticsDashboard() {
         <RevenueMetricsCard />
         <ActiveProjectsCard />
       </div>
-
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -36,88 +34,119 @@ export function AnalyticsDashboard() {
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="revenue">Revenue</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader><CardTitle>Revenue Trend</CardTitle></CardHeader>
-              <CardContent><RevenueChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>Project Status</CardTitle></CardHeader>
-              <CardContent><ProjectStatusChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>User Activity</CardTitle></CardHeader>
-              <CardContent><UserActivityChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>Service Distribution</CardTitle></CardHeader>
-              <CardContent><ServiceDistributionChart /></CardContent>
-            </Card>
+            <ChartWrapper 
+              title="Revenue Trend" 
+              description="Track monthly revenue patterns over the last 6 months to identify growth trends and seasonal variations."
+            >
+              <RevenueChart />
+            </ChartWrapper>
+            
+            <ChartWrapper 
+              title="Project Status" 
+              description="Overview of projects by their current status"
+            >
+              <ProjectStatusChart />
+            </ChartWrapper>
+            <ChartWrapper 
+              title="User Activity" 
+              description="Daily user interactions and engagement metrics"
+            >
+              <UserActivityChart />
+            </ChartWrapper>
+            <ChartWrapper 
+              title="Service Distribution" 
+              description="Breakdown of services across all projects"
+            >
+              <ServiceDistributionChart />
+            </ChartWrapper>
           </div>
         </TabsContent>
-
         <TabsContent value="projects" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader><CardTitle>Milestone Completion</CardTitle></CardHeader>
-              <CardContent><MilestoneCompletionChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>Project Timeline</CardTitle></CardHeader>
-              <CardContent><ProjectTimelineChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>Project Categories</CardTitle></CardHeader>
-              <CardContent><ProjectCategoryChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>Milestone Status</CardTitle></CardHeader>
-              <CardContent><MilestoneStatusChart /></CardContent>
-            </Card>
+            <ChartWrapper 
+              title="Milestone Completion"
+              description="Track the completion status of project milestones"
+            >
+              <MilestoneCompletionChart />
+            </ChartWrapper>
+            <ChartWrapper 
+              title="Project Timeline"
+              description="Visual representation of project timelines"
+            >
+              <ProjectTimelineChart />
+            </ChartWrapper>
+            <ChartWrapper 
+              title="Project Categories"
+              description="Distribution of projects across different categories"
+            >
+              <ProjectCategoryChart />
+            </ChartWrapper>
+            <ChartWrapper 
+              title="Milestone Status"
+              description="Current status of project milestones"
+            >
+              <MilestoneStatusChart />
+            </ChartWrapper>
           </div>
         </TabsContent>
 
         <TabsContent value="users" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader><CardTitle>User Growth</CardTitle></CardHeader>
-              <CardContent><UserGrowthChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>User Activity</CardTitle></CardHeader>
-              <CardContent><UserActivityChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>User Engagement</CardTitle></CardHeader>
-              <CardContent><UserEngagementChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>Project Distribution</CardTitle></CardHeader>
-              <CardContent><ProjectStatusChart /></CardContent>
-            </Card>
+            <ChartWrapper 
+              title="User Growth"
+              description="Track user acquisition and growth over time"
+            >
+              <UserGrowthChart />
+            </ChartWrapper>
+            <ChartWrapper 
+              title="User Activity"
+              description="Monitor daily user interactions and engagement"
+            >
+              <UserActivityChart />
+            </ChartWrapper>
+            <ChartWrapper 
+              title="User Engagement"
+              description="Analyze user engagement patterns and metrics"
+            >
+              <UserEngagementChart />
+            </ChartWrapper>
+            <ChartWrapper 
+              title="Project Distribution"
+              description="Distribution of projects across user base"
+            >
+              <ProjectStatusChart />
+            </ChartWrapper>
           </div>
         </TabsContent>
 
         <TabsContent value="revenue" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader><CardTitle>Revenue Overview</CardTitle></CardHeader>
-              <CardContent><RevenueChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>Payment History</CardTitle></CardHeader>
-              <CardContent><PaymentHistoryChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>Revenue by Service</CardTitle></CardHeader>
-              <CardContent><RevenueByServiceChart /></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle>Project Value Distribution</CardTitle></CardHeader>
-              <CardContent><ProjectStatusChart /></CardContent>
-            </Card>
+            <ChartWrapper 
+              title="Revenue Overview"
+              description="Overall revenue performance and trends"
+            >
+              <RevenueChart />
+            </ChartWrapper>
+            <ChartWrapper 
+              title="Payment History"
+              description="Historical payment data and patterns"
+            >
+              <PaymentHistoryChart />
+            </ChartWrapper>
+            <ChartWrapper 
+              title="Revenue by Service"
+              description="Revenue breakdown by service category"
+            >
+              <RevenueByServiceChart />
+            </ChartWrapper>
+            <ChartWrapper 
+              title="Project Value Distribution"
+              description="Distribution of project values across portfolio"
+            >
+              <ProjectStatusChart />
+            </ChartWrapper>
           </div>
         </TabsContent>
       </Tabs>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Message } from '@/lib/types/communication';
 import { getAllMessages } from '@/lib/services/communicationService';
 // import { useAuth } from '@/lib/hooks/useAuth';
+import { convertToDate } from '@/lib/utils/dateUtils';
 
 export default function MessagesPage() {
     const [messages, setMessages] = useState<Message[]>([]);
@@ -39,7 +40,7 @@ export default function MessagesPage() {
                             <div className="flex justify-between items-start">
                                 <h3 className="font-semibold">{message.content}</h3>
                                 <span className="text-sm text-gray-500">
-                                    {new Date(message.createdAt).toLocaleString()}
+                                    {convertToDate(message.createdAt)?.toLocaleString()}
                                 </span>
                             </div>
                             <p className="text-sm text-gray-600">{message.content}</p>

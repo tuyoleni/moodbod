@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { fetchAllProjects } from '@/lib/services/projectService';
 import { getProjectServices } from '@/lib/services/serviceManagementService';
 import { getPaymentsByProject } from '@/lib/services/paymentService';
+import { chartColors, commonChartOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -57,51 +58,45 @@ export function RevenueByServiceChart({ loading: initialLoading }: { loading?: b
     }
   };
 
-  if (loading) return <Skeleton className="h-[200px]" />;
+  if (loading) return <Skeleton className="h-[400px] w-full" />;
 
   const data = {
     labels: serviceRevenue.labels,
     datasets: [{
       label: 'Revenue by Service Type',
       data: serviceRevenue.amounts,
-      backgroundColor: '#3b82f6',
+      backgroundColor: chartColors.accent,
       borderRadius: 4,
     }]
   };
 
   const options = {
-    responsive: true,
-    maintainAspectRatio: false,
+    ...commonChartOptions,
     plugins: {
-      legend: {
-        position: 'bottom' as const,
-        labels: { boxWidth: 10, padding: 10 }
-      },
+      ...commonChartOptions.plugins,
       tooltip: {
+        ...commonChartOptions.plugins.tooltip,
         callbacks: {
-          label: (tooltipItem: TooltipItem<'bar'>) => `$${(tooltipItem.raw as number).toLocaleString()}`
+          label: (tooltipItem: TooltipItem<'bar'>) => 
+            `$${(tooltipItem.raw as number).toLocaleString()}`
         }
       }
     },
     scales: {
-      x: { 
-        grid: { display: false },
-        ticks: { maxRotation: 45 }
-      },
-      y: { 
-        beginAtZero: true,
-        grid: { color: '#e5e7eb' },
+      ...commonChartOptions.scales,
+      y: {
+        ...commonChartOptions.scales.y,
         ticks: {
-          callback: function(value: string | number) {
-            return `$${Number(value).toLocaleString()}`;
-          }
+          ...commonChartOptions.scales.y.ticks,
+          callback: (value: string | number) => 
+            `$${Number(value).toLocaleString()}`
         }
       }
     }
   };
 
   return (
-    <div className="h-[200px]">
+    <div className="h-[400px] w-full bg-white rounded-lg p-4">
       <Bar data={data} options={options} />
     </div>
   );
