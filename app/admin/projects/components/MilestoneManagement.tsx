@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ServiceStatus } from '@/lib/types';
+import { Milestone, ServiceStatus } from '@/lib/types';
 import { createMilestone, getProjectMilestones, updateMilestoneStatus } from '@/lib/services/milestoneService';
 import { toast } from 'sonner';
 
@@ -15,7 +15,7 @@ type MilestoneManagementProps = {
 }
 
 export function MilestoneManagement({ projectId }: MilestoneManagementProps) {
-    const [milestones, setMilestones] = useState<Array<Milestone>>([]);
+    const [milestones, setMilestones] = useState<Milestone[]>([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({
