@@ -8,31 +8,42 @@ import { Payment } from './payment';
 import { User } from './user';
 
 export interface Project {
-    startDate: string | number | Date;
-    endDate: string | number | Date;
+    // Basic Information
     id: string;
-    userId: string;
     name: string;
     description: string;
     type: ProjectType;
     status: ProjectStatus;
+    userId: string;
+    user?: User;
+
+    // Project Details
     package: ProjectPackage;
     additionalServices: Service[];
+    services?: Service[];
     requirements: string;
     projectGoals: string[];
     targetAudience: string;
+    liveUrl?: string;
+
+    // Financial Information
     totalCost: number;
     paidAmount: number;
-    liveUrl?: string;
+    payments: Payment[];
+
+    // Timeline
+    startDate: Timestamp;
+    endDate: Timestamp;
     createdAt: Timestamp;
     updatedAt: Timestamp;
+
+    // Project Progress
+    milestones: Milestone[];
+
+    // Communication
     comments: Comment[];
     feedback: Feedback[];
-    milestones: Milestone[];
-    payments: Payment[];
-    user?: User;
     messages?: Message[];
-    services?: Service[];
 }
 
 export interface ProjectPackage {

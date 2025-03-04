@@ -11,8 +11,7 @@ import { useProjectForm } from '@/lib/hooks/useProjectForm';
 import { BasicInformation, PackageSelection, ServiceSelection } from './form';
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { ProjectStatus } from '@/lib/types';
-
+import { Project, ProjectStatus, ProjectType } from '@/lib/types';
 
 const steps = [
   { id: 'basic', title: 'Basic Information' },
@@ -34,16 +33,29 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
     calculateTotalPrice,
     handleFormChange,
     handlePackageSelect,
-    handleServiceToggle  } = useProjectForm();
+    handleServiceToggle,
+    validateStep
+  } = useProjectForm();
+
+  const handleNext = () => {
+    if (validateStep(currentStep)) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
 
   const handleSubmit = async () => {
-    if (!session?.user?.id || !formData.name || !formData.package?.price) return;
+    if (!session?.user?.id || !formData.name || !formData.package?.price) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
 
     try {
       setLoading(true);
-      const projectData = {
-        ...formData,
+      const projectData: Omit<Project, 'id'> = {
         userId: session.user.id,
+        name: formData.name,
+        description: formData.description || '',
+        type: formData.type || ProjectType.WEBSITE,
         totalCost: calculateTotalPrice(),
         status: ProjectStatus.REQUESTED,
         startDate: Timestamp.fromDate(new Date()),
@@ -134,7 +146,7 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
             type="button"
             variant="outline"
             onClick={() => currentStep > 0 && setCurrentStep(currentStep - 1)}
-            disabled={currentStep === 0}
+            disabled={currentStep === 0 || loading}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Previous
@@ -146,7 +158,7 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
               if (currentStep === steps.length - 1) {
                 handleSubmit();
               } else {
-                setCurrentStep(currentStep + 1);
+                handleNext();
               }
             }}
             disabled={loading}
