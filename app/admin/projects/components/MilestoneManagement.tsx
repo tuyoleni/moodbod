@@ -54,7 +54,7 @@ export function MilestoneManagement({ projectId }: MilestoneManagementProps) {
                 paymentRequired: parseFloat(formData.paymentRequired) || 0,
                 status: ServiceStatus.PENDING,
                 updatedAt: serverTimestamp(),
-                updatedBy: (updatedBy: any) => 'system'
+                updatedBy: 'system'
             };
 
             await createMilestone(milestone);
