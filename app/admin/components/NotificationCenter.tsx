@@ -10,7 +10,7 @@ import { fetchAllProjects, updateProject } from '@/lib/services/projectService';
 import { toast } from 'sonner';
 
 export function NotificationCenter() {
-    const [notifications, setNotifications] = useState<Project>([]);
+    const [notifications, setNotifications] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -49,7 +49,7 @@ export function NotificationCenter() {
         }
     };
 
-    const handleApprove = async () => {
+    const handleApprove = async (project: Project) => {
         try {
             const projectUpdate = {
                 status: ProjectStatus.IN_PROGRESS
