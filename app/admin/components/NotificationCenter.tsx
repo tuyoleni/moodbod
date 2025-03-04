@@ -63,7 +63,7 @@ export function NotificationCenter() {
         }
     };
 
-    const handleReject = async (project) => {
+    const handleReject = async (project: Project) => {
         try {
             const projectUpdate = {
                 status: ProjectStatus.REJECTED
@@ -76,6 +76,7 @@ export function NotificationCenter() {
             toast.error('Failed to reject project');
         }
     };
+    
 
     if (loading) {
         return <div className="p-4">Loading notifications...</div>;
