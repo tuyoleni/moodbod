@@ -23,8 +23,8 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
 
     useEffect(() => {
         fetchProject();
-        const statusChanged = searchParams.get('statusChanged');
-        const activeTab = searchParams.get('tab');
+        const statusChanged = searchParams?.get('statusChanged');
+        const activeTab = searchParams?.get('tab');
         
         if (statusChanged === 'true' && activeTab === 'milestones') {
             toast.info('Project status has been updated. Please update the milestones accordingly.');
@@ -162,7 +162,13 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
                 </TabsContent>
 
                 <TabsContent value="services" className="space-y-4">
-                    <ServiceManagement projectId={resolvedParams.id} projectType={project.type} />
+                    <ServiceManagement 
+                        key={resolvedParams.id}
+                        {...{
+                            projectId: resolvedParams.id,
+                            projectType: project.type
+                        }}
+                    />
                 </TabsContent>
 
                 <TabsContent value="milestones" className="space-y-4">
