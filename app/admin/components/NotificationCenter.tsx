@@ -8,7 +8,6 @@ import { ProjectStatus, ServiceStatus } from '@/lib/types/enums';
 import { Project } from '@/lib/types/project';
 import { fetchAllProjects, updateProject } from '@/lib/services/projectService';
 import { toast } from 'sonner';
-import { serverTimestamp } from 'firebase/firestore'; // Import serverTimestamp
 
 export function NotificationCenter() {
     const [notifications, setNotifications] = useState<Project[]>([]);
@@ -66,7 +65,7 @@ export function NotificationCenter() {
 
     const handleReject = async (project: Project) => {
         try {
-            const projectUpdate: Partial<Project> = {
+            const projectUpdate: Partial<Project[]> = {
                 status: ProjectStatus.REJECTED
 
             };

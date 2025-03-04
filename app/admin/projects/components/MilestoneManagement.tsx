@@ -46,7 +46,7 @@ export function MilestoneManagement({ projectId }: MilestoneManagementProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const milestone = {
+            const milestone: Omit<Milestone, 'id'> = {
                 projectId,
                 title: formData.title,
                 description: formData.description,
@@ -54,7 +54,7 @@ export function MilestoneManagement({ projectId }: MilestoneManagementProps) {
                 paymentRequired: parseFloat(formData.paymentRequired) || 0,
                 status: ServiceStatus.PENDING,
                 updatedAt: serverTimestamp(),
-                updatedBy: 'system'
+                updatedBy: (updatedBy: any) => 'system'
             };
 
             await createMilestone(milestone);

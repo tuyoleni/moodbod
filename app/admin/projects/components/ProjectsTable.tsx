@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Project } from '@/lib/types/project';
-import { ProjectType, ProjectStatus } from '@/lib/types';
+import { ProjectStatus } from '@/lib/types';
 import { updateProject } from '@/lib/services/projectService';
 import { toast } from 'sonner';
 import {
@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { convertToDate, formatDate } from '@/lib/utils/dateUtils';
+import { Timestamp } from 'firebase/firestore';
 
 interface ProjectsTableProps {
     projects: Project[];
@@ -39,7 +40,7 @@ export default function ProjectsTable({ projects: initialProjects }: ProjectsTab
             await updateProject(projectId, {
                 ...projectToUpdate,
                 status: newStatus,
-                updatedAt: new Date()
+                updatedAt: Timestamp.fromDate(new Date())
             });
             
             setProjects(projects.map(p => 

@@ -80,12 +80,17 @@ export const updateProject = async (projectId: string, projectData: Partial<Proj
     }
 };
 
-export const updateProjectStatus = async (projectId: string, status: ProjectStatus): Promise<void> => {
+export const updateProjectStatus = async (
+    projectId: string, 
+    status: ProjectStatus,
+    projectData?: Partial<Project>
+): Promise<void> => {
     try {
         const projectRef = doc(projectsRef, projectId);
         await updateDoc(projectRef, {
             status,
-            updatedAt: serverTimestamp()
+            updatedAt: serverTimestamp(),
+            ...projectData
         });
     } catch (error) {
         console.error('Error updating project status:', error);

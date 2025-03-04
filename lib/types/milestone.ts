@@ -10,5 +10,5 @@ export interface Milestone {
     paymentRequired?: number;
     projectId: string;
     updatedAt: any;
-    updatedBy: string;  // Changed from function to string type
+    updatedBy: string;
 }
