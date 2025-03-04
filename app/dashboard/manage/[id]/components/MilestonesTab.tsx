@@ -24,7 +24,7 @@ const MilestonesTab: React.FC<MilestonesTabProps> = ({ milestones }) => {
           <TableBody>
             {milestones.map((milestone) => (
               <TableRow key={milestone.id}>
-                <TableCell>{milestone.name}</TableCell>
+                <TableCell>{milestone.title}</TableCell>
                 <TableCell>
                   <Badge variant={
                     milestone.status === 'active' ? 'default' :
