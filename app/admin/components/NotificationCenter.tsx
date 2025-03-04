@@ -10,7 +10,7 @@ import { fetchAllProjects, updateProject } from '@/lib/services/projectService';
 import { toast } from 'sonner';
 
 export function NotificationCenter() {
-    const [notifications, setNotifications] = useState<Project[]>([]);
+    const [notifications, setNotifications] = useState<Project>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -49,9 +49,9 @@ export function NotificationCenter() {
         }
     };
 
-    const handleApprove = async (project: Project) => {
+    const handleApprove = async () => {
         try {
-            const projectUpdate: Partial<Project> = {
+            const projectUpdate = {
                 status: ProjectStatus.IN_PROGRESS
             };
             await updateProject(project.id, projectUpdate);
@@ -63,11 +63,10 @@ export function NotificationCenter() {
         }
     };
 
-    const handleReject = async (project: Project) => {
+    const handleReject = async (project) => {
         try {
-            const projectUpdate: Partial<Project[]> = {
+            const projectUpdate = {
                 status: ProjectStatus.REJECTED
-
             };
             await updateProject(project.id, projectUpdate);
             toast.success('Project rejected');
