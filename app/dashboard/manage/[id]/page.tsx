@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { getProjectById, updateProjectStatus } from '@/lib/services/projectService';
+import { getProjectById } from '@/lib/services/projectService';
 import { getProjectServices } from '@/lib/services/serviceManagementService';
 import { getProjectMilestones } from '@/lib/services/milestoneService';
-import { Project, ProjectStatus, Service, Milestone } from '@/lib/types';
-import ProjectActions from './components/ProjectActions';
+import { Project, Service, Milestone } from '@/lib/types';
 import ProjectTabs from './components/ProjectTabs';
 
 export default function ManageProject() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
