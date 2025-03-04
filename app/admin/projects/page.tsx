@@ -6,7 +6,7 @@ import { Project } from '@/lib/types/project';
 import ProjectsTable from './components/ProjectsTable';
 
 export default function ProjectsPage() {
-    const [projects, setProjects] = useState<Project>([]);
+    const [projects, setProjects] = useState<Project[]>([]); 
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

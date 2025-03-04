@@ -7,7 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Service } from "@/lib/types";
 
-const ServiceManagement = () => {
+export const ServiceManagement = () => {
   const [project, setProject] = useState<Service | null>(null);
   const [pendingRequests, setPendingRequests] = useState<Service[]>([]);
 
@@ -105,5 +105,3 @@ const ServiceManagement = () => {
     </div>
   );
 };
-
-export default ServiceManagement;
