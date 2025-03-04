@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Project } from '@/lib/types';
 import { Comment } from '@/lib/types/communication';  // Update the import
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { Timestamp } from 'firebase/firestore';
+import { toast } from 'sonner';
+import { addCommentToProject } from '@/lib/services/communicationService';
 
 interface CommentsTabProps {
   project: Project;
@@ -14,7 +16,6 @@ interface CommentsTabProps {
 
 const CommentsTab: React.FC<CommentsTabProps> = ({ project }) => {
   const [comments, setComments] = useState<Comment[]>(() => {
-    // Convert project comments to match the Comment interface
     return (project.comments || []).map((comment: any) => ({
       id: comment.id,
       projectId: comment.projectId,
@@ -25,27 +26,33 @@ const CommentsTab: React.FC<CommentsTabProps> = ({ project }) => {
         : Timestamp.fromDate(new Date(comment.createdAt))
     }));
   });
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [newComment, setNewComment] = useState('');
   const { session } = useAuth();
 
   const handleAddComment = async () => {
     if (!newComment.trim() || !session?.user?.id) return;
+    setIsSubmitting(true);
 
     const comment: Comment = {
       id: Date.now().toString(),
       projectId: project.id,
       userId: session.user.id,
       content: newComment.trim(),
-      createdAt: Timestamp.now()  // Use Timestamp instead of Date
+      createdAt: Timestamp.now()
     };
 
     try {
-      // Add comment to the project
+      // Save comment to Firebase
+      await addCommentToProject(project.id, comment);
       setComments([...comments, comment]);
       setNewComment('');
+      toast.success('Comment added successfully');
     } catch (error) {
       console.error('Error adding comment:', error);
+      toast.error('Failed to add comment');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -57,8 +64,14 @@ const CommentsTab: React.FC<CommentsTabProps> = ({ project }) => {
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           className="flex-1"
+          disabled={isSubmitting}
         />
-        <Button onClick={handleAddComment}>Add Comment</Button>
+        <Button 
+          onClick={handleAddComment} 
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Adding...' : 'Add Comment'}
+        </Button>
       </div>
 
       {comments.length > 0 ? (

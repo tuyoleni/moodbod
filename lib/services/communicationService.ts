@@ -1,6 +1,10 @@
 import { collection, query, where, getDocs, addDoc, serverTimestamp, orderBy } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Message, Feedback, FeedbackStatus } from '../types';
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
+
+const projectsRef = collection(db, 'projects');
+import { Comment } from '../types/communication';
 
 const messagesRef = collection(db, 'messages');
 const feedbackRef = collection(db, 'feedback');
@@ -92,4 +96,16 @@ export const getProjectFeedback = async (projectId: string): Promise<Feedback[]>
         console.error('Error fetching feedback:', error);
         return [];
     }
+};
+
+export const addCommentToProject = async (projectId: string, comment: Comment): Promise<void> => {
+  try {
+    const projectRef = doc(projectsRef, projectId);
+    await updateDoc(projectRef, {
+      comments: arrayUnion(comment)
+    });
+  } catch (error) {
+    console.error('Error adding comment:', error);
+    throw error;
+  }
 };
