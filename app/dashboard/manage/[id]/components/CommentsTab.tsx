@@ -1,29 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { Project, Comment } from '@/lib/types';
+import { Project } from '@/lib/types';
+import { Comment } from '@/lib/types/communication';  // Update the import
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
 import { useAuth } from '@/lib/hooks/useAuth';
+import { Timestamp } from 'firebase/firestore';
 
 interface CommentsTabProps {
   project: Project;
 }
 
 const CommentsTab: React.FC<CommentsTabProps> = ({ project }) => {
-  const [comments, setComments] = useState<Comment[]>(project.comments || []);
+  const [comments, setComments] = useState<Comment[]>(() => {
+    // Convert project comments to match the Comment interface
+    return (project.comments || []).map((comment: any) => ({
+      id: comment.id,
+      projectId: comment.projectId,
+      userId: comment.userId,
+      content: comment.content,
+      createdAt: comment.createdAt instanceof Timestamp 
+        ? comment.createdAt 
+        : Timestamp.fromDate(new Date(comment.createdAt))
+    }));
+  });
+
   const [newComment, setNewComment] = useState('');
   const { session } = useAuth();
 
   const handleAddComment = async () => {
     if (!newComment.trim() || !session?.user?.id) return;
 
-    const comment = {
+    const comment: Comment = {
       id: Date.now().toString(),
       projectId: project.id,
       userId: session.user.id,
       content: newComment.trim(),
-      createdAt: new Date()
+      createdAt: Timestamp.now()  // Use Timestamp instead of Date
     };
 
     try {
