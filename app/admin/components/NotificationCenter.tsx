@@ -10,7 +10,7 @@ import { fetchAllProjects, updateProject } from '@/lib/services/projectService';
 import { toast } from 'sonner';
 
 export function NotificationCenter() {
-    const [notifications, setNotifications] = useState<Project[]>([]);
+    const [notifications, setNotifications] = useState<Array<Project>>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
