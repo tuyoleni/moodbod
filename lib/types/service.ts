@@ -12,4 +12,6 @@ export interface Service {
     status?: ServiceStatus;
     category?: string;
     price?: number;
+    quantity?: number;
+    allowQuantity?: boolean;
 }

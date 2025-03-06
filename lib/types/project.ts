@@ -6,6 +6,7 @@ import { Feedback, Message } from './communication';
 import { Milestone } from './milestone';
 import { Payment } from './payment';
 import { User } from './user';
+import { FileWithPreview } from './file';
 
 export interface Project {
     // Basic Information
@@ -24,6 +25,8 @@ export interface Project {
     requirements: string;
     projectGoals: string[];
     targetAudience: string;
+    inspirationSources: string[];
+    referenceImages?: FileWithPreview[]; // Add this line
     liveUrl?: string;
 
     // Financial Information

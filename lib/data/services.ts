@@ -61,7 +61,9 @@ export const additionalServices = [
         description: 'Expand your website with up to 5 additional pages of custom content.',
         price: 500,
         category: 'website',
-        features: ['Custom design', 'Content integration', 'Mobile responsive']
+        isMultiRequest: true,
+        allowQuantity: true,
+        quantity: 1
     },
     {
         id: 'advanced-seo',
@@ -69,7 +71,7 @@ export const additionalServices = [
         description: 'Comprehensive keyword research and optimization to improve your search rankings.',
         price: 1500,
         category: 'marketing',
-        features: ['Keyword research', 'On-page optimization', 'Monthly reports']
+        isMultiRequest: false
     },
     {
         id: 'branding-package',
@@ -77,7 +79,7 @@ export const additionalServices = [
         description: 'Comprehensive branding including logo design, color palette, and brand guidelines.',
         price: 2500,
         category: 'branding',
-        features: ['Logo design', 'Color palette', 'Brand guidelines']
+        isMultiRequest: false
     },
     {
         id: 'content-writing',
@@ -85,7 +87,9 @@ export const additionalServices = [
         description: 'Professional content creation to engage your target audience.',
         price: 300,
         category: 'marketing',
-        features: ['SEO-optimized content', 'Professional writing', 'Per page pricing']
+        isMultiRequest: true,
+        allowQuantity: true,
+        quantity: 1
     },
     {
         id: 'extra-revisions',
@@ -93,7 +97,9 @@ export const additionalServices = [
         description: 'Additional design adjustments beyond the included revision rounds.',
         price: 250,
         category: 'website',
-        features: ['Per revision pricing', 'Quick turnaround', 'Unlimited changes']
+        isMultiRequest: true,
+        allowQuantity: true,
+        quantity: 1
     },
     {
         id: 'priority-support',
@@ -101,7 +107,7 @@ export const additionalServices = [
         description: 'Fast-track support with priority response for your website needs.',
         price: 300,
         category: 'maintenance',
-        features: ['Monthly subscription', 'Priority response', 'Direct support']
+        isMultiRequest: false
     },
     {
         id: 'website-maintenance',
@@ -109,7 +115,7 @@ export const additionalServices = [
         description: 'Regular updates, backups, and technical maintenance of your site.',
         price: 600,
         category: 'maintenance',
-        features: ['Regular updates', 'Daily backups', 'Security monitoring']
+        isMultiRequest: false
     },
     {
         id: 'ecommerce-setup',
@@ -117,7 +123,7 @@ export const additionalServices = [
         description: 'Professional setup of your online store with up to 100 products.',
         price: 1500,
         category: 'ecommerce',
-        features: ['Product setup', 'Category organization', 'Payment integration']
+        isMultiRequest: false
     },
     {
         id: 'analytics-setup',
@@ -125,7 +131,7 @@ export const additionalServices = [
         description: 'Installation and configuration of advanced tracking and reporting tools.',
         price: 800,
         category: 'marketing',
-        features: ['Google Analytics setup', 'Custom reporting', 'Goal tracking']
+        isMultiRequest: false
     }
 ];
 

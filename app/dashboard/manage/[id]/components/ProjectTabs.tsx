@@ -14,8 +14,10 @@ interface ProjectTabsProps {
 }
 
 const ProjectTabs: React.FC<ProjectTabsProps> = ({ project, milestones, services }) => {
+  const [activeTab, setActiveTab] = React.useState('details');
+
   return (
-    <Tabs defaultValue="details">
+    <Tabs value={activeTab} onValueChange={setActiveTab}>
       <TabsList>
         <TabsTrigger value="details">Details</TabsTrigger>
         <TabsTrigger value="milestones">Milestones</TabsTrigger>
@@ -25,7 +27,7 @@ const ProjectTabs: React.FC<ProjectTabsProps> = ({ project, milestones, services
       </TabsList>
 
       <TabsContent value="details" className="space-y-6">
-        <ProjectDetailsTab project={project} />
+        <ProjectDetailsTab project={project} onServiceClick={() => setActiveTab('services')} />
       </TabsContent>
 
       <TabsContent value="milestones">

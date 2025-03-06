@@ -9,3 +9,7 @@ export interface Attachment {
     path: string;
     uploadedAt: number;
 }
+
+export interface FileWithPreview extends File {
+    preview: string;
+}

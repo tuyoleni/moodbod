@@ -1,4 +1,5 @@
 export enum ProjectStatus {
+    PAYMENT_PENDING = 'payment pending',
     REQUESTED = 'requested',
     IN_PROGRESS = 'in progress',
     IN_REVIEW = 'in review',
@@ -15,6 +16,7 @@ export enum PaymentMethod {
 
 export enum ServiceStatus {
     PENDING = 'pending',
+    PAYMENT_PENDING = 'payment pending',
     APPROVED = 'approved',
     REJECTED = 'rejected',
     ACTIVE = 'active',

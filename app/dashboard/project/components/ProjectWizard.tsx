@@ -55,7 +55,7 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
         userId: session.user.id,
         name: formData.name,
         description: formData.description || '',
-        type: formData.type || ProjectType.WEBSITE,
+        type: ProjectType.WEBSITE,
         totalCost: calculateTotalPrice(),
         status: ProjectStatus.REQUESTED,
         startDate: Timestamp.fromDate(new Date()),
@@ -65,6 +65,7 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
         requirements: formData.requirements || '',
         projectGoals: formData.projectGoals || [],
         targetAudience: formData.targetAudience || '',
+        inspirationSources: formData.inspirationSources || [],
         paidAmount: 0,
         comments: [],
         feedback: [],
@@ -105,16 +106,19 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
   };
 
   return (
-    <div className="py-4">
-      <CardHeader className="px-0">
-        <div className="space-y-2">
-          <CardTitle>Create New Project</CardTitle>
-          <CardDescription>{steps[currentStep].title}</CardDescription>
-        </div>
-        <Separator className="my-4" />
-        <div className="flex gap-2">
+    <div className="h-[80vh] flex flex-col">
+      <CardHeader className="px-0 flex-shrink-0">
+          <div className="flex justify-between items-center">
+            <CardTitle className='my-4'>Create New Project</CardTitle>
+            <div className="text-xl font-semibold">
+              Total Cost: ${calculateTotalPrice()}
+            </div>
+          </div>
+
+        <Separator className="my-8" />
+        <div className="flex gap-2 ">
           {steps.map((step, index) => (
-            <div key={step.id} className="flex-1">
+            <div key={step.id} className="flex-1 my-4">
               <div className={`h-2 rounded-full transition-all ${
                 index <= currentStep ? 'bg-primary' : 'bg-muted'
               }`} />
@@ -128,20 +132,22 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
         </div>
       </CardHeader>
 
-      <div className="mt-6 space-y-8">
-        <div className="min-h-[400px]">
-          {renderStep()}
-        </div>
-        
-        {currentStep === steps.length - 1 && (
-          <div className="rounded-lg bg-muted p-4">
-            <div className="text-xl font-bold">
-              Total Price: ${calculateTotalPrice()}
-            </div>
+      <div className="flex-1 overflow-hidden flex flex-col">
+        <div className="flex-1 overflow-y-auto px-1 space-y-8">
+          <div className="py-4">
+            {renderStep()}
           </div>
-        )}
+          
+          {currentStep === steps.length - 1 && (
+            <div className="rounded-lg bg-muted p-4 mb-4">
+              <div className="text-xl font-bold">
+                Total Price: ${calculateTotalPrice()}
+              </div>
+            </div>
+          )}
+        </div>
 
-        <div className="flex justify-between pt-4">
+        <div className="flex justify-between pt-4 mt-auto border-t bg-background">
           <Button
             type="button"
             variant="outline"

@@ -1,16 +1,17 @@
-// Same content as current ProjectDetails.tsx, just renamedimport React from 'react';
 import { Project } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { projectTypes } from '@/lib/data/projectTypes';
 import { Progress } from '@/components/ui/progress';
-import { Briefcase, Package, Sparkles, DollarSign, Clock, CheckCircle2, Check } from 'lucide-react';
+import { Briefcase, Package, Sparkles, CheckCircle2, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ProjectDetailsProps {
   project: Project;
+  onServiceClick: () => void;
 }
 
-const ProjectDetailsTab: React.FC<ProjectDetailsProps> = ({ project }) => {
+const ProjectDetailsTab: React.FC<ProjectDetailsProps> = ({ project, onServiceClick }) => {
   const projectType = projectTypes.find(type => type.id === project.type);
   const completedMilestones = project.milestones?.filter(m => m.status === 'completed').length || 0;
   const totalMilestones = project.milestones?.length || 0;
@@ -75,9 +76,14 @@ const ProjectDetailsTab: React.FC<ProjectDetailsProps> = ({ project }) => {
 
         <Card>
           <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <div className="font-medium">Additional Services</div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-primary" />
+                <div className="font-medium">Additional Services</div>
+              </div>
+              <Button variant="ghost" size="sm" onClick={onServiceClick}>
+                View All
+              </Button>
             </div>
             <div className="space-y-2">
               <div className="text-2xl font-semibold">{project.additionalServices?.length || 0}</div>
@@ -138,9 +144,14 @@ const ProjectDetailsTab: React.FC<ProjectDetailsProps> = ({ project }) => {
         {project.additionalServices?.length > 0 && (
           <Card className="col-span-full">
             <CardContent className="pt-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="h-4 w-4 text-primary" />
-                <h3 className="font-medium">Additional Services</h3>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  <h3 className="font-medium">Additional Services</h3>
+                </div>
+                <Button variant="ghost" size="sm" onClick={onServiceClick}>
+                  View All Services
+                </Button>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {project.additionalServices.map((service, index) => (

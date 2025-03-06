@@ -7,6 +7,7 @@ import { getProjectServices } from '@/lib/services/serviceManagementService';
 import { getProjectMilestones } from '@/lib/services/milestoneService';
 import { Project, Service, Milestone } from '@/lib/types';
 import ProjectTabs from './components/ProjectTabs';
+import { Globe } from 'lucide-react';
 
 export default function ManageProject() {
   const params = useParams();
@@ -59,7 +60,17 @@ export default function ManageProject() {
     <div className="container max-w-6xl mx-auto py-8 px-4 space-y-8">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl font-medium tracking-tight">{project.name}</h1>
+          <h1 className="text-2xl font-medium tracking-tight">{project.name}
+          <a 
+          href={project.liveUrl || '#'} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className={`flex items-center gap-2 text-sm ${project.liveUrl ? 'text-primary hover:underline' : 'text-muted-foreground cursor-not-allowed'}`}
+        >
+          <Globe className="h-4 w-4" />
+          {project.liveUrl || 'Live URL not available'}
+        </a>
+          </h1>
           <p className="text-muted-foreground mt-2">{project.description}</p>
         </div>
       </div>

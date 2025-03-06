@@ -23,9 +23,9 @@ export default function ProjectsPage() {
       <ProjectsTable />
 
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-5xl">
           <DialogHeader>
-            <DialogTitle>Create New Project</DialogTitle>
+            <DialogTitle></DialogTitle>
           </DialogHeader>
           <ProjectWizard onComplete={() => setShowCreateDialog(false)} />
         </DialogContent>
