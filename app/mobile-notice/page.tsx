@@ -1,10 +1,11 @@
 'use client';
 
+import React from "react";
 import { ArrowLeft } from "lucide-react";
 import { signOut } from 'next-auth/react';
 
 export default function MobileNoticePage() {
-  const handleSignOut = (e) => {
+  const handleSignOut = (e: React.FormEvent) => {
     e.preventDefault();
     signOut({ callbackUrl: '/' });
   };
