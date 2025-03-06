@@ -1,9 +1,14 @@
 'use client';
 
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { signOut } from 'next-auth/react';
 
 export default function MobileNoticePage() {
+  const handleSignOut = (e) => {
+    e.preventDefault();
+    signOut({ callbackUrl: '/' });
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="max-w-md space-y-6 text-center">
@@ -19,13 +24,14 @@ export default function MobileNoticePage() {
             We value your commitment to quality, just as we are committed to providing you with the best possible service.
           </p>
         </div>
-        <Link 
+        <a 
           href="/"
+          onClick={handleSignOut}
           className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80"
         >
           <ArrowLeft className="h-4 w-4" />
           Return to Homepage
-        </Link>
+        </a>
       </div>
     </div>
   );
