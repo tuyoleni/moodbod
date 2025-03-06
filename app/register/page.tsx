@@ -151,7 +151,7 @@ export default function Register() {
                         </div>
 
                         <Link
-                            href="mailto:simeon@moodbod.com"
+                            href="mailto:tuyoleni@moodbod.design"
                             className="flex items-center justify-center h-10 text-[13px] font-medium rounded-md text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors duration-200"
                         >
                             Get in Touch
