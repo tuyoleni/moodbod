@@ -14,7 +14,7 @@ export default function Header() {
 
             <div className="w-full h-screen flex justify-center items-center px-8 z-10 absolute top-0 left-0 text-white [mix-blend-mode:difference] ">
                 <div className="flex flex-col justify-between gap-20 max-w-[95vw] mt-28">
-                    <h1 className="text-[clamp(10rem,20vw,14.5rem)] font-black tracking-[-28px] leading-[0.75] flex flex-wrap">
+                    <h1 className="text-[clamp(9rem,20vw,14.5rem)] font-black tracking-[-28px] leading-[0.75] flex flex-wrap">
                         <span>MOOD</span>
                         <span>BOD</span>
                     </h1>
