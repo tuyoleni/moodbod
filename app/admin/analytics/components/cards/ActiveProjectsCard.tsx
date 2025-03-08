@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Activity } from 'lucide-react';
 import { fetchAllProjects } from '@/lib/services/projectService';
-import { ProjectStatus } from '@/lib/types';
+import { ServiceStatus } from '@/lib/types';
 import { metricCardStyles } from './MetricCardStyles';
 
 export function ActiveProjectsCard({ loading: initialLoading }: { loading?: boolean }) {
@@ -21,7 +21,7 @@ export function ActiveProjectsCard({ loading: initialLoading }: { loading?: bool
       setLoading(true);
       const projects = await fetchAllProjects();
       const active = projects.filter(
-        project => project.status === ProjectStatus.IN_PROGRESS
+        project => project.status === ServiceStatus.ANALYZING
       ).length;
       setActiveCount(active);
     } catch (error) {

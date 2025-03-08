@@ -1,7 +1,7 @@
-import { ProjectStatus, ProjectType } from '@/lib/types';
+import { ServiceStatus, ProjectType } from '@/lib/types';
 
-export const validateProjectStatus = (status: ProjectStatus): boolean => {
-    return Object.values(ProjectStatus).includes(status);
+export const validateProjectStatus = (status: ServiceStatus): boolean => {
+    return Object.values(ServiceStatus).includes(status);
 };
 
 export const validateProjectType = (type: ProjectType): boolean => {
