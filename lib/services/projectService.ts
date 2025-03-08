@@ -1,7 +1,7 @@
 import { collection, query, where, getDocs, addDoc, doc, serverTimestamp, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { validateFeatures } from '@/lib/utils/validation';
-import { Project, ProjectStatus } from '../types';
+import { Project, ServiceStatus } from '../types';
 
 const projectsRef = collection(db, 'projects');
 
@@ -56,7 +56,7 @@ export const createProject = async (projectData: Omit<Project, 'id'>): Promise<s
 
         const docRef = await addDoc(projectsRef, {
             ...projectData,
-            status: ProjectStatus.REQUESTED,
+            status: ServiceStatus.REQUEST,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
         });
@@ -82,7 +82,7 @@ export const updateProject = async (projectId: string, projectData: Partial<Proj
 
 export const updateProjectStatus = async (
     projectId: string, 
-    status: ProjectStatus,
+    status: ServiceStatus,
     projectData?: Partial<Project>
 ): Promise<void> => {
     try {

@@ -1,14 +1,22 @@
 import { Timestamp } from 'firebase/firestore';
-import { ServiceStatus } from './enums';
+import { FeedbackStatus, FeedbackType, ServiceStatus } from './enums';
 
 export interface Milestone {
-    id: string;
-    title: string;
+    id: ServiceStatus;
     description: string;
-    dueDate: Timestamp;
-    status: ServiceStatus;
     paymentRequired?: number;
     projectId: string;
-    updatedAt: any;
-    updatedBy: string;
+    createdAt: any;
+    feedback?: MilestoneFeedback[];
+    status: ServiceStatus;
+}
+
+export interface MilestoneFeedback {
+    id: string;
+    content: string;
+    createdAt: Timestamp;
+    createdBy: string;
+    type: FeedbackType;
+    status: FeedbackStatus;
+    revisionNumber?: number;
 }

@@ -5,12 +5,10 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchUsersByRole } from '@/lib/services/userService';
-import { getProjectMessages } from '@/lib/services/communicationService';
 import { fetchAllProjects } from '@/lib/services/projectService';
 import { format } from 'date-fns';
-import { convertToDate, getLocalTime } from '@/lib/utils/dateUtils';
 import { chartColors, commonChartOptions } from '@/lib/config/chartConfig';
-import { ProjectStatus, ServiceStatus } from '@/lib/types';
+import { ServiceStatus } from '@/lib/types';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -71,9 +69,9 @@ export function UserActivityChart({ loading: initialLoading }: { loading?: boole
         
         return projects.filter(project => {
           const updatedDate = project.updatedAt?.toDate();
-          const statusChanged = project.status !== ProjectStatus.REQUESTED;
+          const statusChanged = project.status !== ServiceStatus.REQUEST;
           const hasAdminResponse = project.milestones?.some(m => {
-            return m.status === ServiceStatus.ACTIVE;
+            return m.id === ServiceStatus.DEVELOPMENT;
           });
           
           return updatedDate && 

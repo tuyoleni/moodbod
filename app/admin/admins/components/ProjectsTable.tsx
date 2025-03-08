@@ -1,12 +1,12 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Project, ProjectStatus } from '@/lib/types';
+import { Project, ServiceStatus } from '@/lib/types';
 import { format } from 'date-fns';
 
 interface ProjectsTableProps {
     projects: Project[];
-    onStatusUpdate: (projectId: string, status: ProjectStatus) => void;
+    onStatusUpdate: (projectId: string, status: ServiceStatus) => void;
 }
 
 export function ProjectsTable({ projects, onStatusUpdate }: ProjectsTableProps) {
@@ -30,9 +30,9 @@ export function ProjectsTable({ projects, onStatusUpdate }: ProjectsTableProps) 
                         <TableCell>{project.type}</TableCell>
                         <TableCell>
                             <Badge variant={
-                                project.status === ProjectStatus.ACTIVE ? 'default' :
-                                project.status === ProjectStatus.REQUESTED ? 'secondary' :
-                                project.status === ProjectStatus.COMPLETED ? 'outline' :
+                                project.status === ServiceStatus.DEVELOPMENT ? 'default' :
+                                project.status === ServiceStatus.REQUEST ? 'secondary' :
+                                project.status === ServiceStatus.COMPLETED ? 'outline' :
                                 'destructive'
                             }>
                                 {project.status}
@@ -43,27 +43,27 @@ export function ProjectsTable({ projects, onStatusUpdate }: ProjectsTableProps) 
                         </TableCell>
                         <TableCell>
                             <div className="space-x-2">
-                                {project.status === ProjectStatus.REQUESTED && (
+                                {project.status === ServiceStatus.REQUEST && (
                                     <>
                                         <Button
                                             size="sm"
-                                            onClick={() => onStatusUpdate(project.id, ProjectStatus.ACTIVE)}
+                                            onClick={() => onStatusUpdate(project.id, ServiceStatus.DEVELOPMENT)}
                                         >
                                             Approve
                                         </Button>
                                         <Button
                                             size="sm"
                                             variant="destructive"
-                                            onClick={() => onStatusUpdate(project.id, ProjectStatus.REJECTED)}
+                                            onClick={() => onStatusUpdate(project.id, ServiceStatus.REJECTED)}
                                         >
                                             Reject
                                         </Button>
                                     </>
                                 )}
-                                {project.status === ProjectStatus.ACTIVE && (
+                                {project.status === ServiceStatus.DEVELOPMENT && (
                                     <Button
                                         size="sm"
-                                        onClick={() => onStatusUpdate(project.id, ProjectStatus.COMPLETED)}
+                                        onClick={() => onStatusUpdate(project.id, ServiceStatus.COMPLETED)}
                                     >
                                         Mark Complete
                                     </Button>

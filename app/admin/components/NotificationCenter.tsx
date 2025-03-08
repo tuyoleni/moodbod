@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ProjectStatus, ServiceStatus } from '@/lib/types/enums';
+import { ServiceStatus } from '@/lib/types/enums';
 import { Project } from '@/lib/types/project';
 import { fetchAllProjects, updateProject } from '@/lib/services/projectService';
 import { toast } from 'sonner';
@@ -26,16 +26,16 @@ export function NotificationCenter() {
             const projects = await fetchAllProjects();
             const pendingProjects = projects.filter(project => {
                 // Filter for new project requests
-                const isNewRequest = project.status === ProjectStatus.REQUESTED;
+                const isNewRequest = project.status === ServiceStatus.REQUEST;
                 
                 // Filter for projects with pending service additions
                 const hasPendingServices = project.additionalServices?.some(
-                    service => service.status === ServiceStatus.PENDING
+                    service => service.status === ServiceStatus.REQUEST
                 );
 
                 // Filter for projects with recent updates
                 const hasRecentUpdates = project.updatedAt && 
-                    (new Date().getTime() - project.updatedAt.toDate().getTime()) < 24 * 60 * 60 * 1000; // Within last 24 hours
+                    (new Date().getTime() - project.updatedAt.toDate().getTime()) < 24 * 60 * 60 * 1000;
 
                 return isNewRequest || hasPendingServices || hasRecentUpdates;
             });
@@ -52,7 +52,7 @@ export function NotificationCenter() {
     const handleApprove = async (project: Project) => {
         try {
             const projectUpdate = {
-                status: ProjectStatus.IN_PROGRESS
+                status: ServiceStatus.DEVELOPMENT
             };
             await updateProject(project.id, projectUpdate);
             toast.success('Project approved successfully');
@@ -66,7 +66,7 @@ export function NotificationCenter() {
     const handleReject = async (project: Project) => {
         try {
             const projectUpdate = {
-                status: ProjectStatus.REJECTED
+                status: ServiceStatus.REJECTED
             };
             await updateProject(project.id, projectUpdate);
             toast.success('Project rejected');
@@ -100,7 +100,7 @@ export function NotificationCenter() {
                                 <div className="flex items-center justify-between">
                                     <h3 className="font-semibold">{project.name}</h3>
                                     <Badge
-                                        variant={project.status === ProjectStatus.REQUESTED ? 'default' : 'secondary'}
+                                        variant={project.status === ServiceStatus.REQUEST ? 'default' : 'secondary'}
                                     >
                                         {project.status}
                                     </Badge>
@@ -110,7 +110,7 @@ export function NotificationCenter() {
                                     <p className="text-sm">Client: {project.userId}</p>
                                     <p className="text-sm">Type: {project.type}</p>
                                 </div>
-                                {project.status === ProjectStatus.REQUESTED && (
+                                {project.status === ServiceStatus.REQUEST && (
                                     <div className="flex items-center space-x-2 mt-2">
                                         <Button
                                             size="sm"

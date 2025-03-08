@@ -31,7 +31,7 @@ const ServicesTab: React.FC<ServicesTabProps> = ({ services: initialServices }) 
       await removeProjectService(serviceId);
       setServices(services.map(service => 
         service.id === serviceId 
-          ? { ...service, status: ServiceStatus.REMOVED } 
+          ? { ...service, status: ServiceStatus.REJECTED } 
           : service
       ));
       toast.success('Service removal requested');
@@ -59,7 +59,7 @@ const ServicesTab: React.FC<ServicesTabProps> = ({ services: initialServices }) 
       await requestServiceAddition(service.projectId || '', serviceData);
       setServices(prevServices => [
         ...prevServices,
-        { ...service, status: ServiceStatus.PENDING }
+        { ...service, status: ServiceStatus.REQUEST }
       ]);
       toast.success('Service request submitted');
     } catch (error) {
@@ -67,7 +67,7 @@ const ServicesTab: React.FC<ServicesTabProps> = ({ services: initialServices }) 
     }
   };
 
-  const currentServices = services.filter(service => service.status !== ServiceStatus.REMOVED);
+  const currentServices = services.filter(service => service.status !== ServiceStatus.REJECTED);
   const availableServices = additionalServices.filter(service => 
     !services.some(currentService => currentService.id === service.id)
   );
@@ -128,8 +128,8 @@ const ServicesTab: React.FC<ServicesTabProps> = ({ services: initialServices }) 
                   <TableCell>${((service.price || 0) * (service.quantity || 1)).toLocaleString()}</TableCell>
                   <TableCell>
                     <Badge variant={
-                      service.status === ServiceStatus.ACTIVE ? 'default' :
-                      service.status === ServiceStatus.PENDING ? 'secondary' :
+                      service.status === ServiceStatus.REVIEW ? 'default' :
+                      service.status === ServiceStatus.ANALYZING ? 'secondary' :
                       service.status === ServiceStatus.PAYMENT_PENDING ? 'warning' :
                       'destructive'
                     }>
@@ -137,7 +137,7 @@ const ServicesTab: React.FC<ServicesTabProps> = ({ services: initialServices }) 
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {service.status !== ServiceStatus.REMOVED && (
+                    {service.status !== ServiceStatus.REJECTED && (
                       <Button
                         variant="ghost"
                         size="sm"

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Project } from '@/lib/types/project';
-import { ProjectStatus } from '@/lib/types';
+import { ServiceStatus } from '@/lib/types';
 import { updateProject } from '@/lib/services/projectService';
 import { toast } from 'sonner';
 import {
@@ -31,7 +31,7 @@ export default function ProjectsTable({ projects: initialProjects }: ProjectsTab
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const handleStatusChange = async (projectId: string, newStatus: ProjectStatus) => {
+    const handleStatusChange = async (projectId: string, newStatus: ServiceStatus) => {
         setLoading(true);
         try {
             const projectToUpdate = projects.find(p => p.id === projectId);

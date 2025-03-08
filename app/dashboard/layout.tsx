@@ -10,7 +10,7 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout(props: DashboardLayoutProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
 
   return (
     <div className="flex min-h-screen">

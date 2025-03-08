@@ -5,7 +5,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchAllProjects } from '@/lib/services/projectService';
-import { ProjectStatus } from '@/lib/types';
+import { ServiceStatus } from '@/lib/types';
 import { chartColors, commonChartOptions, pieChartOptions } from '@/lib/config/chartConfig';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -22,7 +22,7 @@ export function ProjectStatusChart({ loading: initialLoading }: { loading?: bool
     try {
       setLoading(true);
       const projects = await fetchAllProjects();
-      const statusCounts = Object.values(ProjectStatus).reduce((acc, status) => {
+      const statusCounts = Object.values(ServiceStatus).reduce((acc, status) => {
         acc[status] = projects.filter(project => project.status === status).length;
         return acc;
       }, {} as Record<string, number>);

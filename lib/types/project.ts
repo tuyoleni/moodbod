@@ -1,5 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
-import { ProjectType, ProjectStatus } from './enums';
+import { ProjectType, ServiceStatus } from './enums';
 import { BaseFeatures, EcommerceFeatures, MarketingFeatures, BrandingFeatures, MaintenanceFeatures } from './features';
 import { Service } from './service';
 import { Feedback, Message } from './communication';
@@ -14,7 +14,7 @@ export interface Project {
     name: string;
     description: string;
     type: ProjectType;
-    status: ProjectStatus;
+    status: ServiceStatus;
     userId: string;
     user?: User;
 

@@ -11,7 +11,7 @@ import { useProjectForm } from '@/lib/hooks/useProjectForm';
 import { BasicInformation, PackageSelection, ServiceSelection } from './form';
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Project, ProjectStatus, ProjectType } from '@/lib/types';
+import { Project, ServiceStatus, ProjectType } from '@/lib/types';
 
 const steps = [
   { id: 'basic', title: 'Basic Information' },
@@ -57,7 +57,7 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
         description: formData.description || '',
         type: ProjectType.WEBSITE,
         totalCost: calculateTotalPrice(),
-        status: ProjectStatus.REQUESTED,
+        status: ServiceStatus.REQUEST,
         startDate: Timestamp.fromDate(new Date()),
         endDate: Timestamp.fromDate(new Date()),
         createdAt: Timestamp.now(),

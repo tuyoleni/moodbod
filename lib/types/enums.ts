@@ -1,13 +1,3 @@
-export enum ProjectStatus {
-    PAYMENT_PENDING = 'payment pending',
-    REQUESTED = 'requested',
-    IN_PROGRESS = 'in progress',
-    IN_REVIEW = 'in review',
-    COMPLETED = 'completed',
-    ACTIVE = "activate",
-    REJECTED = "rejected"
-}
-
 export enum PaymentMethod {
     BANK_TRANSFER = 'bank transfer',
     CREDIT_CARD = 'credit card',
@@ -15,14 +5,15 @@ export enum PaymentMethod {
 }
 
 export enum ServiceStatus {
-    PENDING = 'pending',
+    REQUEST = 'request',
+    ANALYZING = 'analyzing',
     PAYMENT_PENDING = 'payment pending',
-    APPROVED = 'approved',
-    REJECTED = 'rejected',
-    ACTIVE = 'active',
-    IN_PROGRESS = 'in progress',
+    PLANNING = 'planning',
+    DEVELOPMENT = 'development',
+    REVIEW = 'review',
+    TESTING = 'testing',
     COMPLETED = 'completed',
-    REMOVED = 'removed'
+    REJECTED = 'rejected'
 }
 
 export enum FeedbackType {

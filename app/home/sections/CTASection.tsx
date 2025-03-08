@@ -24,7 +24,7 @@ export const CTASection = memo(({ onVisibilityChange }: Props) => {
         >
             <div className="flex flex-col">
                 <div className="relative leading-none">
-                    <h1 className="text-[clamp(80px,12vw,200pt)]  text-wrap font-black block leading-[0.85] uppercase">
+                    <h1 className="text-[1000%]  text-wrap font-black block leading-[0.85] uppercase">
                         Let&apos;s hear your idea.
                     </h1>
                 </div>

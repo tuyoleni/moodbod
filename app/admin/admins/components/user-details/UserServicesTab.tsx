@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { Project } from '@/lib/types/project';
 import { Service } from '@/lib/types/service';
+import { ServiceStatus } from '@/lib/types/enums';
 
 interface UserServicesTabProps {
     projects: Project[];
@@ -34,8 +35,8 @@ export function UserServicesTab({ projects, services }: UserServicesTabProps) {
                                         <TableCell>{service.name}</TableCell>
                                         <TableCell>
                                             <Badge variant={
-                                                service.status === 'active' ? 'default' :
-                                                service.status === 'pending' ? 'secondary' :
+                                                service.status === ServiceStatus.DEVELOPMENT ? 'default' :
+                                                service.status === ServiceStatus.REQUEST ? 'secondary' :
                                                 'destructive'
                                             }>
                                                 {service.status}

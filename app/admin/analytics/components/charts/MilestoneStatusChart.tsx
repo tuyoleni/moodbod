@@ -31,18 +31,31 @@ export function MilestoneStatusChart({ loading: initialLoading }: { loading?: bo
       );
 
       const statusCounts = milestones.flat().reduce((acc, milestone) => {
-        acc[milestone.status] = (acc[milestone.status] || 0) + 1;
+        const status = milestone.status || ServiceStatus.REQUEST;
+        acc[status] = (acc[status] || 0) + 1;
         return acc;
       }, {} as Record<string, number>);
 
       const labels = Object.keys(statusCounts).map(status => {
         switch (status) {
-          case ServiceStatus.ACTIVE:
+          case ServiceStatus.COMPLETED:
             return 'Completed';
-          case ServiceStatus.PENDING:
+          case ServiceStatus.DEVELOPMENT:
             return 'In Progress';
           case ServiceStatus.REJECTED:
             return 'Blocked';
+          case ServiceStatus.REQUEST:
+            return 'Requested';
+          case ServiceStatus.ANALYZING:
+            return 'Analyzing';
+          case ServiceStatus.PAYMENT_PENDING:
+            return 'Payment Pending';
+          case ServiceStatus.PLANNING:
+            return 'Planning';
+          case ServiceStatus.REVIEW:
+            return 'Review';
+          case ServiceStatus.TESTING:
+            return 'Testing';
           default:
             return status;
         }

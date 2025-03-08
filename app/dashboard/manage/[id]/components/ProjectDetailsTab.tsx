@@ -1,4 +1,4 @@
-import { Project } from '@/lib/types';
+import { Project, ServiceStatus } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { projectTypes } from '@/lib/data/projectTypes';
@@ -13,11 +13,39 @@ interface ProjectDetailsProps {
 
 const ProjectDetailsTab: React.FC<ProjectDetailsProps> = ({ project, onServiceClick }) => {
   const projectType = projectTypes.find(type => type.id === project.type);
-  const completedMilestones = project.milestones?.filter(m => m.status === 'completed').length || 0;
+  
+  // Define milestone stages in order
+  const milestoneStages = [
+    ServiceStatus.REQUEST,
+    ServiceStatus.ANALYZING,
+    ServiceStatus.PAYMENT_PENDING,
+    ServiceStatus.PLANNING,
+    ServiceStatus.DEVELOPMENT,
+    ServiceStatus.REVIEW,
+    ServiceStatus.TESTING,
+    ServiceStatus.COMPLETED
+  ];
+  // Calculate milestone progress based on current stage
+  const completedMilestones = project.milestones?.length || 0;
   const totalMilestones = project.milestones?.length || 0;
-  const progressPercentage = totalMilestones ? (completedMilestones / totalMilestones) * 100 : 0;
-  const paidAmount = project.payments?.reduce((sum, payment) => sum + payment.amount, 0) || 0;
-  const paymentProgress = (paidAmount / project.totalCost) * 100;
+
+  // Find the current active milestone (non-completed)
+  const currentMilestone = project.milestones?.[0] || null;
+  
+  const completedStages = completedMilestones;
+  const totalStages = totalMilestones;
+  const progressPercentage = totalStages > 0 ? (completedStages / totalStages) * 100 : 0;
+  
+  // Get current stage status
+  const currentStage = currentMilestone
+    ? currentMilestone.status
+    : completedMilestones === totalMilestones && totalMilestones > 0
+    ? 'All completed'
+    : 'No milestones';
+  
+  // Calculate payment progress
+  const paidAmount = project.payments?.reduce((sum, payment) => sum + (payment.amount || 0), 0) || 0;
+  const paymentProgress = project.totalCost > 0 ? (paidAmount / project.totalCost) * 100 : 0;
 
   const renderFeaturesList = (features: any) => {
     return (
@@ -65,11 +93,11 @@ const ProjectDetailsTab: React.FC<ProjectDetailsProps> = ({ project, onServiceCl
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-4">
               <CheckCircle2 className="h-4 w-4 text-primary" />
-              <div className="font-medium">Milestones</div>
+              <div className="font-medium">Milestones Progress</div>
             </div>
             <div className="space-y-2">
-              <div className="text-2xl font-semibold">{completedMilestones}/{totalMilestones}</div>
-              <p className="text-sm text-muted-foreground">Completed milestones</p>
+              <div className="text-2xl font-semibold">{completedStages}/{totalStages}</div>
+              <p className="text-sm text-muted-foreground">Current Stage: {currentStage}</p>
             </div>
           </CardContent>
         </Card>

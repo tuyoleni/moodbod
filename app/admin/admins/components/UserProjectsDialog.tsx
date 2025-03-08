@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { User } from "@/lib/types/user";
-import { ProjectStatus } from "@/lib/types";
+import { ServiceStatus } from "@/lib/types";
 
 interface UserProjectsDialogProps {
     user: User | null;
@@ -39,9 +39,9 @@ export function UserProjectsDialog({ user, open, onOpenChange }: UserProjectsDia
                                     <TableCell>{project.type}</TableCell>
                                     <TableCell>
                                         <Badge variant={
-                                            project.status === ProjectStatus.ACTIVE ? 'default' :
-                                            project.status === ProjectStatus.REQUESTED ? 'secondary' :
-                                            project.status === ProjectStatus.COMPLETED ? 'outline' :
+                                            project.status === ServiceStatus.DEVELOPMENT ? 'default' :
+                                            project.status === ServiceStatus.REQUEST ? 'secondary' :
+                                            project.status === ServiceStatus.COMPLETED ? 'outline' :
                                             'destructive'
                                         }>
                                             {project.status}

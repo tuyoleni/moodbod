@@ -74,7 +74,7 @@ export function MilestoneCompletionChart({ loading: initialLoading }: MilestoneC
     projectMilestones.forEach(({ project, milestones }) => {
       if (milestones.length > 0) {
         const completedMilestones = milestones.filter(
-          milestone => milestone.status === ServiceStatus.ACTIVE
+          milestone => milestone.status === ServiceStatus.COMPLETED
         ).length;
         const completionRate = (completedMilestones / milestones.length) * 100;
         const pendingRate = 100 - completionRate;

@@ -1,4 +1,4 @@
-import { ProjectType, ProjectStatus } from '../types/enums';
+import { ProjectType, ServiceStatus } from '../types/enums';
 
 export const initialFeatures = {
   pages: 0,
@@ -14,7 +14,7 @@ export const initialProjectFormState = {
   name: '',
   description: '',
   type: ProjectType.WEBSITE,
-  status: ProjectStatus.REQUESTED,
+  status: ServiceStatus.REQUEST,
   userId: '',
   package: {
     id: '',

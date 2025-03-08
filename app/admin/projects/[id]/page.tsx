@@ -5,17 +5,18 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { MilestoneManagement } from '../components/MilestoneManagement';
 import { ServiceManagement } from '../components/ServiceManagement';
-import { Project, ProjectStatus } from '@/lib/types';
+import { Project, ServiceStatus } from '@/lib/types';
 import { getProjectById, updateProjectStatus } from '@/lib/services/projectService';
+import { createMilestone } from '@/lib/services/milestoneService';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { serverTimestamp } from 'firebase/firestore';
 
-// Fix the params type to match Next.js 13+ App Router expectations
 export default function ProjectDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-    const resolvedParams = use(params); // Unwrap the params using use()
+    const resolvedParams = use(params);
     const router = useRouter();
     const searchParams = useSearchParams();
     const [project, setProject] = useState<Project | null>(null);
@@ -29,7 +30,7 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
         if (statusChanged === 'true' && activeTab === 'milestones') {
             toast.info('Project status has been updated. Please update the milestones accordingly.');
         }
-    }, [resolvedParams.id, searchParams]); // Use resolvedParams.id instead of params.id
+    }, [resolvedParams.id, searchParams]);
 
     const fetchProject = async () => {
         try {
@@ -43,16 +44,70 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
         }
     };
 
-    const handleStatusChange = async (newStatus: ProjectStatus) => {
+    const handleStatusChange = async (newStatus: ServiceStatus) => {
         if (!project) return;
-
+    
         try {
             await updateProjectStatus(project.id, newStatus);
+            
+            // Create milestone based on the new status
+            const milestone = {
+                projectId: project.id,
+                title: `${newStatus} Phase`,
+                description: getStatusDescription(newStatus),
+                paymentRequired: calculatePaymentForStatus(newStatus, project.totalCost),
+                status: newStatus,
+                updatedAt: serverTimestamp(),
+                updatedBy: 'system',
+                revisionsAllowed: 2,
+                revisionsUsed: 0,
+                feedback: []
+            };
+    
+            await createMilestone({
+                ...milestone,
+                createdAt: serverTimestamp()
+            });
             setProject({ ...project, status: newStatus });
-            toast.success('Project status updated successfully');
+            toast.success('Project status and milestone updated successfully');
+            
+            router.push(`/admin/projects/${project.id}?statusChanged=true&tab=milestones`);
         } catch (error) {
             console.error('Error updating project:', error);
             toast.error('Failed to update project status');
+        }
+    };
+    
+    const getStatusDescription = (status: ServiceStatus) => {
+        const clientName = project?.user?.name || project?.userId || 'Client';
+        switch (status) {
+            case ServiceStatus.REQUEST:
+                return `Dear ${clientName}, Thank you for submitting your project "${project?.name}". We will review your request shortly.`;
+            case ServiceStatus.ANALYZING:
+                return `Dear ${clientName}, We are currently analyzing your project "${project?.name}" requirements and will provide feedback soon.`;
+            case ServiceStatus.PAYMENT_PENDING:
+                return `Dear ${clientName}, We have reviewed your project "${project?.name}", and we require a 30% deposit to begin working on the project. Please check your dashboard for payment details.`;
+            case ServiceStatus.PLANNING:
+                return `Dear ${clientName}, We are now planning the development approach for "${project?.name}". We will keep you updated on our progress.`;
+            case ServiceStatus.DEVELOPMENT:
+                return `Project "${project?.name}" has entered the development phase. Our team is now working on implementing the requested features.`;
+            case ServiceStatus.REVIEW:
+                return `Dear ${clientName}, We have completed a development milestone for "${project?.name}" and are currently reviewing it. We will update you on the progress through your dashboard.`;
+            case ServiceStatus.TESTING:
+                return `Project "${project?.name}" is now in the testing phase. We are conducting thorough testing to ensure quality.`;
+            case ServiceStatus.COMPLETED:
+                return `Congratulations! Project "${project?.name}" has been completed. Please review the final deliverables in your dashboard.`;
+            default:
+                return `Project "${project?.name}" has entered the ${status.toLowerCase()} phase.`;
+        }
+    };
+    
+    const calculatePaymentForStatus = (status: ServiceStatus, totalCost: number) => {
+        switch (status) {
+            case ServiceStatus.PAYMENT_PENDING:
+                return totalCost * 0.3; // 30% deposit
+            default:
+                return 0;
         }
     };
 
@@ -74,11 +129,10 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
             </div>
 
             <Tabs defaultValue="details" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="details">Details</TabsTrigger>
-                    <TabsTrigger value="management">Management</TabsTrigger>
+                    <TabsTrigger value="project-management">Project Management</TabsTrigger>
                     <TabsTrigger value="services">Services</TabsTrigger>
-                    <TabsTrigger value="milestones">Milestones</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="details" className="space-y-4">
@@ -133,23 +187,23 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
                     </Card>
                 </TabsContent>
 
-                <TabsContent value="management" className="space-y-4">
+                <TabsContent value="project-management" className="space-y-4">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Project Management</CardTitle>
+                            <CardTitle>Project Status</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="space-y-2">
                                 <h3 className="font-semibold">Current Status</h3>
                                 <Select
                                     value={project.status}
-                                    onValueChange={(value) => handleStatusChange(value as ProjectStatus)}
+                                    onValueChange={(value) => handleStatusChange(value as ServiceStatus)}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select status" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {Object.values(ProjectStatus).map((status) => (
+                                        {Object.values(ServiceStatus).map((status) => (
                                             <SelectItem key={status} value={status}>
                                                 {status}
                                             </SelectItem>
@@ -159,6 +213,7 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
                             </div>
                         </CardContent>
                     </Card>
+                    <MilestoneManagement projectId={resolvedParams.id} />
                 </TabsContent>
 
                 <TabsContent value="services" className="space-y-4">
@@ -169,10 +224,6 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
                             projectType: project.type
                         }}
                     />
-                </TabsContent>
-
-                <TabsContent value="milestones" className="space-y-4">
-                    <MilestoneManagement projectId={resolvedParams.id} />
                 </TabsContent>
             </Tabs>
         </div>

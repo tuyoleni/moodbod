@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import { Project, ProjectStatus } from "@/lib/types";
+import { Project, ServiceStatus } from "@/lib/types";
 
 interface UserProjectsTabProps {
     projects: Project[];
@@ -27,9 +27,9 @@ export function UserProjectsTab({ projects }: UserProjectsTabProps) {
                                 <TableCell>{project.type}</TableCell>
                                 <TableCell>
                                     <Badge variant={
-                                        project.status === ProjectStatus.IN_REVIEW ? 'default' :
-                                        project.status === ProjectStatus.REQUESTED ? 'secondary' :
-                                        project.status === ProjectStatus.COMPLETED ? 'outline' :
+                                        project.status === ServiceStatus.REVIEW ? 'default' :
+                                        project.status === ServiceStatus.REQUEST ? 'secondary' :
+                                        project.status === ServiceStatus.COMPLETED ? 'outline' :
                                         'destructive'
                                     }>
                                         {project.status}

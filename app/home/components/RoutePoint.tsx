@@ -24,8 +24,8 @@ export function RoutePoint({ x, y, label, onHover, onLeave, isActive = false, on
                 </div>
             )}
             <motion.div
-                className="absolute w-8 h-8 rounded-full cursor-pointer hover:scale-125 transition-transform group"
-                style={{ left: x - 16, top: y - 16 }}
+                className="absolute w-4 h-4 rounded-full cursor-pointer hover:scale-125 transition-transform"
+                style={{ left: x - 8, top: y - 8 }}
                 initial={{ scale: 0 }}
                 animate={{ scale: isActive ? 1.25 : 1 }}
                 exit={{ scale: 0 }}
@@ -42,8 +42,7 @@ export function RoutePoint({ x, y, label, onHover, onLeave, isActive = false, on
                 title="Tap to learn more"
                 aria-label="Tap to learn more"
             >
-                <div className={`absolute inset-0 bg-gray-100 rounded-full ${isFirst ? 'animate-pulse' : ''}`} />
-                <div className="absolute inset-[10px] bg-black rounded-full" />
+                <div className={`absolute inset-0 bg-black rounded-full ${isFirst ? 'animate-pulse' : ''}`} />
             </motion.div>
             {showLabel && (
                 <motion.div
