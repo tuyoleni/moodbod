@@ -53,8 +53,11 @@ const validateMilestoneTransition = (currentStatus: ServiceStatus, newStatus: Se
         [ServiceStatus.DEVELOPMENT]: [ServiceStatus.REVIEW, ServiceStatus.REJECTED],
         [ServiceStatus.REVIEW]: [ServiceStatus.TESTING, ServiceStatus.DEVELOPMENT, ServiceStatus.REJECTED],
         [ServiceStatus.TESTING]: [ServiceStatus.COMPLETED, ServiceStatus.DEVELOPMENT, ServiceStatus.REJECTED],
-        [ServiceStatus.COMPLETED]: [], // No transitions from completed
+        [ServiceStatus.COMPLETED]: [],
         [ServiceStatus.REJECTED]: [ServiceStatus.REQUEST] // Allow restart from rejected
+        ,
+        [ServiceStatus.REMOVED]: [],
+        [ServiceStatus.APPROVED]: []
     };
 
     return validTransitions[currentStatus]?.includes(newStatus) || false;

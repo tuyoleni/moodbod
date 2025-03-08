@@ -9,7 +9,7 @@ export const requestServiceAddition = async (projectId: string, serviceData: Omi
         const docRef = await addDoc(projectServicesRef, {
             ...serviceData,
             projectId,
-            status: ServiceStatus.PENDING,
+            status: ServiceStatus.REQUEST,
             requestedAt: serverTimestamp(),
             updatedAt: serverTimestamp()
         });
@@ -24,7 +24,7 @@ export const getServiceRequests = async (projectId?: string): Promise<Service[]>
     try {
         let q = query(
             projectServicesRef,
-            where('status', '==', ServiceStatus.PENDING)
+            where('status', '==', ServiceStatus.REQUEST)
         );
 
         if (projectId) {
@@ -46,7 +46,7 @@ export const approveServiceRequest = async (serviceId: string): Promise<void> =>
     try {
         const serviceRef = doc(projectServicesRef, serviceId);
         await updateDoc(serviceRef, {
-            status: ServiceStatus.ACTIVE,
+            status: ServiceStatus.APPROVED,
             approvedAt: serverTimestamp(),
             updatedAt: serverTimestamp()
         });

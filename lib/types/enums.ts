@@ -13,7 +13,9 @@ export enum ServiceStatus {
     REVIEW = 'review',
     TESTING = 'testing',
     COMPLETED = 'completed',
-    REJECTED = 'rejected'
+    REJECTED = 'rejected',
+    REMOVED = 'removed',
+    APPROVED='approved'
 }
 
 export enum FeedbackType {
