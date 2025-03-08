@@ -64,7 +64,7 @@ export const additionalServices: Service[] = [
         category: 'website',
         description: 'Add an extra page to your website with custom content.',
         price: 500,
-        status: ServiceStatus.PENDING
+        status: ServiceStatus.REQUEST
     },
     {
         id: 'seo-package',
@@ -72,7 +72,7 @@ export const additionalServices: Service[] = [
         category: 'marketing',
         description: 'Comprehensive keyword research and optimization to improve your search rankings.',
         price: 1500,
-        status: ServiceStatus.PENDING
+        status: ServiceStatus.REQUEST
     },
     {
         id: 'branding-package',
@@ -80,7 +80,7 @@ export const additionalServices: Service[] = [
         category: 'branding',
         description: 'Complete brand identity design including logo and brand guidelines.',
         price: 2000,
-        status: ServiceStatus.PENDING
+        status: ServiceStatus.REQUEST
     },
     {
         id: 'maintenance-package',
@@ -88,7 +88,7 @@ export const additionalServices: Service[] = [
         category: 'maintenance',
         description: 'Keep your website secure and up-to-date with regular maintenance.',
         price: 200,
-        status: ServiceStatus.PENDING
+        status: ServiceStatus.REQUEST
     },
     {
         id: 'extra-products',
@@ -96,6 +96,6 @@ export const additionalServices: Service[] = [
         category: 'ecommerce',
         description: 'Add more product listings to your e-commerce website.',
         price: 300,
-        status: ServiceStatus.PENDING
+        status: ServiceStatus.REQUEST
     }
 ];
