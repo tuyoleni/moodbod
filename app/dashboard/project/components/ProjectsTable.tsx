@@ -14,15 +14,14 @@ import { fetchUserProjects } from '@/lib/services/projectService';
 import { Project } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/lib/utils/dateUtils';
-import { Timestamp } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useRouter } from 'next/navigation'; // Updated import
+import { useRouter } from 'next/navigation';
 
 export function ProjectsTable() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const { session } = useAuth();
-  const router = useRouter(); // Hook usage remains the same
+  const router = useRouter();
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -48,11 +47,11 @@ export function ProjectsTable() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
+              <TableHead>Description</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Created</TableHead>
               <TableHead className="text-right">Total Cost</TableHead>
-              <TableHead>Description</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -88,26 +87,25 @@ export function ProjectsTable() {
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
+            <TableHead>Description</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Created</TableHead>
             <TableHead className="text-right">Total Cost</TableHead>
-            <TableHead>Description</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {projects.map((project) => {
             let formattedDate = 'Invalid Date';
-            if (project.createdAt instanceof Timestamp) {
-              const date = project.createdAt.toDate();
-              if (!isNaN(date.getTime())) {
-                formattedDate = formatDate(date);
-              }
+            const date = project.createdAt.toDate();
+            if (!isNaN(date.getTime())) {
+              formattedDate = formatDate(date);
             }
             return (
               <TableRow key={project.id}>
                 <TableCell className="font-medium">{project.name}</TableCell>
+                <TableCell>{project.description}</TableCell>
                 <TableCell className="capitalize">{project.type}</TableCell>
                 <TableCell>
                   <Badge variant="outline" className="capitalize">
@@ -118,7 +116,6 @@ export function ProjectsTable() {
                 <TableCell className="text-right">
                   ${project.totalCost.toLocaleString()}
                 </TableCell>
-                <TableCell>{project.description}</TableCell>
                 <TableCell>
                   <button
                     className="btn-action"
