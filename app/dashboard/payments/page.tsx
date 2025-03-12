@@ -120,7 +120,7 @@ export default function PaymentsPage() {
                   </TableCell>
                   <TableCell>{formatAmount(project.package.price)}</TableCell>
                   <TableCell>
-                    <Badge variant={project.payments?.some(p => p.status === 'completed') ? 'success' : 'warning'}>
+                    <Badge variant={project.payments?.some(p => p.status === 'completed') ? 'secondary' : 'warning'}>
                       {project.payments?.some(p => p.status === 'completed') ? 'Paid' : 'Pending'}
                     </Badge>
                   </TableCell>
