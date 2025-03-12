@@ -4,9 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { Milestone, ServiceStatus } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle2, Clock, PartyPopper } from 'lucide-react';
+import { CheckCircle2, Clock } from 'lucide-react';
 import { getProjectMilestones } from '@/lib/services/milestoneService';
 import { useParams } from 'next/navigation';
+import { useCurrency } from '@/lib/context/CurrencyContext';
 
 interface ProjectStage {
   id: ServiceStatus;
@@ -32,6 +33,7 @@ const MilestoneProgress: React.FC<MilestoneProgressProps> = ({ milestones: initi
   const params = useParams();
   const [milestones, setMilestones] = useState<Milestone[]>(initialMilestones);
   const [loading, setLoading] = useState(false);
+  const { formatAmount } = useCurrency();
 
   useEffect(() => {
     const fetchMilestones = async () => {
@@ -114,7 +116,9 @@ const MilestoneProgress: React.FC<MilestoneProgressProps> = ({ milestones: initi
                         {milestone.paymentRequired && milestone.paymentRequired > 0 && (
                           <div className="flex items-center gap-2 text-sm">
                             <span className="text-muted-foreground">Payment Required:</span>
-                            <span className="font-medium">${milestone.paymentRequired.toLocaleString()}</span>
+                            <span className="font-medium">
+                              {formatAmount(milestone.paymentRequired)}
+                            </span>
                           </div>
                         )}
                       </div>

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
-import { Analytics } from '@vercel/analytics/next';
 import { Providers } from './providers';
 import { Toaster } from 'sonner';
+import { cn } from '@/lib/utils';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -135,15 +135,24 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import '../styles/globals.css';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-    return (
-        <html lang="en">
-            <body>
-                <Providers>
-                    {children}
-                    <Toaster />
-                </Providers>
-            </body>
-        </html>
-    );
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn(
+        'antialiased',
+        'min-h-screen'
+      )}
+    >
+      <head />
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
 }

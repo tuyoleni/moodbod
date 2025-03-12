@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { getProjectById } from '@/lib/services/projectService';
-import { getProjectServices } from '@/lib/services/serviceManagementService';
+import { getProjectServices, getServiceRequests } from '@/lib/services/serviceManagementService';
 import { getProjectMilestones } from '@/lib/services/milestoneService';
 import { Project, Service, Milestone } from '@/lib/types';
 import ProjectTabs from './components/ProjectTabs';
@@ -22,12 +22,15 @@ export default function ManageProject() {
     const loadProjectData = async () => {
       if (id) {
         try {
-          const projectData = await getProjectById(id);
-          const projectMilestones = await getProjectMilestones(id);
-          const projectServices = await getProjectServices(id);
+          const [projectData, projectMilestones, projectServices, serviceRequests] = await Promise.all([
+            getProjectById(id),
+            getProjectMilestones(id),
+            getProjectServices(id),
+            getServiceRequests(id)
+          ]);
           setProject(projectData);
           setMilestones(projectMilestones);
-          setServices(projectServices);
+          setServices([...projectServices, ...serviceRequests]);
         } catch (error) {
           console.error('Error loading project data:', error);
         } finally {

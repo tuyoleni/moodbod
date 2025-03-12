@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
@@ -5,6 +7,7 @@ import { LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Logo from '../Logo';
+import CurrencySelector from '../CurrencySelector';
 import type { NavSection } from './config';
 
 interface NavItemProps {
@@ -44,10 +47,11 @@ interface SidebarProps {
   currentPath: string;
 }
 
+
 export default function Sidebar({ sections = [], currentPath = '/' }: SidebarProps) {
   return (
     <div className="flex h-full flex-col gap-8">
-      <div className="px-4 py-3">
+      <div className="px-4 py-3 pt-9">
         <Logo />
       </div>
       
@@ -70,12 +74,16 @@ export default function Sidebar({ sections = [], currentPath = '/' }: SidebarPro
         ))}
       </div>
 
-      <div className="px-2 py-2 border-t">
-        <NavItem
-          href="/logout"
-          icon={LogOut}
-          label="Logout"
-        />
+      <div className="mt-auto">
+        <CurrencySelector />
+        
+        <div className="px-2 py-2 border-t">
+          <NavItem
+            href="/logout"
+            icon={LogOut}
+            label="Logout"
+          />
+        </div>
       </div>
     </div>
   );

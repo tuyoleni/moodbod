@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { createProject } from '@/lib/services/projectService';
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ import { BasicInformation, PackageSelection, ServiceSelection } from './form';
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Project, ServiceStatus, ProjectType } from '@/lib/types';
+import { useCurrency } from '@/lib/context/CurrencyContext';
 
 const steps = [
   { id: 'basic', title: 'Basic Information' },
@@ -26,6 +27,7 @@ interface ProjectWizardProps {
 export function ProjectWizard({ onComplete }: ProjectWizardProps) {
   const { session } = useAuth('');
   const [currentStep, setCurrentStep] = useState(0);
+  const { formatAmount } = useCurrency();
   const {
     formData,
     loading,
@@ -111,7 +113,7 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
           <div className="flex justify-between items-center">
             <CardTitle className='my-4'>Create New Project</CardTitle>
             <div className="text-xl font-semibold">
-              Total Cost: ${calculateTotalPrice()}
+              Total Cost: {formatAmount(calculateTotalPrice())}
             </div>
           </div>
 
@@ -141,7 +143,7 @@ export function ProjectWizard({ onComplete }: ProjectWizardProps) {
           {currentStep === steps.length - 1 && (
             <div className="rounded-lg bg-muted p-4 mb-4">
               <div className="text-xl font-bold">
-                Total Price: ${calculateTotalPrice()}
+                Total Price: {formatAmount(calculateTotalPrice())}
               </div>
             </div>
           )}

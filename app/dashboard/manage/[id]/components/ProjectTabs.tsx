@@ -3,7 +3,6 @@ import { Project, Milestone, Service } from '@/lib/types';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import ProjectDetailsTab from './ProjectDetailsTab';
 import MessagesTab from './MessagesTab';
-import CommentsTab from './CommentsTab';
 import MilestonesTab from './MilestonesTab';
 import ServicesTab from './ServicesTab';
 
@@ -22,8 +21,7 @@ const ProjectTabs: React.FC<ProjectTabsProps> = ({ project, milestones, services
         <TabsTrigger value="details">Details</TabsTrigger>
         <TabsTrigger value="milestones">Milestones</TabsTrigger>
         <TabsTrigger value="services">Services</TabsTrigger>
-        <TabsTrigger value="messages">Messages</TabsTrigger>
-        <TabsTrigger value="comments">Comments</TabsTrigger>
+        <TabsTrigger value="messages">Messages & Comments</TabsTrigger>
       </TabsList>
 
       <TabsContent value="details" className="space-y-6">
@@ -40,10 +38,6 @@ const ProjectTabs: React.FC<ProjectTabsProps> = ({ project, milestones, services
 
       <TabsContent value="messages">
         <MessagesTab project={project} />
-      </TabsContent>
-
-      <TabsContent value="comments">
-        <CommentsTab project={project} />
       </TabsContent>
     </Tabs>
   );

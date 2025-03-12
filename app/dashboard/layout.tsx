@@ -2,7 +2,6 @@
 
 import ClientSidebar from './components/ClientSidebar';
 import { usePathname } from 'next/navigation';
-
 import { ReactNode } from 'react';
 
 interface DashboardLayoutProps {
@@ -14,10 +13,10 @@ export default function DashboardLayout(props: DashboardLayoutProps) {
 
   return (
     <div className="flex min-h-screen">
-      <div className="w-auto border-r">
+      <div className="fixed left-0 top-0 h-screen w-48 border-r">
         <ClientSidebar currentPath={pathname} />
       </div>
-      <main className="flex-1">
+      <main className="flex-1 pl-48">
         {props.children}
       </main>
     </div>

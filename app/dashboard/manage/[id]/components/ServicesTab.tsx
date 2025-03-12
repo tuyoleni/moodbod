@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Service, ServiceStatus } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { requestServiceAddition, removeProjectService } from '@/lib/services/serviceManagementService';
 import { additionalServices } from '@/lib/data/services';
 import { toast } from 'sonner';
+import { useCurrency } from '@/lib/context/CurrencyContext';
 
 interface ServicesTabProps {
   services: Service[];
@@ -14,6 +15,11 @@ interface ServicesTabProps {
 
 const ServicesTab: React.FC<ServicesTabProps> = ({ services: initialServices }) => {
   const [services, setServices] = useState<Service[]>(initialServices);
+  const { formatAmount } = useCurrency();
+
+  useEffect(() => {
+    setServices(initialServices);
+  }, [initialServices]);
 
   const handleQuantityChange = async (service: Service, newQuantity: number) => {
     try {
@@ -54,12 +60,13 @@ const ServicesTab: React.FC<ServicesTabProps> = ({ services: initialServices }) 
         category: service.category,
         price: service.price,
         allowQuantity: service.allowQuantity,
-        quantity: service.quantity || 1
+        quantity: service.quantity || 1,
+        projectId: service.projectId || ''
       };
-      await requestServiceAddition(service.projectId || '', serviceData);
+      const serviceId = await requestServiceAddition(service.projectId || '', serviceData);
       setServices(prevServices => [
         ...prevServices,
-        { ...service, status: ServiceStatus.REQUEST }
+        { ...serviceData, id: serviceId, status: ServiceStatus.REQUEST }
       ]);
       toast.success('Service request submitted');
     } catch (error) {
@@ -67,143 +74,180 @@ const ServicesTab: React.FC<ServicesTabProps> = ({ services: initialServices }) 
     }
   };
 
-  const currentServices = services.filter(service => service.status !== ServiceStatus.REJECTED);
+  // Filter services based on their status
+  const currentServices = services.filter(service => 
+    service.status === ServiceStatus.COMPLETED || 
+    service.status === ServiceStatus.DEVELOPMENT ||
+    service.status === ServiceStatus.APPROVED
+  );
+
+  const pendingServices = services.filter(service =>
+    service.status === ServiceStatus.REQUEST || 
+    service.status === ServiceStatus.PAYMENT_PENDING
+  );
+
+  // Filter available services to exclude those that are already added
   const availableServices = additionalServices.filter(service => 
-    !services.some(currentService => currentService.id === service.id)
+    !services.some(existingService => 
+      (existingService.name ?? '').toLowerCase() === service.name.toLowerCase() &&
+      existingService.status !== ServiceStatus.REJECTED
+    )
   );
 
   return (
-    <div className="space-y-8">
-      {/* Current Packages Section */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Current Packages</h3>
-        {currentServices.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Quantity</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {currentServices.map((service) => (
-                <TableRow key={service.id}>
-                  <TableCell className="font-medium">{service.name}</TableCell>
-                  <TableCell>{service.description}</TableCell>
-                  <TableCell>{service.category || 'Uncategorized'}</TableCell>
-                  <TableCell>
-                    {service.allowQuantity ? (
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            if (service.quantity && service.quantity > 1) {
-                              handleQuantityChange(service, (service.quantity || 1) - 1);
-                            }
-                          }}
+    <div className="space-y-6">
+      {currentServices.length === 0 && pendingServices.length === 0 ? (
+        <div className="text-center py-4 text-muted-foreground">
+          No services available
+        </div>
+      ) : (
+        <>
+          {/* Current Services Section */}
+          {currentServices.length > 0 && (
+            <div>
+              <h3 className="text-lg font-medium mb-4">Current Services</h3>
+              <div className="space-y-4">
+                {currentServices.map((service) => (
+                  <div
+                    key={service.id}
+                    className="p-4 border rounded-lg"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-medium">{service.name}</p>
+                        <p className="text-sm text-muted-foreground">{service.description}</p>
+                        <div className="flex items-center gap-4 mt-2">
+                          <p className="text-sm font-medium">
+                            {formatAmount((service.price || 0) * (service.quantity || 1))}
+                          </p>
+                          {service.allowQuantity && (
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-muted-foreground">Quantity:</span>
+                              <input
+                                type="number"
+                                min="1"
+                                value={service.quantity || 1}
+                                onChange={(e) => handleQuantityChange(service, parseInt(e.target.value))}
+                                className="w-16 p-1 border rounded"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant={service.status === ServiceStatus.COMPLETED ? 'default' : 'secondary'}
+                          className="capitalize"
                         >
-                          -
-                        </Button>
-                        <span>{service.quantity || 1}</span>
+                          {(service.status || ServiceStatus.REQUEST).toLowerCase()}
+                        </Badge>
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="sm"
-                          onClick={() => {
-                            handleQuantityChange(service, (service.quantity || 1) + 1);
-                          }}
+                          onClick={() => handleRemoveService(service.id)}
+                          disabled={service.status === ServiceStatus.COMPLETED}
                         >
-                          +
+                          Remove
                         </Button>
                       </div>
-                    ) : (
-                      '1'
-                    )}
-                  </TableCell>
-                  <TableCell>${((service.price || 0) * (service.quantity || 1)).toLocaleString()}</TableCell>
-                  <TableCell>
-                    <Badge variant={
-                      service.status === ServiceStatus.REVIEW ? 'default' :
-                      service.status === ServiceStatus.ANALYZING ? 'secondary' :
-                      service.status === ServiceStatus.PAYMENT_PENDING ? 'warning' :
-                      'destructive'
-                    }>
-                      {service.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {service.status !== ServiceStatus.REJECTED && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRemoveService(service.id)}
-                      >
-                        Remove
-                      </Button>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        ) : (
-          <div className="text-center py-4 text-muted-foreground">
-            No packages currently active in this project
-          </div>
-        )}
-      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Pending Services Section */}
+          {pendingServices.length > 0 && (
+            <div>
+              <h3 className="text-lg font-medium mb-4">Pending Requests</h3>
+              <div className="space-y-4">
+                {pendingServices.map((service) => (
+                  <div
+                    key={service.id}
+                    className="p-4 border rounded-lg"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-medium">{service.name}</p>
+                        <p className="text-sm text-muted-foreground">{service.description}</p>
+                        <div className="flex items-center gap-4 mt-2">
+                          <p className="text-sm font-medium">
+                            {formatAmount((service.price || 0) * (service.quantity || 1))}
+                          </p>
+                          {service.allowQuantity && (
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-muted-foreground">Quantity:</span>
+                              <input
+                                type="number"
+                                min="1"
+                                value={service.quantity || 1}
+                                onChange={(e) => handleQuantityChange(service, parseInt(e.target.value))}
+                                className="w-16 p-1 border rounded"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant="secondary"
+                          className="capitalize"
+                        >
+                          {service.status?.toLowerCase()}
+                        </Badge>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRemoveService(service.id)}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      )}
 
       <Separator />
 
-      {/* Available Packages Section */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Available Packages</h3>
+      {/* Available Services Section */}
+      <div>
+        <h3 className="text-lg font-medium mb-4">Available Services</h3>
         {availableServices.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {availableServices.map((service) => (
-                <TableRow key={service.id}>
-                  <TableCell className="font-medium">{service.name}</TableCell>
-                  <TableCell>{service.description}</TableCell>
-                  <TableCell>{service.category || 'Uncategorized'}</TableCell>
-                  <TableCell>${service.price?.toLocaleString() || 'N/A'}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="default"
-                      size="sm"
-                      onClick={() => handleRequestService(service)}
-                    >
-                      Request Service
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        ) : (
-          <div className="text-center py-4 text-muted-foreground">
-            No additional packages available
+          <div className="space-y-4">
+            {availableServices.map((service) => (
+              <div
+                key={service.id}
+                className="p-4 border rounded-lg"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-medium">{service.name}</p>
+                    <p className="text-sm text-muted-foreground">{service.description}</p>
+                    <p className="text-sm font-medium mt-2">{formatAmount(service.price)}</p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleRequestService(service)}
+                  >
+                    Request
+                  </Button>
+                </div>
+              </div>
+            ))}
           </div>
+        ) : (
+          <p className="text-muted-foreground">No additional services available</p>
         )}
       </div>
     </div>
   );
 };
-
-
 
 export default ServicesTab;

@@ -16,12 +16,14 @@ import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/lib/utils/dateUtils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useRouter } from 'next/navigation';
+import { useCurrency } from '@/lib/context/CurrencyContext';
 
 export function ProjectsTable() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const { session } = useAuth();
   const router = useRouter();
+  const { formatAmount } = useCurrency();
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -48,7 +50,7 @@ export function ProjectsTable() {
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Description</TableHead>
-              <TableHead>Type</TableHead>
+              {/*<TableHead>Type</TableHead>*/}
               <TableHead>Status</TableHead>
               <TableHead>Created</TableHead>
               <TableHead className="text-right">Total Cost</TableHead>
@@ -88,7 +90,7 @@ export function ProjectsTable() {
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead>Type</TableHead>
+            {/*<TableHead>Type</TableHead>*/}
             <TableHead>Status</TableHead>
             <TableHead>Created</TableHead>
             <TableHead className="text-right">Total Cost</TableHead>
@@ -105,8 +107,10 @@ export function ProjectsTable() {
             return (
               <TableRow key={project.id}>
                 <TableCell className="font-medium">{project.name}</TableCell>
-                <TableCell>{project.description}</TableCell>
-                <TableCell className="capitalize">{project.type}</TableCell>
+                <TableCell className="max-w-xs whitespace-normal break-words">
+                  {project.description}
+                </TableCell>
+                {/*<TableCell className="capitalize">{project.type}</TableCell>*/}
                 <TableCell>
                   <Badge variant="outline" className="capitalize">
                     {project.status.toLowerCase()}
@@ -114,7 +118,7 @@ export function ProjectsTable() {
                 </TableCell>
                 <TableCell>{formattedDate}</TableCell>
                 <TableCell className="text-right">
-                  ${project.totalCost.toLocaleString()}
+                  {formatAmount(project.totalCost)}
                 </TableCell>
                 <TableCell>
                   <button

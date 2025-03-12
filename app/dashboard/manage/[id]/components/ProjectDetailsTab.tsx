@@ -5,6 +5,7 @@ import { projectTypes } from '@/lib/data/projectTypes';
 import { Progress } from '@/components/ui/progress';
 import { Briefcase, Package, Sparkles, CheckCircle2, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useCurrency } from '@/lib/context/CurrencyContext';
 
 interface ProjectDetailsProps {
   project: Project;
@@ -12,6 +13,7 @@ interface ProjectDetailsProps {
 }
 
 const ProjectDetailsTab: React.FC<ProjectDetailsProps> = ({ project, onServiceClick }) => {
+  const { formatAmount } = useCurrency();
   const projectType = projectTypes.find(type => type.id === project.type);
   
   // Define milestone stages in order
@@ -65,7 +67,7 @@ const ProjectDetailsTab: React.FC<ProjectDetailsProps> = ({ project, onServiceCl
               <span className="capitalize text-sm">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
             </div>
             {typeof value === 'number' && (
-              <span className="font-bold text-sm">${value.toLocaleString()}</span>
+              <span className="font-bold text-sm">{value.toLocaleString()}</span>
             )}
           </div>
         ))}
@@ -130,7 +132,9 @@ const ProjectDetailsTab: React.FC<ProjectDetailsProps> = ({ project, onServiceCl
               </div>
               <div className="flex gap-2 items-center">
                 <Badge variant="secondary">{project.package.name}</Badge>
-                <Badge variant="outline" className="font-bold">${project.package.price.toLocaleString()}</Badge>
+                <Badge variant="outline" className="font-bold">
+                  {formatAmount(project.package.price)}
+                </Badge>
               </div>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
@@ -152,9 +156,9 @@ const ProjectDetailsTab: React.FC<ProjectDetailsProps> = ({ project, onServiceCl
                     <Progress value={paymentProgress} className="h-2" />
                     <span className="text-sm font-medium">{Math.round(paymentProgress)}%</span>
                   </div>
-                  <div className="flex justify-between  font-bold text-sm">
-                    <span>Paid: ${paidAmount.toLocaleString()}</span>
-                    <span>Total: ${project.totalCost.toLocaleString()}</span>
+                  <div className="flex justify-between font-bold text-sm">
+                    <span>Paid: {formatAmount(paidAmount)}</span>
+                    <span>Total: {formatAmount(project.totalCost)}</span>
                   </div>
                 </div>
               </div>
@@ -190,7 +194,9 @@ const ProjectDetailsTab: React.FC<ProjectDetailsProps> = ({ project, onServiceCl
                         <p className="text-sm text-muted-foreground">{service.description}</p>
                       )}
                     </div>
-                    <Badge variant="outline" className="font-bold">${service.price?.toLocaleString()}</Badge>
+                    <Badge variant="outline" className="font-bold">
+                      {formatAmount(service.price || 0)}
+                    </Badge>
                   </div>
                 ))}
               </div>
