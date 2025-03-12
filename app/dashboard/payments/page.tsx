@@ -220,7 +220,7 @@ export default function PaymentsPage() {
                               <TableCell>{formatAmount(service.price || 0)}</TableCell>
                               <TableCell>
                                 <div className="flex items-center gap-2">
-                                  <Badge variant={service.status === 'APPROVED' ? 'success' : 'warning'}>
+                                  <Badge variant={service.status === 'APPROVED' ? 'secondary' : 'warning'}>
                                     {service.status}
                                   </Badge>
                                   {service.status === 'APPROVED' && !service.paid && (
