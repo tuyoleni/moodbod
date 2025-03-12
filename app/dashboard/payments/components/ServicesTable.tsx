@@ -1,11 +1,9 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { CreditCard } from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useCurrency } from '@/lib/context/CurrencyContext';
 import { Service, ServiceStatus } from '@/lib/types';
+import { useCurrency } from '@/lib/context/CurrencyContext';
+import ServicePaymentDialog from './ServicePaymentDialog';
 
 interface ServicesTableProps {
   services: Service[];
@@ -40,7 +38,7 @@ export default function ServicesTable({ services, projectId, onPayment, processi
                     <Badge variant={service.status === ServiceStatus.APPROVED ? 'secondary' : 'warning'}>
                       {service.status}
                     </Badge>
-                    {service.status === ServiceStatus.APPROVED && !service.paid && (
+                    {service.status === ServiceStatus.APPROVED && (
                       <ServicePaymentDialog
                         service={service}
                         projectId={projectId}
