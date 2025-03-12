@@ -23,24 +23,24 @@ export default function PaymentsPage() {
   const { formatAmount } = useCurrency();
   const router = useRouter();
 
-  useEffect(() => {
-    const loadProjects = async () => {
-      try {
-        const projectsData = await fetchAllProjects();
-        const projectsWithServices = await Promise.all(
-          projectsData.map(async (project) => {
-            const services = await getProjectServices(project.id);
-            return { ...project, services };
-          })
-        );
-        setProjects(projectsWithServices);
-      } catch (error) {
-        console.error('Error loading projects:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadProjects = async () => {
+    try {
+      const projectsData = await fetchAllProjects();
+      const projectsWithServices = await Promise.all(
+        projectsData.map(async (project) => {
+          const services = await getProjectServices(project.id);
+          return { ...project, services };
+        })
+      );
+      setProjects(projectsWithServices);
+    } catch (error) {
+      console.error('Error loading projects:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     loadProjects();
   }, []);
 
