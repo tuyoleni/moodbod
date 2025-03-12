@@ -10,10 +10,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen">
-      <div className="fixed left-0 top-0 h-screen w-48 border-r">
+      <div className="fixed left-0 top-0 h-screen border-r">
       <AdminSidebar currentPath={pathname || undefined} />
       </div>
-      <main className="flex-1 pl-48">
+      <main className="flex-1 pl-52">
         {children}
       </main>
     </div>
