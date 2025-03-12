@@ -67,7 +67,7 @@ export default function PaymentsPage() {
     }
   };
 
-  const toggleProjectExpansion = (projectId) => {
+  const toggleProjectExpansion = (projectId: string) => {
     setExpandedProjects(prev => {
       const newSet = new Set(prev);
       if (newSet.has(projectId)) {
