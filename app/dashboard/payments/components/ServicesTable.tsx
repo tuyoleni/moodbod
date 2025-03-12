@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { CreditCard } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useCurrency } from '@/lib/context/CurrencyContext';
-import { Service } from '@/lib/types';
+import { Service, ServiceStatus } from '@/lib/types';
 
 interface ServicesTableProps {
   services: Service[];
@@ -37,10 +37,10 @@ export default function ServicesTable({ services, projectId, onPayment, processi
                 <TableCell>{formatAmount(service.price || 0)}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
-                    <Badge variant={service.status === 'APPROVED' ? 'secondary' : 'warning'}>
+                    <Badge variant={service.status === ServiceStatus.APPROVED ? 'secondary' : 'warning'}>
                       {service.status}
                     </Badge>
-                    {service.status === 'APPROVED' && !service.paid && (
+                    {service.status === ServiceStatus.APPROVED && !service.paid && (
                       <ServicePaymentDialog
                         service={service}
                         projectId={projectId}
