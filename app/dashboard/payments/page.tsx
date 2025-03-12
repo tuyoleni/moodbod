@@ -44,7 +44,12 @@ export default function PaymentsPage() {
     loadProjects();
   }, []);
 
-  const handlePayment = async (projectId, amount, isService = false, serviceId) => {
+  const handlePayment = async (
+    projectId: string,
+    amount: number,
+    isService: boolean = false,
+    serviceId?: string
+  ) => {
     setProcessingPayment(serviceId || projectId);
     try {
       // TODO: Integrate with your payment gateway here
