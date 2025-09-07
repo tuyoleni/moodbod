@@ -2,7 +2,7 @@
 
 interface StructuredDataProps {
   type: "Organization" | "WebSite" | "WebPage";
-  data: any;
+  data: Record<string, unknown>;
 }
 
 export function StructuredData({ type, data }: StructuredDataProps) {
@@ -16,7 +16,7 @@ export function StructuredData({ type, data }: StructuredDataProps) {
           description:
             "Moodbod Digital Agency blends creativity and technology to drive meaningful change for businesses everywhere.",
           url: "https://moodbod.agency",
-          logo: "https://moodbod.com/logos/Moodbod.svg",
+          logo: "https://moodbod.agency/logos/Moodbod.svg",
           sameAs: [
             "https://twitter.com/moodbod",
             "https://linkedin.com/company/moodbod",
@@ -24,15 +24,15 @@ export function StructuredData({ type, data }: StructuredDataProps) {
           ],
           contactPoint: {
             "@type": "ContactPoint",
-            telephone: "+1-XXX-XXX-XXXX",
+            telephone: "+264 81 444 1644",
             contactType: "customer service",
-            email: "hello@moodbod.com",
+            email: "info@moodbod.design",
           },
           address: {
             "@type": "PostalAddress",
-            addressCountry: "US",
-            addressLocality: "Your City",
-            addressRegion: "Your State",
+            addressCountry: "NA",
+            addressLocality: "Windhoek",
+            addressRegion: "Khomas",
           },
           founder: [
             {

@@ -19,7 +19,7 @@ export function ServicesHero() {
             <h1 className="font-heading text-5xl font-medium">
               Empowering Your Business with Innovative Solutions{" "}
             </h1>
-            <div className="self-end md:mt-48">
+            <div className="mx-[7.5%] self-end md:mt-48">
               <p className="text-lg text-muted-foreground font-sans leading-relaxed">
                 At Moodbod Digital Agency, we specialize in crafting tailored
                 digital solutions that drive growth and engagement. Our

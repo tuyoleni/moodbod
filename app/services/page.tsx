@@ -3,7 +3,6 @@ import {
   ServicesShowcase,
   ServicesFaq,
 } from "@/components/services";
-import { Cta } from "@/components/layout";
 import { StructuredData } from "@/components/StructuredData";
 import type { Metadata } from "next";
 
@@ -72,7 +71,6 @@ export default function ServicesPage() {
         <ServicesHero />
         <ServicesShowcase />
         <ServicesFaq />
-        <Cta />
       </div>
     </>
   );
