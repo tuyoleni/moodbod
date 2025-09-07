@@ -12,6 +12,8 @@ const useNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isInHeroSection, setIsInHeroSection] = useState(true);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const isMobile = useMediaQuery("(max-width: 991px)");
 
   useEffect(() => {
@@ -20,13 +22,27 @@ const useNavbar = () => {
       const viewportHeight = window.innerHeight;
       const shouldShowCTA = scrollY > viewportHeight * 0.5;
       setIsInHeroSection(shouldShowCTA);
+
+      // Navbar visibility logic
+      if (scrollY < 10) {
+        // Always show navbar at the top
+        setIsNavbarVisible(true);
+      } else if (scrollY > lastScrollY && scrollY > 100) {
+        // Scrolling down and past 100px - hide navbar
+        setIsNavbarVisible(false);
+      } else if (scrollY < lastScrollY) {
+        // Scrolling up - show navbar
+        setIsNavbarVisible(true);
+      }
+
+      setLastScrollY(scrollY);
     };
 
     window.addEventListener("scroll", handleScroll);
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const openOnMobileDropdownMenu = () => {
@@ -58,15 +74,23 @@ const useNavbar = () => {
     animateDropdownMenu,
     animateDropdownMenuIcon,
     isInHeroSection,
+    isNavbarVisible,
   };
 };
 
 export function Navbar() {
   const useActive = useNavbar();
   return (
-    <section
+    <motion.section
       id="navbar"
       className="fixed top-0 left-0 right-0 z-[999] flex min-h-16 w-full items-center border-b border-border-primary bg-white px-[5%] md:min-h-18"
+      animate={{
+        y: useActive.isNavbarVisible ? 0 : -100,
+      }}
+      transition={{
+        duration: 0.3,
+        ease: "easeInOut",
+      }}
     >
       <div className="mx-auto flex size-full max-w-full items-center justify-between">
         <Link href="/">
@@ -349,6 +373,6 @@ export function Navbar() {
           </motion.div>
         </motion.div>
       </AnimatePresence>
-    </section>
+    </motion.section>
   );
 }
