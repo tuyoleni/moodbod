@@ -2,49 +2,46 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { BiLogoDribbble, BiLogoLinkedinSquare } from "react-icons/bi";
+import { BiLogoLinkedinSquare } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
 
 const teamMembers = [
   {
-    name: "Alice Johnson",
-    role: "Project Manager",
+    name: "Simeon Tuyoleni",
+    role: "Co-Founder & CEO",
     description:
-      "Alice ensures projects run smoothly and clients are always satisfied with the results.",
+      "Simeon leads our vision and strategy, ensuring every project delivers exceptional results for our clients.",
     image: "/images/team/team-member-1.jpg",
     social: {
       linkedin: "#",
       twitter: "#",
-      dribbble: "#",
     },
   },
   {
-    name: "Bob Smith",
-    role: "Lead Developer",
+    name: "Stephen Indongo",
+    role: "Co-Founder & CTO",
     description:
-      "Bob specializes in crafting robust software solutions tailored to client needs.",
+      "Stephen leads our technical vision and specializes in crafting robust software solutions and innovative digital experiences.",
     image: "/images/team/team-member-2.jpg",
     social: {
       linkedin: "#",
       twitter: "#",
-      dribbble: "#",
     },
   },
   {
-    name: "Cathy Lee",
+    name: "Sarah Chen",
     role: "UX Designer",
     description:
-      "Cathy creates user-friendly interfaces that enhance the overall user experience.",
+      "Sarah creates intuitive and beautiful user experiences that make our clients' products stand out.",
     image: "/images/team/team-member-3.jpg",
     social: {
       linkedin: "#",
       twitter: "#",
-      dribbble: "#",
     },
   },
 ];
 
-export function AboutTeam() {
+export function Team() {
   return (
     <section className="px-4 py-16 md:py-24 lg:py-28">
       <div className="container mx-auto">
@@ -91,12 +88,6 @@ export function AboutTeam() {
                 >
                   <FaXTwitter className="h-6 w-6" />
                 </a>
-                <a
-                  href={member.social.dribbble}
-                  className="text-muted-foreground transition-colors hover:text-primary"
-                >
-                  <BiLogoDribbble className="h-6 w-6" />
-                </a>
               </div>
             </div>
           ))}
@@ -109,7 +100,7 @@ export function AboutTeam() {
           <p className="mb-6 text-muted-foreground font-sans leading-relaxed">
             Join our dynamic team and make an impact!
           </p>
-          <Button variant="outline">Open positions</Button>
+          <Button>Open positions</Button>
         </div>
       </div>
     </section>

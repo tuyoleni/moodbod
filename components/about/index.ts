@@ -1,5 +1,3 @@
-export { AboutHero } from "./AboutHero";
-export { AboutStory } from "./AboutStory";
-export { AboutTeam } from "./AboutTeam";
-export { AboutMilestones } from "./AboutMilestones";
-export { AboutCta } from "./AboutCta";
+export { Hero } from "./Hero";
+export { Story } from "./Story";
+export { Team } from "./Team";

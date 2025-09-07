@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-export function AboutStory() {
+export function Story() {
   return (
     <section className="px-4 py-16 md:py-24 lg:py-28">
       <div className="container mx-auto">
