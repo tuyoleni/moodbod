@@ -1,5 +1,45 @@
 import { Hero, Story, Team } from "@/components/about";
 import { Milestone } from "@/components/Milestone";
+import { StructuredData } from "@/components/StructuredData";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description:
+    "Learn about Moodbod Digital Agency's journey, our passionate team, and our commitment to driving digital transformation. Meet our founders and discover our milestones.",
+  keywords: [
+    "about moodbod",
+    "digital agency team",
+    "company story",
+    "founders",
+    "digital transformation experts",
+    "agency milestones",
+    "team members",
+  ],
+  openGraph: {
+    title: "About Us | Moodbod Digital Agency",
+    description:
+      "Learn about Moodbod Digital Agency's journey, our passionate team, and our commitment to driving digital transformation.",
+    url: "https://moodbod.agency/about",
+    images: [
+      {
+        url: "/images/og-about.jpg",
+        width: 1200,
+        height: 630,
+        alt: "About Moodbod Digital Agency",
+      },
+    ],
+  },
+  twitter: {
+    title: "About Us | Moodbod Digital Agency",
+    description:
+      "Learn about Moodbod Digital Agency's journey, our passionate team, and our commitment to driving digital transformation.",
+    images: ["/images/og-about.jpg"],
+  },
+  alternates: {
+    canonical: "/about",
+  },
+};
 
 const milestonesData = [
   {
@@ -39,11 +79,28 @@ const milestonesData = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen">
-      <Hero />
-      <Story />
-      <Team />
-      <Milestone milestones={milestonesData} />
-    </div>
+    <>
+      <StructuredData
+        type="WebPage"
+        data={{
+          name: "About Us",
+          description:
+            "Learn about Moodbod Digital Agency's journey, our passionate team, and our commitment to driving digital transformation. Meet our founders and discover our milestones.",
+          url: "https://moodbod.agency/about",
+          mainEntity: {
+            "@type": "AboutPage",
+            name: "About Moodbod Digital Agency",
+            description:
+              "Our story, team, and commitment to digital transformation",
+          },
+        }}
+      />
+      <div className="min-h-screen">
+        <Hero />
+        <Story />
+        <Team />
+        <Milestone milestones={milestonesData} />
+      </div>
+    </>
   );
 }

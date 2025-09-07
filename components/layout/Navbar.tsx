@@ -69,7 +69,7 @@ export function Navbar() {
       className="fixed top-0 left-0 right-0 z-[999] flex min-h-16 w-full items-center border-b border-border-primary bg-white px-[5%] md:min-h-18"
     >
       <div className="mx-auto flex size-full max-w-full items-center justify-between">
-        <Link href="#">
+        <Link href="/">
           <Image
             src="/logos/Moodbod.svg"
             alt="MoodBod Logo"
@@ -82,19 +82,19 @@ export function Navbar() {
         <div className="absolute hidden h-screen overflow-auto border-b border-border-primary bg-background-primary px-[5%] pt-4 pb-24 md:pb-0 lg:static lg:ml-6 lg:flex lg:h-auto lg:flex-1 lg:items-center lg:justify-between lg:border-none lg:bg-none lg:px-0 lg:pt-0">
           <div className="flex flex-col items-center lg:flex-row">
             <Link
-              href="#"
+              href="/"
               className="relative block w-auto py-3 text-sm font-sans lg:inline-block lg:px-4 lg:py-6 lg:text-sm"
             >
               HOME
             </Link>
             <Link
-              href="#"
+              href="/about"
               className="relative block w-auto py-3 text-sm font-sans lg:inline-block lg:px-4 lg:py-6 lg:text-sm"
             >
               ABOUT
             </Link>
             <Link
-              href="#"
+              href="/services"
               className="relative block w-auto py-3 text-sm font-sans lg:inline-block lg:px-4 lg:py-6 lg:text-sm"
             >
               SERVICES
@@ -143,7 +143,7 @@ export function Navbar() {
                     <div className="flex w-full flex-col lg:flex-row">
                       <div className="grid flex-1 grid-cols-1 content-start items-start gap-x-8 gap-y-2 py-4 md:grid-cols-2 md:gap-y-6 md:py-8 lg:auto-cols-fr lg:grid-cols-4 lg:content-stretch lg:items-stretch lg:gap-y-0">
                         <Link
-                          href="#"
+                          href="/careers"
                           className="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
                         >
                           <div className="flex size-6 flex-col items-center justify-center">
@@ -165,7 +165,7 @@ export function Navbar() {
                           </div>
                         </Link>
                         <Link
-                          href="#"
+                          href="/blog"
                           className="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
                         >
                           <div className="flex size-6 flex-col items-center justify-center">
@@ -185,7 +185,7 @@ export function Navbar() {
                           </div>
                         </Link>
                         <Link
-                          href="#"
+                          href="/testimonials"
                           className="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
                         >
                           <div className="flex size-6 flex-col items-center justify-center">
@@ -207,7 +207,7 @@ export function Navbar() {
                           </div>
                         </Link>
                         <Link
-                          href="#"
+                          href="/resources"
                           className="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
                         >
                           <div className="flex size-6 flex-col items-center justify-center">
@@ -237,7 +237,7 @@ export function Navbar() {
                       <p className="font-sans">
                         Looking for exciting opportunities?
                       </p>
-                      <Link href="#" className="underline font-sans">
+                      <Link href="/contact" className="underline font-sans">
                         Contact Us
                       </Link>
                     </div>
@@ -321,16 +321,16 @@ export function Navbar() {
             className="absolute top-0 right-0 left-0 block h-dvh overflow-auto border-b border-border-primary bg-background-primary px-[5%] pt-4 pb-8"
           >
             <div className="flex flex-col">
-              <Link href="#" className="block py-3 text-sm font-sans">
+              <Link href="/" className="block py-3 text-sm font-sans">
                 HOME
               </Link>
-              <Link href="#" className="block py-3 text-sm font-sans">
+              <Link href="/about" className="block py-3 text-sm font-sans">
                 ABOUT
               </Link>
-              <Link href="#" className="block py-3 text-sm font-sans">
+              <Link href="/services" className="block py-3 text-sm font-sans">
                 SERVICES
               </Link>
-              <Link href="#" className="block py-3 text-sm font-sans">
+              <Link href="/contact" className="block py-3 text-sm font-sans">
                 CONTACT US
               </Link>
               <div className="mt-6 flex flex-col gap-4">
