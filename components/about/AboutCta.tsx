@@ -13,8 +13,9 @@ export function AboutCta() {
               Transform Your Business Today
             </h2>
             <p className="mb-8 text-lg text-muted-foreground">
-              Ready to take your business to the next level? Let's work together
-              to create innovative digital solutions that drive real results.
+              Ready to take your business to the next level? Let&apos;s work
+              together to create innovative digital solutions that drive real
+              results.
             </p>
             <Button size="lg">Discover What is Possible</Button>
           </div>

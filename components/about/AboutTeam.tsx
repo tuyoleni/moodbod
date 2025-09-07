@@ -52,10 +52,8 @@ export function AboutTeam() {
           <p className="mb-4 text-sm font-semibold uppercase tracking-wider text-primary">
             Together
           </p>
-          <h2 className="mb-6 text-4xl font-bold md:text-5xl lg:text-6xl">
-            Our Team
-          </h2>
-          <p className="text-lg text-muted-foreground">
+          <h2 className="mb-6 font-heading text-4xl font-medium">Our Team</h2>
+          <p className="text-lg text-muted-foreground font-sans leading-relaxed">
             Meet the passionate individuals behind our innovative solutions.
           </p>
         </div>
@@ -105,10 +103,10 @@ export function AboutTeam() {
         </div>
 
         <div className="mx-auto mt-16 w-full max-w-md text-center md:mt-20 lg:mt-24">
-          <h3 className="mb-4 text-2xl font-bold md:text-3xl lg:text-4xl">
+          <h3 className="mb-4 font-heading text-2xl font-medium">
             We&apos;re hiring!
           </h3>
-          <p className="mb-6 text-muted-foreground">
+          <p className="mb-6 text-muted-foreground font-sans leading-relaxed">
             Join our dynamic team and make an impact!
           </p>
           <Button variant="outline">Open positions</Button>
