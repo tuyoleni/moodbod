@@ -1,0 +1,51 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "@/lib/hooks";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
+
+export function ServicesHero() {
+  const isMobile = useMediaQuery("(max-width: 767px)");
+
+  const { scrollYProgress } = useScroll();
+  const videoScale = useTransform(scrollYProgress, [0, 0.4], [0.7, 1]);
+
+  return (
+    <section className="relative md:min-h-screen">
+      <div className="px-[5%] py-16 md:py-24 lg:py-28">
+        <div className="container">
+          <div className="mb-12 grid grid-cols-1 items-start gap-y-5 md:mb-18 md:grid-cols-2 md:gap-x-12 md:gap-y-8 lg:mb-20 lg:gap-x-20 lg:gap-y-16">
+            <h1 className="font-heading text-5xl font-medium">
+              Empowering Your Business with Innovative Solutions{" "}
+            </h1>
+            <div className="self-end md:mt-48">
+              <p className="text-lg text-muted-foreground font-sans leading-relaxed">
+                At Moodbod Digital Agency, we specialize in crafting tailored
+                digital solutions that drive growth and engagement. Our
+                innovative, human-focused approach ensures that your unique
+                business needs are met with creativity and precision.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-4 md:mt-8">
+                <Button>Discover What is Possible</Button>
+                <Button variant="secondary">Learn More</Button>
+              </div>
+            </div>
+          </div>
+          <motion.div
+            className="flex origin-top-right flex-col items-end justify-center md:h-[60vh] lg:h-[80vh] lg:justify-start"
+            style={{ scale: isMobile ? 1 : videoScale }}
+          >
+            <Image
+              src="/images/services/services-hero.jpg"
+              alt="Digital Solutions Hero Image"
+              width={1200}
+              height={800}
+              className="size-full object-cover"
+            />
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
