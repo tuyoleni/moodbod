@@ -11,7 +11,7 @@ const teamMembers = [
     role: "Co-Founder & CEO",
     description:
       "Simeon leads our vision and strategy, ensuring every project delivers exceptional results for our clients.",
-    image: "/images/team/team-member-1.jpg",
+    image: "/images/team/tuyoleni.moodbod.jpg",
     social: {
       linkedin: "#",
       twitter: "#",
@@ -22,18 +22,18 @@ const teamMembers = [
     role: "Co-Founder & CTO",
     description:
       "Stephen leads our technical vision and specializes in crafting robust software solutions and innovative digital experiences.",
-    image: "/images/team/team-member-2.jpg",
+    image: "/images/team/indongo.moodbod.jpg",
     social: {
       linkedin: "#",
       twitter: "#",
     },
   },
   {
-    name: "Sarah Chen",
+    name: "Sarah Tapopi",
     role: "UX Designer",
     description:
       "Sarah creates intuitive and beautiful user experiences that make our clients' products stand out.",
-    image: "/images/team/team-member-3.jpg",
+    image: "/images/team/tapopi.moodbod.jpg",
     social: {
       linkedin: "#",
       twitter: "#",

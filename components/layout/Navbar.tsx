@@ -161,7 +161,7 @@ export function Navbar() {
                   initial="close"
                   exit="close"
                   transition={{ duration: 0.2 }}
-                  className="top-full bottom-auto left-0 w-full max-w-full min-w-full overflow-hidden bg-background-primary lg:absolute lg:w-screen lg:border-b lg:border-border-primary lg:px-[5%] lg:[--height-close:auto]"
+                  className="top-full bottom-auto left-0 w-full max-w-full min-w-full overflow-hidden bg-white bg-background-primary lg:absolute lg:w-screen lg:border-b lg:border-border-primary lg:px-[5%] lg:[--height-close:auto]"
                 >
                   <div className="mx-auto flex size-full max-w-full items-center justify-between">
                     <div className="flex w-full flex-col lg:flex-row">
@@ -342,7 +342,7 @@ export function Navbar() {
             initial="close"
             exit="close"
             transition={{ duration: 0.4 }}
-            className="absolute top-0 right-0 left-0 block h-dvh overflow-auto border-b border-border-primary bg-background-primary px-[5%] pt-4 pb-8"
+            className="absolute top-0 right-0 left-0 block h-dvh overflow-auto border-b border-border-primary bg-white bg-background-primary px-[5%] pt-4 pb-8"
           >
             <div className="flex flex-col">
               <Link href="/" className="block py-3 text-sm font-sans">

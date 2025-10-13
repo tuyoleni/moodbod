@@ -66,7 +66,7 @@ export function Cursor({ className }: CursorProps) {
   return (
     <motion.div
       ref={cursorRef}
-      className={`fixed top-0 left-0 pointer-events-none z-50 mix-blend-difference ${className}`}
+      className={`fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference ${className}`}
       animate={{
         x: mousePosition.x - 20,
         y: mousePosition.y - 20,

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import React, { Fragment, useRef } from "react";
 import { RxChevronRight } from "react-icons/rx";
 
@@ -96,7 +97,13 @@ export function ServicesShowcase() {
         "Every business is unique, and so are our solutions. We create custom software that fits your workflow perfectly.",
       image: "/images/services/service-software.jpg",
       imageAlt: "Custom Software Development",
-      buttons: [{ title: "Get Started", variant: "link" as const }],
+      buttons: [
+        {
+          title: "Get Started",
+          variant: "link" as const,
+          href: "/services/custom-software",
+        },
+      ],
     },
     {
       tagline: "E-commerce",
@@ -105,7 +112,13 @@ export function ServicesShowcase() {
         "Build powerful online stores that convert visitors into customers with our comprehensive e-commerce solutions.",
       image: "/images/services/service-ecommerce.jpg",
       imageAlt: "E-commerce Development",
-      buttons: [{ title: "Get Started", variant: "link" as const }],
+      buttons: [
+        {
+          title: "Get Started",
+          variant: "link" as const,
+          href: "/services/ecommerce",
+        },
+      ],
     },
     {
       tagline: "Innovation",
@@ -114,7 +127,13 @@ export function ServicesShowcase() {
         "Leverage artificial intelligence and automation to streamline your processes and boost productivity.",
       image: "/images/services/service-ai-automation.jpg",
       imageAlt: "AI and Automation Services",
-      buttons: [{ title: "Get Started", variant: "link" as const }],
+      buttons: [
+        {
+          title: "Get Started",
+          variant: "link" as const,
+          href: "/services/ai-automation",
+        },
+      ],
     },
   ];
 
@@ -155,21 +174,44 @@ export function ServicesShowcase() {
                         {service.description}
                       </p>
                       <div className="mt-6 flex items-center gap-x-4 md:mt-8">
-                        {service.buttons.map((button, buttonIndex) => (
-                          <Button
-                            key={buttonIndex}
-                            variant={button.variant}
-                            size={button.variant === "link" ? "sm" : undefined}
-                            className={
-                              button.variant === "link"
-                                ? "flex items-center gap-2"
-                                : undefined
-                            }
-                          >
-                            {button.title}
-                            {button.variant === "link" && <RxChevronRight />}
-                          </Button>
-                        ))}
+                        {service.buttons.map((button, buttonIndex) =>
+                          button.href ? (
+                            <Link key={buttonIndex} href={button.href}>
+                              <Button
+                                variant={button.variant}
+                                size={
+                                  button.variant === "link" ? "sm" : undefined
+                                }
+                                className={
+                                  button.variant === "link"
+                                    ? "flex items-center gap-2"
+                                    : undefined
+                                }
+                              >
+                                {button.title}
+                                {button.variant === "link" && (
+                                  <RxChevronRight />
+                                )}
+                              </Button>
+                            </Link>
+                          ) : (
+                            <Button
+                              key={buttonIndex}
+                              variant={button.variant}
+                              size={
+                                button.variant === "link" ? "sm" : undefined
+                              }
+                              className={
+                                button.variant === "link"
+                                  ? "flex items-center gap-2"
+                                  : undefined
+                              }
+                            >
+                              {button.title}
+                              {button.variant === "link" && <RxChevronRight />}
+                            </Button>
+                          )
+                        )}
                       </div>
                     </div>
                     <div className="order-last flex flex-col items-center justify-center md:order-last">
@@ -208,21 +250,44 @@ export function ServicesShowcase() {
                         {service.description}
                       </p>
                       <div className="mt-6 flex items-center gap-x-4 md:mt-8">
-                        {service.buttons.map((button, buttonIndex) => (
-                          <Button
-                            key={buttonIndex}
-                            variant={button.variant}
-                            size={button.variant === "link" ? "sm" : undefined}
-                            className={
-                              button.variant === "link"
-                                ? "flex items-center gap-2"
-                                : undefined
-                            }
-                          >
-                            {button.title}
-                            {button.variant === "link" && <RxChevronRight />}
-                          </Button>
-                        ))}
+                        {service.buttons.map((button, buttonIndex) =>
+                          button.href ? (
+                            <Link key={buttonIndex} href={button.href}>
+                              <Button
+                                variant={button.variant}
+                                size={
+                                  button.variant === "link" ? "sm" : undefined
+                                }
+                                className={
+                                  button.variant === "link"
+                                    ? "flex items-center gap-2"
+                                    : undefined
+                                }
+                              >
+                                {button.title}
+                                {button.variant === "link" && (
+                                  <RxChevronRight />
+                                )}
+                              </Button>
+                            </Link>
+                          ) : (
+                            <Button
+                              key={buttonIndex}
+                              variant={button.variant}
+                              size={
+                                button.variant === "link" ? "sm" : undefined
+                              }
+                              className={
+                                button.variant === "link"
+                                  ? "flex items-center gap-2"
+                                  : undefined
+                              }
+                            >
+                              {button.title}
+                              {button.variant === "link" && <RxChevronRight />}
+                            </Button>
+                          )
+                        )}
                       </div>
                     </div>
                     <div

@@ -128,7 +128,7 @@ export const ServicesDefaults: Props = {
   features: [
     {
       tagline: "Mobile",
-      url: "#",
+      url: "/services/mobile-apps",
       heading: "Stay Connected with Mobile Apps",
       description:
         "Engage your customers anytime, anywhere with our user-friendly mobile app solutions.",
@@ -139,7 +139,7 @@ export const ServicesDefaults: Props = {
     },
     {
       tagline: "Smart",
-      url: "#",
+      url: "/services/ai-automation",
       heading: "AI & Automation for Better Decisions",
       description:
         "Leverage AI to enhance decision-making and streamline your business processes.",
@@ -150,7 +150,7 @@ export const ServicesDefaults: Props = {
     },
     {
       tagline: "E-commerce",
-      url: "#",
+      url: "/services/ecommerce",
       heading: "Empower Your Business with E-commerce Solutions",
       description:
         "Reach more customers with our flexible and easy-to-use online platforms.",
