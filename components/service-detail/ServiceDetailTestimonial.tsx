@@ -12,10 +12,11 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
-import React, { useEffect, useState } from "react";
-import { BiSolidStar } from "react-icons/bi";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { BiSolidStar } from "react-icons/bi";
 
 interface Testimonial {
   quote: string;
@@ -31,35 +32,47 @@ interface ServiceDetailTestimonialProps {
   testimonials: Testimonial[];
 }
 
+/**
+ * useCarousel hook
+ * Handles carousel state, dot navigation, and Embla API integration
+ */
 const useCarousel = () => {
-  const [api, setApi] = useState();
+  const [api, setApi] = useState<CarouselApi | null>(null);
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    if (!api) {
-      return;
-    }
+    if (!api) return;
+
+    // Initialize current slide
     setCurrent(api.selectedScrollSnap() + 1);
-    api.on("select", () => {
+
+    // Listener for slide selection
+    const handleSelect = () => {
       setCurrent(api.selectedScrollSnap() + 1);
-    });
+    };
+
+    api.on("select", handleSelect);
+
+    // Cleanup listener to prevent memory leaks
+    return () => {
+      api.off("select", handleSelect);
+    };
   }, [api]);
 
   const handleDotClick = (index: number) => () => {
-    if (api) {
-      api.scrollTo(index);
-    }
+    api?.scrollTo(index);
   };
 
-  const dotClassName = (index: number) => {
-    return `mx-[3px] inline-block size-2 rounded-full ${
-      current === index + 1 ? "bg-foreground" : "bg-foreground/20"
+  const dotClassName = (index: number) =>
+    `mx-[3px] inline-block size-2 rounded-full ${current === index + 1 ? "bg-foreground" : "bg-foreground/20"
     }`;
-  };
 
   return { api, setApi, current, handleDotClick, dotClassName };
 };
 
+/**
+ * ServiceDetailTestimonial component
+ */
 export function ServiceDetailTestimonial({
   testimonials,
 }: ServiceDetailTestimonialProps) {
@@ -101,7 +114,7 @@ export function ServiceDetailTestimonial({
                         ))}
                       </div>
                       <blockquote className="font-heading text-xl font-medium">
-                        "{testimonial.quote}"
+                        “{testimonial.quote}”
                       </blockquote>
                       <div className="mt-6 flex flex-nowrap items-center gap-5 md:mt-8">
                         <div>
@@ -126,6 +139,8 @@ export function ServiceDetailTestimonial({
                 </CarouselItem>
               ))}
             </CarouselContent>
+
+            {/* Dots + Navigation */}
             <div className="absolute top-0 flex w-full items-start justify-between md:top-auto md:bottom-0 md:items-end">
               <div className="mt-2.5 flex w-full items-start justify-start md:mt-0 md:mb-2.5">
                 {testimonials.map((_, index) => (
